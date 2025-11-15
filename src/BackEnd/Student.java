@@ -1,13 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
+
 package BackEnd;
 
-/**
- *
- * @author Ayman
- */
-public class Student {
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class Student extends User {
+    private List<String> enrolledCourses;
+    
+    
+    public Student(String userId, String username, String email, String passwordHash) {
+        super(userId, username, email, passwordHash, "Student");
+                enrolledCourses = new ArrayList<>();
+    }
+    
+    
+    public List<String> getEnrolledCourses() {
+        return enrolledCourses;
+    }
+     public void enrollCourse(String courseId) {
+        if (!enrolledCourses.contains(courseId)) 
+            
+        {enrolledCourses.add(courseId);
+    } }
+    
     
 }
