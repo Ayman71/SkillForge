@@ -1,4 +1,0 @@
-admin,admin
-ayman,12345
-mariam,54321
-se7s,6922

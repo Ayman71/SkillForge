@@ -16,7 +16,7 @@ import java.util.Scanner;
  * @author Mariam
  */
 public class LoginInfo{
-    File file = new File("Admins.txt");
+    File file = new File("users.txt");
     Scanner scanner;
     ArrayList<String> userNames = new ArrayList<String>();
     ArrayList<String> passwords = new ArrayList<String>();
