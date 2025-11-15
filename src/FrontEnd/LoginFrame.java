@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Ayman
+ * @author Mariam
  */
 public class LoginFrame extends javax.swing.JFrame {
 
@@ -193,7 +193,7 @@ public class LoginFrame extends javax.swing.JFrame {
             LoginInfo loginInfo = new LoginInfo();
             if (loginInfo.validateLogin(userName, password)) {
 
-                SignupFrame signup = new  SignupFrame();
+                SignUpFrame signup = new  SignUpFrame();
                 this.setVisible(true);
                 signup.setVisible(true);
 
