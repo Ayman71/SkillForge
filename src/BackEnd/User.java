@@ -1,20 +1,14 @@
-
 package BackEnd;
 
+public abstract class User {
 
-
-
-
-
-public abstract class  User implements Records {
-    
     private String userId;
     private String username;
     private String email;
     private String passwordHash;
     private String role;
-    
-     public User(String userId, String username, String email, String passwordHash, String role) {
+
+    public User(String userId, String username, String email, String passwordHash, String role) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -42,7 +36,6 @@ public abstract class  User implements Records {
         return role;
     }
 
-  
     public void setUsername(String username) {
         this.username = username;
     }
@@ -55,9 +48,8 @@ public abstract class  User implements Records {
         this.passwordHash = passwordHash;
     }
 
-    @Override
- public String getSearchKey() {
+    public String getSearchKey() {
         return userId;
     }
-    
+
 }

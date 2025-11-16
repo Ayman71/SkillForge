@@ -6,11 +6,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class UserManager {
 
-    private List<User> users;
+    private ArrayList<User> users;
     private String filename;
     private Gson gson;
 
@@ -23,7 +23,7 @@ public class UserManager {
 
     public void readFromFile() {
         try (FileReader reader = new FileReader(filename)) {
-            users = gson.fromJson(reader, new TypeToken<List<User>>() {
+            users = gson.fromJson(reader, new TypeToken<ArrayList<User>>() {
             }.getType());
             if (users == null) {
                 users = new ArrayList<>();
@@ -98,7 +98,7 @@ public class UserManager {
         saveToFile();
     }
 
-    public List<User> getAllUsers() {
+    public ArrayList<User> getAllUsers() {
         return users;
     }
 
