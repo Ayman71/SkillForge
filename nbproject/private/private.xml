@@ -8,14 +8,15 @@
             <file>file:/D:/GitHub/SkillForge/src/BackEnd/User.java</file>
             <file>file:/D:/GitHub/SkillForge/src/BackEnd/Instructor.java</file>
             <file>file:/D:/GitHub/SkillForge/src/BackEnd/Course.java</file>
-            <file>file:/D:/GitHub/SkillForge/src/BackEnd/UserManager.java</file>
             <file>file:/D:/GitHub/SkillForge/src/BackEnd/CourseManager.java</file>
-            <file>file:/D:/GitHub/SkillForge/src/data/users.json</file>
+            <file>file:/D:/GitHub/SkillForge/src/BackEnd/UserManager.java</file>
             <file>file:/D:/GitHub/SkillForge/src/FrontEnd/StudentDashboardFrame.java</file>
             <file>file:/D:/GitHub/SkillForge/src/FrontEnd/InstructorDashboardFrame.java</file>
             <file>file:/D:/GitHub/SkillForge/src/FrontEnd/CourseDetails.java</file>
             <file>file:/D:/GitHub/SkillForge/src/FrontEnd/CourseForm.java</file>
             <file>file:/D:/GitHub/SkillForge/src/BackEnd/Lesson.java</file>
+            <file>file:/D:/GitHub/SkillForge/src/FrontEnd/LoginFrame.java</file>
+            <file>file:/D:/GitHub/SkillForge/src/FrontEnd/SignUpFrame.java</file>
         </group>
     </open-files>
 </project-private>

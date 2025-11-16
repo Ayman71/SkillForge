@@ -32,7 +32,7 @@ public class CourseDetails extends javax.swing.JFrame {
         instructorIDLabel.setText(course.getInstructorId());
         descriptionTextArea.setText(course.getDescription());
         for (Lesson l : course.getLessons()) {
-            lessonsTextArea.append(l.getId() + "\t");
+            lessonsTextArea.append(l.getId() + "-" + l.getTitle() + ": " + l.getContent() + "\n");
         }
 //        for (User u : course.getEnrolledStudents()) {
 //            enrolledStudentsTextArea1.append(u.getUserId() + "\t");

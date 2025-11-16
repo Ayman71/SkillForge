@@ -26,6 +26,16 @@ public class Course {
         this.lessons = lessons;
     }
 
+    public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons, ArrayList<User> enrolledStudents) {
+        this.courseID = courseID;
+        this.title = title;
+        this.description = description;
+        this.instructorId = instructorId;
+        this.lessons = lessons;
+        this.enrolledStudents = enrolledStudents;
+    }
+    
+
     public String getCourseID() {
         return courseID;
     }

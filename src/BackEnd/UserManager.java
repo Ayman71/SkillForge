@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 
-
 public class UserManager {
 
     private ArrayList<User> users;
@@ -84,14 +83,19 @@ public class UserManager {
         return false;
     }
 
-    public User login(String email, String password) throws Exception {
+    public int login(String email, String password) throws Exception {
         String hashed = hashPassword(password);
         for (User u : users) {
             if (u.getEmail().equals(email) && u.getPasswordHash().equals(hashed)) {
-                return u;
+                if (u.getRole().equals("Instructor")) {
+                    return 1;
+                } else {
+                    return 2;
+                }
+
             }
         }
-        return null;
+        return -1;
     }
 
     public void logout() {

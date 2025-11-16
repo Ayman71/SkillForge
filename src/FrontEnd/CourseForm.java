@@ -5,7 +5,13 @@
 package FrontEnd;
 
 import BackEnd.Course;
+import BackEnd.Lesson;
+import BackEnd.Student;
+import BackEnd.User;
 import com.formdev.flatlaf.FlatDarkLaf;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,17 +22,60 @@ public class CourseForm extends javax.swing.JFrame {
     /**
      * Creates new form CourseForm
      */
+    private static class LockedTableModel extends DefaultTableModel {
+
+        private int lockedRows = 0;
+
+        public LockedTableModel(Object[] columnNames, int rowCount) {
+            super(columnNames, rowCount);
+        }
+
+        public void lockRows(int count) {
+            lockedRows = count;
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return row >= lockedRows;
+        }
+    }
+    private LockedTableModel lessonsModel;
+    private Course courseToModiy;
+
     public CourseForm() {
         initComponents();
         this.setSize(500, 600);
         this.setLocationRelativeTo(null);
-        
+        lessonsModel = new LockedTableModel(new Object[]{"ID", "Title", "Content"}, 0);
+        lessonsTable.setModel(lessonsModel);
+        lessonsModel.lockRows(0);
+        addModifyButton.setText("Add");
+
     }
+
     public CourseForm(Course course) {
         initComponents();
+        courseToModiy = course;
         this.setSize(500, 600);
         this.setLocationRelativeTo(null);
-        
+        fillForm(course);
+        addModifyButton.setText("Update");
+    }
+
+    private void fillForm(Course course) {
+        courseIDtext.setText(course.getCourseID());
+        courseTitleText.setText(course.getTitle());
+        instructorIDText.setText(course.getInstructorId());
+        descriptionText.setText(course.getDescription());
+        lessonsModel = new LockedTableModel(new Object[]{"ID", "Title", "Content"}, 0);
+        for (Lesson l : course.getLessons()) {
+            lessonsModel.addRow(new Object[]{l.getId(), l.getTitle(), l.getContent()});
+        }
+        lessonsTable.setModel(lessonsModel);
+        lessonsModel.lockRows(lessonsModel.getRowCount());
+        for (int i = 1; i <= course.getEnrolledStudents().size(); i++) {
+            studentsText.append(i + "- " + course.getEnrolledStudents().get(i - 1).getUserId() + "\n");
+        }
     }
 
     /**
@@ -39,21 +88,21 @@ public class CourseForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        courseIDtext = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        courseTitleText = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        instructorIDText = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        descriptionText = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        studentsText = new javax.swing.JTextArea();
+        addModifyButton = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        lessonsTable = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -61,17 +110,17 @@ public class CourseForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Course ID:");
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        courseIDtext.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("Course Title:");
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        courseTitleText.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Instructor ID:");
 
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        instructorIDText.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("Description:");
@@ -79,26 +128,33 @@ public class CourseForm extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Students:");
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        descriptionText.setColumns(20);
+        descriptionText.setLineWrap(true);
+        descriptionText.setRows(5);
+        descriptionText.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(descriptionText);
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setText("Lessons:");
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane3.setViewportView(jTextArea3);
+        studentsText.setEditable(false);
+        studentsText.setColumns(20);
+        studentsText.setRows(5);
+        studentsText.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        studentsText.setEnabled(false);
+        jScrollPane3.setViewportView(studentsText);
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setText("Add");
+        addModifyButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        addModifyButton.setText("Add");
+        addModifyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addModifyButtonActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        lessonsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Lesson ID", "Title", "Content"
@@ -112,10 +168,15 @@ public class CourseForm extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane4.setViewportView(jTable1);
+        jScrollPane4.setViewportView(lessonsTable);
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton2.setText("+");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,17 +195,17 @@ public class CourseForm extends javax.swing.JFrame {
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(courseTitleText, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(instructorIDText, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(jTextField1))
+                            .addComponent(courseIDtext))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(198, 198, 198)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(addModifyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -153,15 +214,15 @@ public class CourseForm extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(courseIDtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(courseTitleText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(instructorIDText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
@@ -176,12 +237,74 @@ public class CourseForm extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(addModifyButton)
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        lessonsModel.addRow(new Object[]{"ID", "Title", "Content"});
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void addModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addModifyButtonActionPerformed
+
+        Course course;
+        String courseID = courseIDtext.getText();
+        String title = courseTitleText.getText();
+        String instructorID = instructorIDText.getText();
+        String description = descriptionText.getText();
+        String idPattern = "^[A-Za-z][0-9]+$";
+
+        if (courseID.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Course ID cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (title.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Course Title cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (instructorID.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Instructor ID cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (description.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Description cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!courseID.matches(idPattern)) {
+            JOptionPane.showMessageDialog(this, "Course ID must start with a letter followed by numbers (e.g., C123).", "Invalid ID", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!instructorID.matches(idPattern)) {
+            JOptionPane.showMessageDialog(this, "Instructor ID must start with a letter followed by numbers (e.g., I15).", "Invalid ID", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        ArrayList<Lesson> lessons = new ArrayList<>();
+        for (int row = 0; row < lessonsTable.getRowCount(); row++) {
+            String lessonID = lessonsModel.getValueAt(row, 0).toString().trim();
+            String lessonTitle = lessonsModel.getValueAt(row, 1).toString().trim();
+            String lessonContent = lessonsModel.getValueAt(row, 2).toString().trim();
+            if (lessonID.isEmpty() || lessonTitle.isEmpty() || lessonContent.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Lesson fields cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            if (!lessonID.matches(idPattern)) {
+                JOptionPane.showMessageDialog(this, "Lesson ID must start with a letter then numbers (e.g., L01).", "Invalid Lesson ID", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            lessons.add(new Lesson(lessonsModel.getValueAt(row, 0).toString(), lessonsModel.getValueAt(row, 1).toString(), lessonsModel.getValueAt(row, 2).toString()));
+        }
+
+        course = new Course(courseID, title, description, instructorID, lessons);
+        if (!studentsText.getText().trim().isEmpty()) {
+            course.setEnrolledStudents(courseToModiy.getEnrolledStudents());
+        }
+    }//GEN-LAST:event_addModifyButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -194,15 +317,46 @@ public class CourseForm extends javax.swing.JFrame {
         } catch (Exception ex) {
             System.err.println("Failed to initialize FlatLaf");
         }
+        ArrayList<Lesson> lessons = new ArrayList<>();
+        lessons.add(new Lesson("L1", "Introduction", "content"));
+        lessons.add(new Lesson("L2", "Basic Concepts", "content"));
+        lessons.add(new Lesson("L3", "Advanced Topics", "content"));
+        lessons.add(new Lesson("L3", "Advanced Topics", "content"));
+        lessons.add(new Lesson("L3", "Advanced Topics", "content"));
+        lessons.add(new Lesson("L3", "Advanced Topics", "content"));
+        lessons.add(new Lesson("L3", "Advanced Topics", "content"));
+        lessons.add(new Lesson("L3", "Advanced Topics", "content"));
+        ArrayList<User> enrolledStudents = new ArrayList<>();
+        enrolledStudents.add(new Student("S100", "Ayman", "Ayman@gmial.com", "asjdhsa"));
+        enrolledStudents.add(new Student("S100", "Ayman", "Ayman@gmial.com", "asjdhsa"));
+        enrolledStudents.add(new Student("S100", "Ayman", "Ayman@gmial.com", "asjdhsa"));
+        enrolledStudents.add(new Student("S100", "Ayman", "Ayman@gmial.com", "asjdhsa"));
+
+// Create the test course
+        Course testCourse = new Course(
+                "C101", // courseID
+                "Java Programming", // title
+                "The goal of this phase is to implement all functionalities for Students and \n"
+                + "Instructors, focusing on course creation, learning progress, and lesson \n"
+                + "interaction. \n"
+                + "The system should support teaching and learning workflows before adding \n"
+                + "administrative oversight. ",
+                "I123",
+                lessons, enrolledStudents
+        );
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CourseForm().setVisible(true);
+                new CourseForm(testCourse).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton addModifyButton;
+    private javax.swing.JTextField courseIDtext;
+    private javax.swing.JTextField courseTitleText;
+    private javax.swing.JTextArea descriptionText;
+    private javax.swing.JTextField instructorIDText;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -213,11 +367,7 @@ public class CourseForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTable lessonsTable;
+    private javax.swing.JTextArea studentsText;
     // End of variables declaration//GEN-END:variables
 }

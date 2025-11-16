@@ -1,0 +1,38 @@
+[
+  {
+    "userId": "I101",
+    "username": "alice_instructor",
+    "email": "a",
+    "passwordHash": "db4017fa4ee642c9c5838dafaa6010243cfbfcefa13b1de4d79e0474ca1715eb",
+    "role": "Instructor",
+    "createdCourses": ["C101", "C205"],
+    "enrolledCourses": null
+  },
+  {
+    "userId": "I102",
+    "username": "mark_teach",
+    "email": "mark@example.com",
+    "passwordHash": "e99a18c428cb38d5",
+    "role": "Instructor",
+    "createdCourses": ["C303"],
+    "enrolledCourses": null
+  },
+  {
+    "userId": "S501",
+    "username": "john_student",
+    "email": "john@example.com",
+    "passwordHash": "5f4dcc3b5aa765d6",
+    "role": "Student",
+    "createdCourses": null,
+    "enrolledCourses": ["C101", "C205"]
+  },
+  {
+    "userId": "S502",
+    "username": "sara_learner",
+    "email": "sara@example.com",
+    "passwordHash": "098f6bcd4621d373",
+    "role": "Student",
+    "createdCourses": null,
+    "enrolledCourses": ["C303"]
+  }
+]

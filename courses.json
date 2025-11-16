@@ -1,3 +1,81 @@
-{
-    "name": "husse"
-}
+[
+  {
+    "courseID": "C101",
+    "title": "Java Programming Basics",
+    "description": "Introduction to Java programming, syntax, OOP, and basic concepts.",
+    "instructorId": "I101",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Introduction to Java",
+        "content": "History of Java, JVM, JDK, JRE."
+      },
+      {
+        "id": "L2",
+        "title": "Variables and Data Types",
+        "content": "Primitive types, reference types, declarations, examples."
+      }
+    ],
+    "enrolledStudents": [
+      {
+        "userId": "S501",
+        "username": "john_student",
+        "email": "john@example.com",
+        "passwordHash": "5f4dcc3b5aa765d61d8327deb882cf99",
+        "role": "Student",
+        "enrolledCourses": ["C101"],
+        "createdCourses": null
+      }
+    ]
+  },
+
+  {
+    "courseID": "C205",
+    "title": "Object-Oriented Programming",
+    "description": "Deep dive into OOP: inheritance, polymorphism, abstraction, encapsulation.",
+    "instructorId": "I102",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "OOP Overview",
+        "content": "Classes, objects, methods, fields."
+      },
+      {
+        "id": "L2",
+        "title": "Inheritance & Polymorphism",
+        "content": "Extending classes, overriding, dynamic dispatch."
+      }
+    ],
+    "enrolledStudents": [
+      {
+        "userId": "S502",
+        "username": "sara_learner",
+        "email": "sara@example.com",
+        "passwordHash": "098f6bcd4621d373cade4e832627b4f6",
+        "role": "Student",
+        "enrolledCourses": ["C205"],
+        "createdCourses": null
+      }
+    ]
+  },
+
+  {
+    "courseID": "C303",
+    "title": "Data Structures",
+    "description": "Arrays, linked lists, stacks, queues, trees, graphs.",
+    "instructorId": "I101",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Arrays & Lists",
+        "content": "Static and dynamic arrays, ArrayList, LinkedList."
+      },
+      {
+        "id": "L2",
+        "title": "Stacks & Queues",
+        "content": "LIFO, FIFO, implementation details."
+      }
+    ],
+    "enrolledStudents": []
+  }
+]

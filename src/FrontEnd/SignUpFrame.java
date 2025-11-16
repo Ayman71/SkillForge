@@ -1,15 +1,10 @@
 package FrontEnd;
 
-
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
-
 import FrontEnd.LoginFrame;
-import Info.LoginInfo;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -160,9 +155,9 @@ public class SignUpFrame extends javax.swing.JFrame {
                             .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jCheckBox1))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton2)
+                    .addComponent(jRadioButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -188,89 +183,85 @@ public class SignUpFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-    String username = jTextField1.getText().trim();
-    String email = jTextField2.getText().trim();
-    String password = jPasswordField2.getText().trim();
-    String confirmPassword = jPasswordField1.getText().trim();
+        String username = jTextField1.getText().trim();
+        String email = jTextField2.getText().trim();
+        String password = jPasswordField2.getText().trim();
+        String confirmPassword = jPasswordField1.getText().trim();
 
-    String role = null;
-    if (jRadioButton1.isSelected()) {
-        role = "Student";
-    } else if (jRadioButton2.isSelected()) {
-        role = "Instructor";
-    }
+        String role = null;
+        if (jRadioButton1.isSelected()) {
+            role = "Student";
+        } else if (jRadioButton2.isSelected()) {
+            role = "Instructor";
+        }
 
-    
-    if (username.isEmpty() || email.isEmpty() ||
-        password.isEmpty() || confirmPassword.isEmpty() || role == null) {
+        if (username.isEmpty() || email.isEmpty()
+                || password.isEmpty() || confirmPassword.isEmpty() || role == null) {
 
-        JOptionPane.showMessageDialog(this,
-                "Please fill all fields and choose a role.",
-                "Signup Error",
-                JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+            JOptionPane.showMessageDialog(this,
+                    "Please fill all fields and choose a role.",
+                    "Signup Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    
-    if (!email.contains("@") || !email.contains(".")) {
-        JOptionPane.showMessageDialog(this,
-                "Invalid email format.",
-                "Signup Error",
-                JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        if (!email.contains("@") || !email.contains(".")) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid email format.",
+                    "Signup Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-  
-    if (!password.equals(confirmPassword)) {
-        JOptionPane.showMessageDialog(this,
-                "Passwords do not match.",
-                "Signup Error",
-                JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(this,
+                    "Passwords do not match.",
+                    "Signup Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    if (password.length() < 6) {
-        JOptionPane.showMessageDialog(this,
-                "Password must be at least 6 characters.",
-                "Signup Error",
-                JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        if (password.length() < 6) {
+            JOptionPane.showMessageDialog(this,
+                    "Password must be at least 6 characters.",
+                    "Signup Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-   LoginInfo loginInfo;
+        LoginInfo loginInfo;
 
-try {
-    loginInfo = new LoginInfo();   // create object normally
-} catch (FileNotFoundException ex) {
-    Logger.getLogger(SignUpFrame.class.getName()).log(Level.SEVERE, null, ex);
-    JOptionPane.showMessageDialog(this,
-            "System error: users file not found.",
-            "Error",
-            JOptionPane.ERROR_MESSAGE);
-    return; // stop the signup
-}
+        try {
+            loginInfo = new LoginInfo();   // create object normally
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(SignUpFrame.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this,
+                    "System error: users file not found.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return; // stop the signup
+        }
 
 // Now use loginInfo correctly:
-boolean ok = false;
+        boolean ok = false;
         try {
             ok = loginInfo.registerUser(username, email, password, role);
         } catch (IOException ex) {
             Logger.getLogger(SignUpFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-if (!ok) {
-    JOptionPane.showMessageDialog(this,
-            "Username or email already exists.",
-            "Signup Error",
-            JOptionPane.ERROR_MESSAGE);
-    return;
-}
+        if (!ok) {
+            JOptionPane.showMessageDialog(this,
+                    "Username or email already exists.",
+                    "Signup Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
 // If registerUser() returns TRUE:
-JOptionPane.showMessageDialog(this, "Signup successful!");
-new LoginFrame().setVisible(true);
-this.dispose();
-
+        JOptionPane.showMessageDialog(this, "Signup successful!");
+        new LoginFrame().setVisible(true);
+        this.dispose();
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
