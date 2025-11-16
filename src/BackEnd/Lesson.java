@@ -9,16 +9,16 @@ package BackEnd;
  * @author husse
  */
 public class Lesson {
+
     private String id;
     private String title;
     private String content;
-    private boolean completed;
 
     public Lesson(String id, String title, String content) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.completed = false;
+
     }
 
     public String getId() {
@@ -45,13 +45,4 @@ public class Lesson {
         this.content = content;
     }
 
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-    
-    
 }
