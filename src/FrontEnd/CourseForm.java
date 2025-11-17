@@ -275,6 +275,10 @@ public class CourseForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Course ID cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        if (courseManager.contains(courseID)!=-1){
+            JOptionPane.showMessageDialog(this, "Course ID already exists!", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (title.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Course Title cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
             return;

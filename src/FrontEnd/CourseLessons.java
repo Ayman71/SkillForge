@@ -4,7 +4,10 @@
  */
 package FrontEnd;
 
+import BackEnd.Lesson;
 import com.formdev.flatlaf.FlatDarkLaf;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,13 +18,24 @@ public class CourseLessons extends javax.swing.JFrame {
     /**
      * Creates new form CourseLessons
      */
-    public CourseLessons() {
+    DefaultTableModel lessonsModel;
+    ArrayList<Lesson> lessons;
+    public CourseLessons(ArrayList<Lesson> lessons) {
         initComponents();
+        this.lessons = lessons;
         this.setSize(500, 600);
         this.setLocationRelativeTo(null);
         progressBar.setStringPainted(true);
+        lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content", "Progress"}, 0);
+        fillTable();
     }
-
+    private void fillTable(){
+        
+        for (Lesson l : lessons) {
+            lessonsModel.addRow(new Object[]{l.getId(), l.getTitle(), l.getContent()});
+        }
+        lessonsTable.setModel(lessonsModel);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,15 +46,15 @@ public class CourseLessons extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        lessonsTable = new javax.swing.JTable();
         courseNameLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        lessonsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -63,8 +77,8 @@ public class CourseLessons extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        lessonsTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(lessonsTable);
 
         courseNameLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         courseNameLabel.setText("Course name - id");
@@ -133,7 +147,7 @@ public class CourseLessons extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CourseLessons().setVisible(true);
+                new CourseLessons(new ArrayList<>()).setVisible(true);
             }
         });
     }
@@ -143,7 +157,7 @@ public class CourseLessons extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable lessonsTable;
     private javax.swing.JProgressBar progressBar;
     // End of variables declaration//GEN-END:variables
 }

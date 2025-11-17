@@ -42,28 +42,24 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         userManager = new UserManager("users.json");
         if (enrolledCoursesRadio.isSelected()) {
             fillTable(1);
-            Button1.setEnabled(true);
-            Button2.setEnabled(true);
+            Button4.setEnabled(true);
             Button3.setEnabled(false);
         } else if (availableCoursesRadio.isSelected()) {
             fillTable(2);
-            Button1.setEnabled(false);
-            Button2.setEnabled(false);
+            Button4.setEnabled(false);
             Button3.setEnabled(true);
         }
         enrolledCoursesRadio.addItemListener(e -> {
             if (enrolledCoursesRadio.isSelected()) {
                 fillTable(1);
-                Button1.setEnabled(true);
-                Button2.setEnabled(true);
+                Button4.setEnabled(true);
                 Button3.setEnabled(false);
             }
         });
         availableCoursesRadio.addItemListener(e -> {
             if (availableCoursesRadio.isSelected()) {
                 fillTable(2);
-                Button1.setEnabled(false);
-                Button2.setEnabled(false);
+                Button4.setEnabled(false);
                 Button3.setEnabled(true);
             }
         });
@@ -89,6 +85,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         Button2 = new javax.swing.JButton();
         Button1 = new javax.swing.JButton();
         Button3 = new javax.swing.JButton();
+        Button4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -145,7 +142,12 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         availableCoursesRadio.setText("Available Courses");
 
         Button2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        Button2.setText("View Course Lessons");
+        Button2.setText("Logout");
+        Button2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Button2ActionPerformed(evt);
+            }
+        });
 
         Button1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Button1.setText("View Course Details");
@@ -161,6 +163,15 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         Button3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Button3ActionPerformed(evt);
+            }
+        });
+
+        Button4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Button4.setText("View Course Lessons");
+        Button4.setEnabled(false);
+        Button4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Button4ActionPerformed(evt);
             }
         });
 
@@ -188,7 +199,8 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(Button1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(Button2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                                    .addComponent(Button3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(Button3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(Button4, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))))
                 .addContainerGap(89, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -202,13 +214,15 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                     .addComponent(enrolledCoursesRadio)
                     .addComponent(availableCoursesRadio))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Button1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Button2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Button4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Button3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Button3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Button2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
@@ -262,6 +276,28 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_Button3ActionPerformed
 
+    private void Button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button2ActionPerformed
+        // TODO add your handling code here:
+        userManager.saveToFile();
+        LoginFrame loginFrame = new LoginFrame();
+        this.setVisible(false);
+        loginFrame.setVisible(true);
+    }//GEN-LAST:event_Button2ActionPerformed
+
+    private void Button4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button4ActionPerformed
+        // TODO add your handling code here:
+         ArrayList<Course> courses = courseManager.getEnrolledCourses(studentID);
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = jTable1.getValueAt(selectedRow, 0).toString();
+            Course course = courses.get(courseManager.contains(courseID));
+            CourseLessons courseLessons = new CourseLessons(course.getLessons());
+            courseLessons.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_Button4ActionPerformed
+
     private void fillTable(int i) {
         
         if (i == 1) {
@@ -302,6 +338,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     private javax.swing.JButton Button1;
     private javax.swing.JButton Button2;
     private javax.swing.JButton Button3;
+    private javax.swing.JButton Button4;
     private javax.swing.JRadioButton availableCoursesRadio;
     private javax.swing.JRadioButton enrolledCoursesRadio;
     private javax.swing.JLabel jLabel1;

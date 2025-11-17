@@ -218,6 +218,7 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
             if(courseManager.deleteCourse(courseID)){
                 userManager.courseDeleted(courseID, userID);
+                coursesModel.removeRow(selectedRow);
                 JOptionPane.showMessageDialog(this, "Course deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 refreshCoursesTable();
             }

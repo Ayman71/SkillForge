@@ -5,10 +5,12 @@ import java.util.ArrayList;
 public class Student extends User {
 
     private ArrayList<String> enrolledCourses;
+    private LessonsProgress lessonsProgress;
 
     public Student(String userId, String username, String email, String passwordHash) {
         super(userId, username, email, passwordHash, "Student");
         enrolledCourses = new ArrayList<>();
+        lessonsProgress = new LessonsProgress();
     }
 
     public ArrayList<String> getEnrolledCourses() {
@@ -18,11 +20,9 @@ public class Student extends User {
     public void setEnrolledCourses(ArrayList<String> enrolledCourses) {
         this.enrolledCourses = enrolledCourses;
     }
-
-    public void enrollCourse(String courseId) {
-        if (!enrolledCourses.contains(courseId)) {
-            enrolledCourses.add(courseId);
-        }
+    public LessonsProgress getLessonsProgress() {
+        return lessonsProgress;
     }
+    
 
 }
