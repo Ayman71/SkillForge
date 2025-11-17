@@ -27,6 +27,7 @@ public class CourseLessons extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         progressBar.setStringPainted(true);
         lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content", "Progress"}, 0);
+        
         fillTable();
     }
     private void fillTable(){

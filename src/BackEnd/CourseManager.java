@@ -58,6 +58,15 @@ public class CourseManager {
         }
         return -1;
     }
+    
+    public Course getCourseFromCourseID(String courseID){
+        for(Course c : courses){
+            if (c.getCourseID().equals(courseID)) {
+                return c;
+            }
+        }
+        return null;
+    }
 
     public boolean addCourse(Course course) {
         if (contains(course.getCourseID()) == -1) {

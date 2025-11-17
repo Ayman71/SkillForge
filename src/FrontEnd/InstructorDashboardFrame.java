@@ -245,9 +245,10 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
         int selectedRow = jTable1.getSelectedRow();
+        
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
-            Course course = courses.get(courseManager.contains(courseID));
+            Course course = courseManager.getCourseFromCourseID(courseID);
             CourseDetails courseDetails = new CourseDetails(course);
             courseDetails.setVisible(true);
         } else {
