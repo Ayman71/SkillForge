@@ -8,6 +8,6 @@ package BackEnd;
  *
  * @author husse
  */
-public class Progress {
+public class LessonsProgress {
     
 }

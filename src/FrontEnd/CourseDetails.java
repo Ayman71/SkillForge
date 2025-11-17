@@ -63,6 +63,7 @@ public class CourseDetails extends javax.swing.JFrame {
         instructorIDLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         courseTitleLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         courseTitleLabel.setText("CourseTitle");

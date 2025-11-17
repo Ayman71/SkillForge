@@ -117,6 +117,8 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jTable1.getTableHeader().setResizingAllowed(false);
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
@@ -251,7 +253,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                 // User clicked OK — perform enrollment
                 courseManager.studentEnrolled(studentID, courseID);
                 userManager.studentEnrolled(studentID, courseID);
-                fillTable(1);
+                fillTable(2);
                 JOptionPane.showMessageDialog(this, "Enrolled successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 
             }
@@ -261,6 +263,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_Button3ActionPerformed
 
     private void fillTable(int i) {
+        
         if (i == 1) {
             coursesModel.setRowCount(0);
             ArrayList<Course> enrolledCourses = courseManager.getEnrolledCourses(studentID);

@@ -238,5 +238,6 @@ public class UserManager {
 
             i++;
         }
+        saveToFile();
     }
 }

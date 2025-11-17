@@ -16,16 +16,7 @@
         "content": "Primitive types, reference types, declarations, examples."
       }
     ],
-    "enrolledStudents": [
-      {
-        "userId": "S501",
-        "username": "john_student",
-        "email": "john@example.com",
-        "passwordHash": "5f4dcc3b5aa765d61d8327deb882cf99",
-        "role": "Student",
-        "enrolledCourses": ["C101"]
-      }
-    ]
+    "enrolledStudents": ["S501"]
   },
   {
     "courseID": "C205",
@@ -44,16 +35,7 @@
         "content": "Extending classes, overriding, dynamic dispatch."
       }
     ],
-    "enrolledStudents": [
-      {
-        "userId": "S502",
-        "username": "sara_learner",
-        "email": "sara@example.com",
-        "passwordHash": "098f6bcd4621d373cade4e832627b4f6",
-        "role": "Student",
-        "enrolledCourses": ["C205"]
-      }
-    ]
+    "enrolledStudents": ["S502"]
   },
   {
     "courseID": "C310",

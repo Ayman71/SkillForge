@@ -78,9 +78,14 @@ public class CourseManager {
     }
 
     public boolean deleteCourse(String courseID) {
-        courses.remove(contains(courseID));
-        saveToFile();
-        return true;
+        for (Course c : courses) {
+            if (c.getCourseID().equals(courseID)) {
+                courses.remove(c);
+                saveToFile();
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean updateLessons(String courseID, ArrayList<Lesson> lessons) {
@@ -98,7 +103,7 @@ public class CourseManager {
         }
         return instructorCourses;
     }
-    
+
     public Course getCourseFromID(String courseID) {
         for (Course c : courses) {
             if (c.getCourseID().equals(courseID)) {
@@ -138,15 +143,16 @@ public class CourseManager {
         }
         return availableCourses;
     }
-    
-    public void studentEnrolled(String studentID, String courseID){
-        int i =0;
-        for(Course c : courses){
-            if(c.getCourseID().equals(courseID)){
+
+    public void studentEnrolled(String studentID, String courseID) {
+        int i = 0;
+        for (Course c : courses) {
+            if (c.getCourseID().equals(courseID)) {
                 courses.get(i).getEnrolledStudents().add(studentID);
                 break;
             }
             i++;
         }
+        saveToFile();
     }
 }
