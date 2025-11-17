@@ -6,7 +6,11 @@ package FrontEnd;
 
 import BackEnd.Course;
 import BackEnd.CourseManager;
+import BackEnd.User;
+import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,21 +23,27 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
      * Creates new form InstructorDashboardFrame
      */
     CourseManager courseManager = new CourseManager("courses.json");
-    DefaultTableModel coursesModel = new DefaultTableModel(
-            new Object[]{"Course ID", "Title", "Instructor ID"}, 0
-    );
+    UserManager userManager = new UserManager("users.json");
+    DefaultTableModel coursesModel = new DefaultTableModel(new Object[]{"Course ID", "Title", "Instructor ID"}, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; // disables editing
+        }
+    };
+    private String userID;
 
-    public InstructorDashboardFrame() {
+    public InstructorDashboardFrame(String userID) {
         initComponents();
         this.setSize(840, 600);
         this.setLocationRelativeTo(null);
+        this.userID = userID;
         jTable1.setModel(coursesModel);
         fillTable();
     }
 
     public void fillTable() {
         coursesModel.setRowCount(0);
-        for (Course c : courseManager.getCourses()) {
+        for (Course c : courseManager.getCoursesFromInstructor(userID)) {
             coursesModel.addRow(new Object[]{c.getCourseID(), c.getTitle(), c.getInstructorId()});
         }
     }
@@ -63,6 +73,7 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Courses");
 
+        jTable1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -86,6 +97,9 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 28)); // NOI18N
@@ -186,24 +200,67 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 //    }
     private void addCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCourseButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_addCourseButtonActionPerformed
+        CourseForm courseForm = new CourseForm(coursesModel,userID);
+        courseForm.setVisible(true);
 
+    }//GEN-LAST:event_addCourseButtonActionPerformed
+    public void refreshCoursesTable() {
+        coursesModel.setRowCount(0); // clear table
+        for (Course c : courseManager.getCoursesFromInstructor(userID)) {
+            coursesModel.addRow(new Object[]{c.getCourseID(), c.getTitle(), c.getInstructorId()});
+        }
+    }
     private void deleteCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCourseButtonActionPerformed
         // TODO add your handling code here:
+        ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = jTable1.getValueAt(selectedRow, 0).toString();
+            if(courseManager.deleteCourse(courseID)){
+                userManager.courseDeleted(courseID, userID);
+                JOptionPane.showMessageDialog(this, "Course deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                refreshCoursesTable();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_deleteCourseButtonActionPerformed
 
     private void modifyCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyCourseButtonActionPerformed
         // TODO add your handling code here:
+        ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = jTable1.getValueAt(selectedRow, 0).toString();
+            Course course = courses.get(courseManager.contains(courseID));
+            CourseForm courseForm = new CourseForm(course, coursesModel, userID);
+            courseForm.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_modifyCourseButtonActionPerformed
 
     private void viewCourseDetailsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewCourseDetailsButtonActionPerformed
         // TODO add your handling code here:
+        ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = jTable1.getValueAt(selectedRow, 0).toString();
+            Course course = courses.get(courseManager.contains(courseID));
+            CourseDetails courseDetails = new CourseDetails(course);
+            courseDetails.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
 
     }//GEN-LAST:event_viewCourseDetailsButtonActionPerformed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         // TODO add your handling code here:
         courseManager.saveToFile();
+        LoginFrame loginFrame = new LoginFrame();
+        this.setVisible(false);
+        loginFrame.setVisible(true);
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     /**
@@ -219,7 +276,7 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InstructorDashboardFrame().setVisible(true);
+                new InstructorDashboardFrame("").setVisible(true);
             }
         });
     }

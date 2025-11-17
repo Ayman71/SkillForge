@@ -16,6 +16,10 @@ public class Instructor extends User {
         return createdCourses;
     }
 
+    public void setCreatedCourses(ArrayList<String> createdCourses) {
+        this.createdCourses = createdCourses;
+    }
+
     public void addCourse(String courseId) {
         if (!createdCourses.contains(courseId)) {
             createdCourses.add(courseId);

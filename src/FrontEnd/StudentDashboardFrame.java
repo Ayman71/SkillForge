@@ -4,7 +4,14 @@
  */
 package FrontEnd;
 
+import BackEnd.Course;
+import BackEnd.CourseManager;
+import BackEnd.User;
+import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -15,10 +22,52 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     /**
      * Creates new form StudentDashboardFrame
      */
-    public StudentDashboardFrame() {
+    private CourseManager courseManager;
+    private UserManager userManager;
+    DefaultTableModel coursesModel = new DefaultTableModel(new Object[]{"Course ID", "Title", "Instructor ID"}, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; // disables editing
+        }
+    };
+    private String studentID;
+
+    public StudentDashboardFrame(String studentID) {
         initComponents();
         this.setSize(840, 600);
         this.setLocationRelativeTo(null);
+        jTable1.setModel(coursesModel);
+        this.studentID = studentID;
+        courseManager = new CourseManager("courses.json");
+        userManager = new UserManager("users.json");
+        if (enrolledCoursesRadio.isSelected()) {
+            fillTable(1);
+            Button1.setEnabled(true);
+            Button2.setEnabled(true);
+            Button3.setEnabled(false);
+        } else if (availableCoursesRadio.isSelected()) {
+            fillTable(2);
+            Button1.setEnabled(false);
+            Button2.setEnabled(false);
+            Button3.setEnabled(true);
+        }
+        enrolledCoursesRadio.addItemListener(e -> {
+            if (enrolledCoursesRadio.isSelected()) {
+                fillTable(1);
+                Button1.setEnabled(true);
+                Button2.setEnabled(true);
+                Button3.setEnabled(false);
+            }
+        });
+        availableCoursesRadio.addItemListener(e -> {
+            if (availableCoursesRadio.isSelected()) {
+                fillTable(2);
+                Button1.setEnabled(false);
+                Button2.setEnabled(false);
+                Button3.setEnabled(true);
+            }
+        });
+
     }
 
     /**
@@ -35,8 +84,8 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        enrolledCoursesRadio = new javax.swing.JRadioButton();
+        availableCoursesRadio = new javax.swing.JRadioButton();
         Button2 = new javax.swing.JButton();
         Button1 = new javax.swing.JButton();
         Button3 = new javax.swing.JButton();
@@ -78,30 +127,40 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Select Table:");
 
-        tableModelbtn.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jRadioButton1.setSelected(true);
-        jRadioButton1.setText("Enrolled Courses");
-        jRadioButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        tableModelbtn.add(enrolledCoursesRadio);
+        enrolledCoursesRadio.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        enrolledCoursesRadio.setSelected(true);
+        enrolledCoursesRadio.setText("Enrolled Courses");
+        enrolledCoursesRadio.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        enrolledCoursesRadio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                enrolledCoursesRadioActionPerformed(evt);
             }
         });
 
-        tableModelbtn.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jRadioButton2.setText("Available Courses");
+        tableModelbtn.add(availableCoursesRadio);
+        availableCoursesRadio.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        availableCoursesRadio.setText("Available Courses");
 
         Button2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Button2.setText("View Course Lessons");
 
         Button1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Button1.setText("View Course Details");
+        Button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Button1ActionPerformed(evt);
+            }
+        });
 
         Button3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Button3.setText("Enroll in Course");
         Button3.setEnabled(false);
+        Button3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Button3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -118,9 +177,9 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(jRadioButton1)
+                                .addComponent(enrolledCoursesRadio)
                                 .addGap(18, 18, 18)
-                                .addComponent(jRadioButton2))
+                                .addComponent(availableCoursesRadio))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -138,8 +197,8 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
+                    .addComponent(enrolledCoursesRadio)
+                    .addComponent(availableCoursesRadio))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -155,9 +214,68 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void enrolledCoursesRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enrolledCoursesRadioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+
+    }//GEN-LAST:event_enrolledCoursesRadioActionPerformed
+
+    private void Button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button1ActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = jTable1.getValueAt(selectedRow, 0).toString();
+            Course course = courseManager.getCourseFromID(courseID);
+            CourseDetails courseDetails = new CourseDetails(course);
+            courseDetails.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_Button1ActionPerformed
+
+    private void Button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button3ActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = jTable1.getValueAt(selectedRow, 0).toString();
+            Course course = courseManager.getCourseFromID(courseID);
+            int option = JOptionPane.showConfirmDialog(
+                    this,
+                    "Do you want to enroll in course: " + course.getTitle() + " (" + courseID + ")?",
+                    "Confirm Enrollment",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (option == JOptionPane.OK_OPTION) {
+                // User clicked OK — perform enrollment
+                courseManager.studentEnrolled(studentID, courseID);
+                userManager.studentEnrolled(studentID, courseID);
+                fillTable(1);
+                JOptionPane.showMessageDialog(this, "Enrolled successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_Button3ActionPerformed
+
+    private void fillTable(int i) {
+        if (i == 1) {
+            coursesModel.setRowCount(0);
+            ArrayList<Course> enrolledCourses = courseManager.getEnrolledCourses(studentID);
+            for (Course c : enrolledCourses) {
+                coursesModel.addRow(new Object[]{c.getCourseID(), c.getTitle(), c.getInstructorId()});
+            }
+        } else {
+            coursesModel.setRowCount(0);
+            ArrayList<Course> availableCourses = courseManager.getAvailableCourses(studentID);
+            for (Course c : availableCourses) {
+                coursesModel.addRow(new Object[]{c.getCourseID(), c.getTitle(), c.getInstructorId()});
+            }
+
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -172,7 +290,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StudentDashboardFrame().setVisible(true);
+                new StudentDashboardFrame("").setVisible(true);
             }
         });
     }
@@ -181,10 +299,10 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     private javax.swing.JButton Button1;
     private javax.swing.JButton Button2;
     private javax.swing.JButton Button3;
+    private javax.swing.JRadioButton availableCoursesRadio;
+    private javax.swing.JRadioButton enrolledCoursesRadio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.ButtonGroup tableModelbtn;

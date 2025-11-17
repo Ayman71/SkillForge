@@ -199,12 +199,13 @@ public class LoginFrame extends javax.swing.JFrame {
         String password = jPasswordField1.getText().trim();
         try {
             int role = userManager.login(email, password);
+            String userID = userManager.getUserFromEmail(email).getUserId();
             if (role == 1) {
-                InstructorDashboardFrame instructorDashboard = new InstructorDashboardFrame();
+                InstructorDashboardFrame instructorDashboard = new InstructorDashboardFrame(userID);
                 this.setVisible(false);
                 instructorDashboard.setVisible(true);
             } else if (role == 2) {
-                StudentDashboardFrame studentDashboard = new StudentDashboardFrame();
+                StudentDashboardFrame studentDashboard = new StudentDashboardFrame(userID);
                 this.setVisible(false);
                 studentDashboard.setVisible(true);
 

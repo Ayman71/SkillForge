@@ -6,6 +6,7 @@ package FrontEnd;
 
 import BackEnd.Course;
 import BackEnd.Lesson;
+import BackEnd.Student;
 import BackEnd.User;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.util.ArrayList;
@@ -34,9 +35,9 @@ public class CourseDetails extends javax.swing.JFrame {
         for (Lesson l : course.getLessons()) {
             lessonsTextArea.append(l.getId() + "-" + l.getTitle() + ": " + l.getContent() + "\n");
         }
-//        for (User u : course.getEnrolledStudents()) {
-//            enrolledStudentsTextArea1.append(u.getUserId() + "\t");
-//        }
+        for (String s : course.getEnrolledStudents()) {
+            enrolledStudentsTextArea1.append(s + "\n");
+        }
     }
 
     /**
@@ -61,7 +62,7 @@ public class CourseDetails extends javax.swing.JFrame {
         instructorIDLabel2 = new javax.swing.JLabel();
         instructorIDLabel3 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         courseTitleLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         courseTitleLabel.setText("CourseTitle");

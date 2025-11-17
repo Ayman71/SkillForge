@@ -13,6 +13,18 @@ public class UserManager {
     private String filename;
     private Gson gson;
 
+    private static class TempUser {
+
+        String userId;
+        String username;
+        String email;
+        String passwordHash;
+        String role;
+        ArrayList<String> enrolledCourses;
+        ArrayList<String> createdCourses;
+
+    }
+
     public UserManager(String filename) {
         this.filename = filename;
         this.gson = new Gson();
@@ -22,11 +34,33 @@ public class UserManager {
 
     public void readFromFile() {
         try (FileReader reader = new FileReader(filename)) {
-            users = gson.fromJson(reader, new TypeToken<ArrayList<User>>() {
-            }.getType());
-            if (users == null) {
-                users = new ArrayList<>();
+
+            ArrayList<TempUser> temp = gson.fromJson(reader,
+                    new TypeToken<ArrayList<TempUser>>() {
+                    }.getType()
+            );
+
+            users = new ArrayList<>();
+
+            if (temp != null) {
+                for (TempUser u : temp) {
+
+                    if ("student".equalsIgnoreCase(u.role)) {
+                        Student s = new Student(u.userId, u.username, u.email, u.passwordHash);
+                        if (u.enrolledCourses != null) {
+                            s.setEnrolledCourses(u.enrolledCourses);
+                        }
+                        users.add(s);
+                    } else if ("instructor".equalsIgnoreCase(u.role)) {
+                        Instructor i = new Instructor(u.userId, u.username, u.email, u.passwordHash);
+                        if (u.createdCourses != null) {
+                            i.setCreatedCourses(u.createdCourses);
+                        }
+                        users.add(i);
+                    }
+                }
             }
+
         } catch (Exception e) {
             users = new ArrayList<>();
         }
@@ -34,7 +68,29 @@ public class UserManager {
 
     public void saveToFile() {
         try (FileWriter writer = new FileWriter(filename)) {
-            gson.toJson(users, writer);
+
+            ArrayList<TempUser> x = new ArrayList<>();
+
+            for (User u : users) {
+                TempUser j = new TempUser();
+                j.userId = u.getUserId();
+                j.username = u.getUsername();
+                j.email = u.getEmail();
+                j.passwordHash = u.getPasswordHash();
+
+                if (u instanceof Student) {
+                    j.role = "student";
+                    j.enrolledCourses = ((Student) u).getEnrolledCourses();
+                } else if (u instanceof Instructor) {
+                    j.role = "instructor";
+                    j.createdCourses = ((Instructor) u).getCreatedCourses();
+                }
+
+                x.add(j);
+            }
+
+            gson.toJson(x, writer);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,6 +130,40 @@ public class UserManager {
         return true;
     }
 
+    public int contains(String ID) {
+        int i = 0;
+        for (User u : users) {
+            if (u.getUserId().equals(ID)) {
+                return i;
+            }
+            i++;
+        }
+        return -1;
+    }
+
+    public void courseCreated(String courseID, String instructorID) {
+        int i = contains(instructorID);
+        ArrayList<String> createdCourses = ((Instructor) users.get(i)).getCreatedCourses();
+        createdCourses.add(courseID);
+        ((Instructor) users.get(i)).setCreatedCourses(createdCourses);
+        saveToFile();
+    }
+
+    public void courseDeleted(String courseID, String instructorID) {
+        int i = contains(instructorID);
+        ArrayList<String> createdCourses = ((Instructor) users.get(i)).getCreatedCourses();
+        int j = 0;
+        for (String s : createdCourses) {
+            if (s.equals(courseID)) {
+                break;
+            }
+            j++;
+        }
+        createdCourses.remove(j);
+        ((Instructor) users.get(i)).setCreatedCourses(createdCourses);
+        saveToFile();
+    }
+
     private boolean emailExists(String email) {
         for (User u : users) {
             if (u.getEmail().equals(email)) {
@@ -81,6 +171,15 @@ public class UserManager {
             }
         }
         return false;
+    }
+
+    public User getUserFromEmail(String email) {
+        for (User u : users) {
+            if (u.getEmail().equals(email)) {
+                return u;
+            }
+        }
+        return null;
     }
 
     public int login(String email, String password) throws Exception {
@@ -123,6 +222,21 @@ public class UserManager {
                 saveToFile();
                 return;
             }
+        }
+    }
+
+    public void studentEnrolled(String studentID, String courseID) {
+        int i = 0;
+        for (User u : users) {
+            if (u instanceof Student) {
+                Student s = (Student) u;
+                if (s.getUserId().equals(studentID)) {
+                    s.getEnrolledCourses().add(courseID);
+                    break;
+                }
+            }
+
+            i++;
         }
     }
 }

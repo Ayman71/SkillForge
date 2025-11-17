@@ -23,12 +23,10 @@
         "email": "john@example.com",
         "passwordHash": "5f4dcc3b5aa765d61d8327deb882cf99",
         "role": "Student",
-        "enrolledCourses": ["C101"],
-        "createdCourses": null
+        "enrolledCourses": ["C101"]
       }
     ]
   },
-
   {
     "courseID": "C205",
     "title": "Object-Oriented Programming",
@@ -53,27 +51,63 @@
         "email": "sara@example.com",
         "passwordHash": "098f6bcd4621d373cade4e832627b4f6",
         "role": "Student",
-        "enrolledCourses": ["C205"],
-        "createdCourses": null
+        "enrolledCourses": ["C205"]
       }
     ]
   },
-
   {
-    "courseID": "C303",
-    "title": "Data Structures",
-    "description": "Arrays, linked lists, stacks, queues, trees, graphs.",
+    "courseID": "C310",
+    "title": "Algorithms Fundamentals",
+    "description": "Sorting, searching, recursion, greedy algorithms, complexity analysis.",
     "instructorId": "I101",
     "lessons": [
       {
         "id": "L1",
-        "title": "Arrays & Lists",
-        "content": "Static and dynamic arrays, ArrayList, LinkedList."
+        "title": "Introduction to Algorithms",
+        "content": "What is an algorithm? Complexity, notation."
       },
       {
         "id": "L2",
-        "title": "Stacks & Queues",
-        "content": "LIFO, FIFO, implementation details."
+        "title": "Sorting Algorithms",
+        "content": "Bubble, merge, quicksort fundamentals."
+      }
+    ],
+    "enrolledStudents": []
+  },
+  {
+    "courseID": "C320",
+    "title": "Database Systems",
+    "description": "SQL, ERD, normalization, indexes, transactions.",
+    "instructorId": "I102",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Introduction to Databases",
+        "content": "Database types, relational model."
+      },
+      {
+        "id": "L2",
+        "title": "Basic SQL",
+        "content": "SELECT, INSERT, UPDATE, DELETE."
+      }
+    ],
+    "enrolledStudents": []
+  },
+  {
+    "courseID": "C330",
+    "title": "Web Development Basics",
+    "description": "HTML, CSS, JavaScript fundamentals, layout, forms.",
+    "instructorId": "I101",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "HTML Structure",
+        "content": "Tags, elements, attributes."
+      },
+      {
+        "id": "L2",
+        "title": "CSS Basics",
+        "content": "Selectors, layout principles."
       }
     ],
     "enrolledStudents": []

@@ -1,7 +1,6 @@
 package BackEnd;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Student extends User {
 
@@ -14,6 +13,10 @@ public class Student extends User {
 
     public ArrayList<String> getEnrolledCourses() {
         return enrolledCourses;
+    }
+
+    public void setEnrolledCourses(ArrayList<String> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
     }
 
     public void enrollCourse(String courseId) {

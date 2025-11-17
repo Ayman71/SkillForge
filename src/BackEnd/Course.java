@@ -16,7 +16,7 @@ public class Course {
     private String description;
     private String instructorId;
     private ArrayList<Lesson> lessons;
-    private ArrayList<User> enrolledStudents;
+    private ArrayList<String> enrolledStudents;
 
     public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons) {
         this.courseID = courseID;
@@ -26,7 +26,7 @@ public class Course {
         this.lessons = lessons;
     }
 
-    public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons, ArrayList<User> enrolledStudents) {
+    public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons, ArrayList<String> enrolledStudents) {
         this.courseID = courseID;
         this.title = title;
         this.description = description;
@@ -76,11 +76,14 @@ public class Course {
         this.lessons = lessons;
     }
 
-    public ArrayList<User> getEnrolledStudents() {
+    public ArrayList<String> getEnrolledStudents() {
+        if(enrolledStudents == null){
+            return new ArrayList<String>();
+        }
         return enrolledStudents;
     }
 
-    public void setEnrolledStudents(ArrayList<User> enrolledStudents) {
+    public void setEnrolledStudents(ArrayList<String> enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
     }
     
