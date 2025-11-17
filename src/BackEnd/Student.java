@@ -1,31 +1,28 @@
-
-
 package BackEnd;
 
-
-
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class Student extends User {
-    private List<String> enrolledCourses;
-    
-    
+
+    private ArrayList<String> enrolledCourses;
+    private LessonsProgress lessonsProgress;
+
     public Student(String userId, String username, String email, String passwordHash) {
         super(userId, username, email, passwordHash, "Student");
-                enrolledCourses = new ArrayList<>();
+        enrolledCourses = new ArrayList<>();
+        lessonsProgress = new LessonsProgress();
     }
-    
-    
-    public List<String> getEnrolledCourses() {
+
+    public ArrayList<String> getEnrolledCourses() {
         return enrolledCourses;
     }
-     public void enrollCourse(String courseId) {
-        if (!enrolledCourses.contains(courseId)) 
-            
-        {enrolledCourses.add(courseId);
-    } }
+
+    public void setEnrolledCourses(ArrayList<String> enrolledCourses) {
+        this.enrolledCourses = enrolledCourses;
+    }
+    public LessonsProgress getLessonsProgress() {
+        return lessonsProgress;
+    }
     
-    
+
 }

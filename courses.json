@@ -1,3 +1,97 @@
-{
-    "name": "husse"
-}
+[
+  {
+    "courseID": "C101",
+    "title": "Java Programming Basics",
+    "description": "Introduction to Java programming, syntax, OOP, and basic concepts.",
+    "instructorId": "I101",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Introduction to Java",
+        "content": "History of Java, JVM, JDK, JRE."
+      },
+      {
+        "id": "L2",
+        "title": "Variables and Data Types",
+        "content": "Primitive types, reference types, declarations, examples."
+      }
+    ],
+    "enrolledStudents": ["S501"]
+  },
+  {
+    "courseID": "C205",
+    "title": "Object-Oriented Programming",
+    "description": "Deep dive into OOP: inheritance, polymorphism, abstraction, encapsulation.",
+    "instructorId": "I102",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "OOP Overview",
+        "content": "Classes, objects, methods, fields."
+      },
+      {
+        "id": "L2",
+        "title": "Inheritance & Polymorphism",
+        "content": "Extending classes, overriding, dynamic dispatch."
+      }
+    ],
+    "enrolledStudents": ["S502"]
+  },
+  {
+    "courseID": "C310",
+    "title": "Algorithms Fundamentals",
+    "description": "Sorting, searching, recursion, greedy algorithms, complexity analysis.",
+    "instructorId": "I101",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Introduction to Algorithms",
+        "content": "What is an algorithm? Complexity, notation."
+      },
+      {
+        "id": "L2",
+        "title": "Sorting Algorithms",
+        "content": "Bubble, merge, quicksort fundamentals."
+      }
+    ],
+    "enrolledStudents": []
+  },
+  {
+    "courseID": "C320",
+    "title": "Database Systems",
+    "description": "SQL, ERD, normalization, indexes, transactions.",
+    "instructorId": "I102",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Introduction to Databases",
+        "content": "Database types, relational model."
+      },
+      {
+        "id": "L2",
+        "title": "Basic SQL",
+        "content": "SELECT, INSERT, UPDATE, DELETE."
+      }
+    ],
+    "enrolledStudents": []
+  },
+  {
+    "courseID": "C330",
+    "title": "Web Development Basics",
+    "description": "HTML, CSS, JavaScript fundamentals, layout, forms.",
+    "instructorId": "I101",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "HTML Structure",
+        "content": "Tags, elements, attributes."
+      },
+      {
+        "id": "L2",
+        "title": "CSS Basics",
+        "content": "Selectors, layout principles."
+      }
+    ],
+    "enrolledStudents": []
+  }
+]
