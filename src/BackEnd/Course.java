@@ -18,14 +18,6 @@ public class Course {
     private ArrayList<Lesson> lessons;
     private ArrayList<String> enrolledStudents;
 
-    public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons) {
-        this.courseID = courseID;
-        this.title = title;
-        this.description = description;
-        this.instructorId = instructorId;
-        this.lessons = lessons;
-    }
-
     public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons, ArrayList<String> enrolledStudents) {
         this.courseID = courseID;
         this.title = title;

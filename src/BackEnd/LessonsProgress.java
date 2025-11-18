@@ -10,14 +10,12 @@ import java.util.Map;
 
 public class LessonsProgress {
 
-    // Maps courseID -> (lessonID -> completion status)
     private Map<String, Map<String, Boolean>> progressMap;
 
     public LessonsProgress() {
         progressMap = new HashMap<>();
     }
 
-    // Initialize progress for a course with its lessons (all incomplete by default)
     public void addCourse(String courseID, ArrayList<Lesson> lessons) {
         Map<String, Boolean> lessonStatus = new HashMap<>();
         for (Lesson lesson : lessons) {
@@ -26,7 +24,14 @@ public class LessonsProgress {
         progressMap.put(courseID, lessonStatus);
     }
 
-    // Mark a lesson as completed
+    public Map<String, Map<String, Boolean>> getProgressMap() {
+        return progressMap;
+    }
+
+    public void setProgressMap(Map<String, Map<String, Boolean>> progressMap) {
+        this.progressMap = progressMap;
+    }
+
     public void markLessonCompleted(String courseID, String lessonID) {
         if (progressMap.containsKey(courseID)) {
             Map<String, Boolean> lessons = progressMap.get(courseID);
@@ -36,28 +41,49 @@ public class LessonsProgress {
         }
     }
 
-    // Get completion status of a lesson
     public boolean isLessonCompleted(String courseID, String lessonID) {
-        return progressMap.containsKey(courseID) &&
-               progressMap.get(courseID).getOrDefault(lessonID, false);
+        return progressMap.containsKey(courseID)
+                && progressMap.get(courseID).getOrDefault(lessonID, false);
     }
 
-    // Calculate progress in a course (percentage 0.0 - 100.0)
     public double getCourseProgress(String courseID) {
-        if (!progressMap.containsKey(courseID)) return 0.0;
+        if (!progressMap.containsKey(courseID)) {
+            return 0.0;
+        }
         Map<String, Boolean> lessons = progressMap.get(courseID);
-        if (lessons.isEmpty()) return 0.0;
+        if (lessons.isEmpty()) {
+            return 0.0;
+        }
 
         int completedCount = 0;
         for (Boolean status : lessons.values()) {
-            if (status) completedCount++;
+            if (status) {
+                completedCount++;
+            }
         }
-        return (completedCount * 100.0) / lessons.size();
+        return (completedCount*100) / lessons.size();
     }
 
-    // Get map of lessons and their completion for a course
     public Map<String, Boolean> getCourseLessonProgress(String courseID) {
         return progressMap.getOrDefault(courseID, new HashMap<>());
     }
-}
 
+    public void syncWithCourse(String courseID, ArrayList<Lesson> updatedLessons) {
+
+        Map<String, Boolean> lessonStatus = progressMap.get(courseID);
+        if (lessonStatus == null) {
+            lessonStatus = new HashMap<>();
+            progressMap.put(courseID, lessonStatus);
+        }
+
+        Map<String, Boolean> newMap = new HashMap<>();
+
+        for (Lesson lesson : updatedLessons) {
+            String lessonID = lesson.getId();
+            boolean old = lessonStatus.getOrDefault(lessonID, false);
+            newMap.put(lessonID, old);
+        }
+
+        progressMap.put(courseID, newMap);
+    }
+}

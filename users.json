@@ -8,11 +8,7 @@
     "createdCourses": [
       "C101",
       "C310",
-      "C330",
-      "C100",
-      "c333",
-      "c33",
-      "c333"
+      "C330"
     ]
   },
   {
@@ -34,8 +30,25 @@
     "role": "student",
     "enrolledCourses": [
       "C101",
-      "C205"
-    ]
+      "C205",
+      "C330"
+    ],
+    "lessonsProgress": {
+      "C101": {
+        "L1": true,
+        "L2": true,
+        "L3": false
+      },
+      "C205": {
+        "L1": false,
+        "L2": true
+      },
+      "C330": {
+        "L1": true,
+        "L2": true,
+        "L3": false
+      }
+    }
   },
   {
     "userId": "S502",
@@ -45,6 +58,12 @@
     "role": "student",
     "enrolledCourses": [
       "C205"
-    ]
+    ],
+    "lessonsProgress": {
+      "C205": {
+        "L1": false,
+        "L2": false
+      }
+    }
   }
 ]

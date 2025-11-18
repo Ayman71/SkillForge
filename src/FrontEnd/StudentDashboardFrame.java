@@ -38,8 +38,8 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         jTable1.setModel(coursesModel);
         this.studentID = studentID;
-        courseManager = new CourseManager("courses.json");
         userManager = new UserManager("users.json");
+        courseManager = new CourseManager("courses.json", userManager);
         if (enrolledCoursesRadio.isSelected()) {
             fillTable(1);
             Button4.setEnabled(true);
@@ -90,7 +90,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        jTable1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jTable1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -180,35 +180,31 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(303, 303, 303)
-                        .addComponent(jLabel1))
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(enrolledCoursesRadio)
+                        .addGap(18, 18, 18)
+                        .addComponent(availableCoursesRadio))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(enrolledCoursesRadio)
-                                .addGap(18, 18, 18)
-                                .addComponent(availableCoursesRadio))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(Button1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(Button2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                                    .addComponent(Button3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(Button4, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Button1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Button2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                            .addComponent(Button3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Button4, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))
                 .addContainerGap(89, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(40, 40, 40)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(enrolledCoursesRadio)
@@ -224,7 +220,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Button2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
 
         pack();
@@ -290,8 +286,8 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
-            Course course = courses.get(courseManager.contains(courseID));
-            CourseLessons courseLessons = new CourseLessons(course.getLessons());
+            Course course = courseManager.getCourseFromCourseID(courseID);
+            CourseLessons courseLessons = new CourseLessons(course,studentID, courseManager);
             courseLessons.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);

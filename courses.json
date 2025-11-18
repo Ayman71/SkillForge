@@ -1,26 +1,5 @@
 [
   {
-    "courseID": "C101",
-    "title": "Java Programming Basics",
-    "description": "Introduction to Java programming, syntax, OOP, and basic concepts.",
-    "instructorId": "I101",
-    "lessons": [
-      {
-        "id": "L1",
-        "title": "Introduction to Java",
-        "content": "History of Java, JVM, JDK, JRE."
-      },
-      {
-        "id": "L2",
-        "title": "Variables and Data Types",
-        "content": "Primitive types, reference types, declarations, examples."
-      }
-    ],
-    "enrolledStudents": [
-      "S501"
-    ]
-  },
-  {
     "courseID": "C205",
     "title": "Object-Oriented Programming",
     "description": "Deep dive into OOP: inheritance, polymorphism, abstraction, encapsulation.",
@@ -95,15 +74,41 @@
         "id": "L2",
         "title": "CSS Basics",
         "content": "Selectors, layout principles."
+      },
+      {
+        "id": "L4",
+        "title": "Title",
+        "content": "Content"
       }
     ],
-    "enrolledStudents": []
+    "enrolledStudents": [
+      "S501"
+    ]
   },
   {
-    "courseID": "c333",
-    "title": "221",
-    "description": "21",
+    "courseID": "C101",
+    "title": "Java Programming Basics",
+    "description": "Introduction to Java programming, syntax, OOP, and basic concepts.",
     "instructorId": "I101",
-    "lessons": []
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Introduction to Java",
+        "content": "History of Java, JVM, JDK, JRE."
+      },
+      {
+        "id": "L2",
+        "title": "Variables and Data Types",
+        "content": "Primitive types, reference types, declarations, examples."
+      },
+      {
+        "id": "L3",
+        "title": "Title",
+        "content": "Content"
+      }
+    ],
+    "enrolledStudents": [
+      "S501"
+    ]
   }
 ]

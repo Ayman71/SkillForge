@@ -22,8 +22,9 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
     /**
      * Creates new form InstructorDashboardFrame
      */
-    CourseManager courseManager = new CourseManager("courses.json");
     UserManager userManager = new UserManager("users.json");
+    CourseManager courseManager = new CourseManager("courses.json", userManager);
+
     DefaultTableModel coursesModel = new DefaultTableModel(new Object[]{"Course ID", "Title", "Instructor ID"}, 0) {
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -150,32 +151,28 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(207, 207, 207)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(294, 294, 294)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(viewCourseDetailsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(addCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(deleteCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(modifyCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -190,7 +187,7 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
                         .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(6, 6, 6)
                 .addComponent(viewCourseDetailsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
         pack();
@@ -200,7 +197,7 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 //    }
     private void addCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCourseButtonActionPerformed
         // TODO add your handling code here:
-        CourseForm courseForm = new CourseForm(coursesModel,userID);
+        CourseForm courseForm = new CourseForm(coursesModel, userID, courseManager, userManager);
         courseForm.setVisible(true);
 
     }//GEN-LAST:event_addCourseButtonActionPerformed
@@ -212,11 +209,10 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
     }
     private void deleteCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCourseButtonActionPerformed
         // TODO add your handling code here:
-        ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
-            if(courseManager.deleteCourse(courseID)){
+            if (courseManager.deleteCourse(courseID)) {
                 userManager.courseDeleted(courseID, userID);
                 coursesModel.removeRow(selectedRow);
                 JOptionPane.showMessageDialog(this, "Course deleted successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -229,12 +225,11 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 
     private void modifyCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyCourseButtonActionPerformed
         // TODO add your handling code here:
-        ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
-            Course course = courses.get(courseManager.contains(courseID));
-            CourseForm courseForm = new CourseForm(course, coursesModel, userID);
+            Course course = courseManager.getCourseFromCourseID(courseID);
+            CourseForm courseForm = new CourseForm(course, coursesModel, userID, courseManager, userManager);
             courseForm.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
@@ -243,9 +238,8 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 
     private void viewCourseDetailsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewCourseDetailsButtonActionPerformed
         // TODO add your handling code here:
-        ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
         int selectedRow = jTable1.getSelectedRow();
-        
+
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
             Course course = courseManager.getCourseFromCourseID(courseID);
