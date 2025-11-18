@@ -206,9 +206,9 @@ public class CourseDetails extends javax.swing.JFrame {
                 + "The system should support teaching and learning workflows before adding \n"
                 + "administrative oversight. ",
                 "INST123",
-                lessons
+                lessons, new ArrayList<String>()
         );
-
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new CourseDetails(testCourse).setVisible(true);

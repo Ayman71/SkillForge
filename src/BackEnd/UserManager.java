@@ -151,16 +151,17 @@ public class UserManager {
 
     public void courseDeleted(String courseID, String instructorID) {
         int i = contains(instructorID);
-        ArrayList<String> createdCourses = ((Instructor) users.get(i)).getCreatedCourses();
-        int j = 0;
-        for (String s : createdCourses) {
-            if (s.equals(courseID)) {
-                break;
-            }
-            j++;
+        Instructor inst = (Instructor) users.get(i);
+        ArrayList<String> createdCourses = inst.getCreatedCourses();
+
+        int index = createdCourses.indexOf(courseID);
+
+        if (index != -1) {
+            createdCourses.remove(index);
+        } else {
+            System.out.println("Course not found in instructor's list");
+            return;
         }
-        createdCourses.remove(j);
-        ((Instructor) users.get(i)).setCreatedCourses(createdCourses);
         saveToFile();
     }
 

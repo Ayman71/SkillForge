@@ -69,7 +69,7 @@ public class CourseManager {
     }
 
     public boolean addCourse(Course course) {
-        if (contains(course.getCourseID()) == -1) {
+        if (getCourseFromCourseID(course.getCourseID()) == null) {
             courses.add(course);
             saveToFile();
             return true;
@@ -78,11 +78,14 @@ public class CourseManager {
     }
 
     public boolean modifyCourse(String oldCourseID, Course course) {
-        int i = contains(oldCourseID);
-        Course oldCourse = courses.get(i);
-        course.setEnrolledStudents(oldCourse.getEnrolledStudents());
-        courses.set(i, course);
-        saveToFile();
+        for (Course c : courses) {
+            if(c.getCourseID().equals(oldCourseID)){
+                course.setEnrolledStudents(c.getEnrolledStudents());
+                courses.remove(c);
+                courses.add(course);
+                saveToFile();
+            }
+        }
         return true;
     }
 

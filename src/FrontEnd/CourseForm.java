@@ -31,26 +31,28 @@ public class CourseForm extends javax.swing.JFrame {
     UserManager userManager;
     String instructorID;
 
-    public CourseForm(DefaultTableModel parentModel, String instructorID) {
+    public CourseForm(DefaultTableModel parentModel, String instructorID, CourseManager courseManager,UserManager userManager) {
         initComponents();
         this.coursesModel = parentModel;
         this.setSize(500, 600);
         this.setLocationRelativeTo(null);
         lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content"}, 0);
         lessonsTable.setModel(lessonsModel);
-        courseManager = new CourseManager("courses.json");
-        userManager = new UserManager("users.json");
+        this.courseManager = courseManager;
+        this.userManager = userManager;
         instructorIDText.setText(instructorID);
         this.instructorID = instructorID;
         addModifyButton.setText("Add");
 
     }
 
-    public CourseForm(Course course, DefaultTableModel parentModel,String userID) {
+    public CourseForm(Course course, DefaultTableModel parentModel, String userID, CourseManager courseManager,UserManager userManager) {
         initComponents();
         this.coursesModel = parentModel;
         courseToModiy = course;
-        courseManager = new CourseManager("courses.json");
+        this.courseManager = courseManager;
+        this.userManager = userManager;
+        this.instructorID = userID;
         this.setSize(500, 600);
         this.setLocationRelativeTo(null);
         fillForm(course);
@@ -267,7 +269,7 @@ public class CourseForm extends javax.swing.JFrame {
         Course course;
         String courseID = courseIDtext.getText();
         String title = courseTitleText.getText();
-        
+
         String description = descriptionText.getText();
         String idPattern = "^[A-Za-z][0-9]+$";
 
@@ -275,7 +277,7 @@ public class CourseForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Course ID cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (courseManager.contains(courseID)!=-1){
+        if (courseManager.contains(courseID) != -1 && courseToModiy == null) {
             JOptionPane.showMessageDialog(this, "Course ID already exists!", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -309,8 +311,8 @@ public class CourseForm extends javax.swing.JFrame {
             lessons.add(new Lesson(lessonsModel.getValueAt(row, 0).toString(), lessonsModel.getValueAt(row, 1).toString(), lessonsModel.getValueAt(row, 2).toString()));
         }
 
-        course = new Course(courseID, title, description, instructorID, lessons);
-        if (!studentsText.getText().trim().isEmpty()) {
+        course = new Course(courseID, title, description, instructorID, lessons,new ArrayList<String>());
+        if (courseToModiy != null) {
             course.setEnrolledStudents(courseToModiy.getEnrolledStudents());
         }
         if (courseToModiy == null) {
@@ -355,7 +357,7 @@ public class CourseForm extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CourseForm(new DefaultTableModel(),"").setVisible(true);
+                new CourseForm(new DefaultTableModel(), "",new CourseManager(""),new UserManager("")).setVisible(true);
             }
         });
     }

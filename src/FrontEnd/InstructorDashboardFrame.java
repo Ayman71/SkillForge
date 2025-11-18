@@ -200,7 +200,7 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 //    }
     private void addCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCourseButtonActionPerformed
         // TODO add your handling code here:
-        CourseForm courseForm = new CourseForm(coursesModel,userID);
+        CourseForm courseForm = new CourseForm(coursesModel,userID,courseManager,userManager);
         courseForm.setVisible(true);
 
     }//GEN-LAST:event_addCourseButtonActionPerformed
@@ -212,7 +212,6 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
     }
     private void deleteCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCourseButtonActionPerformed
         // TODO add your handling code here:
-        ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
@@ -229,12 +228,11 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 
     private void modifyCourseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifyCourseButtonActionPerformed
         // TODO add your handling code here:
-        ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
-            Course course = courses.get(courseManager.contains(courseID));
-            CourseForm courseForm = new CourseForm(course, coursesModel, userID);
+            Course course = courseManager.getCourseFromCourseID(courseID);
+            CourseForm courseForm = new CourseForm(course, coursesModel, userID,courseManager,userManager);
             courseForm.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
@@ -243,7 +241,6 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 
     private void viewCourseDetailsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewCourseDetailsButtonActionPerformed
         // TODO add your handling code here:
-        ArrayList<Course> courses = courseManager.getCoursesFromInstructor(userID);
         int selectedRow = jTable1.getSelectedRow();
         
         if (selectedRow != -1) {
