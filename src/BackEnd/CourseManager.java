@@ -5,10 +5,12 @@
 package BackEnd;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  *
@@ -19,11 +21,13 @@ public class CourseManager {
     private String filename;
     private ArrayList<Course> courses;
     private Gson gson;
+    private UserManager userManager;
 
-    public CourseManager(String filename) {
+    public CourseManager(String filename, UserManager userManager) {
         this.filename = filename;
-        this.gson = new Gson();
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.courses = new ArrayList<>();
+        this.userManager = userManager;
         readFromFile();
     }
 
@@ -58,9 +62,9 @@ public class CourseManager {
         }
         return -1;
     }
-    
-    public Course getCourseFromCourseID(String courseID){
-        for(Course c : courses){
+
+    public Course getCourseFromCourseID(String courseID) {
+        for (Course c : courses) {
             if (c.getCourseID().equals(courseID)) {
                 return c;
             }
@@ -79,11 +83,12 @@ public class CourseManager {
 
     public boolean modifyCourse(String oldCourseID, Course course) {
         for (Course c : courses) {
-            if(c.getCourseID().equals(oldCourseID)){
+            if (c.getCourseID().equals(oldCourseID)) {
                 course.setEnrolledStudents(c.getEnrolledStudents());
                 courses.remove(c);
                 courses.add(course);
                 saveToFile();
+                return true;
             }
         }
         return true;
@@ -161,10 +166,56 @@ public class CourseManager {
         for (Course c : courses) {
             if (c.getCourseID().equals(courseID)) {
                 courses.get(i).getEnrolledStudents().add(studentID);
+                Student student = (Student) userManager.getUserFromID(studentID);
+                student.enrollCourse(c);
                 break;
             }
             i++;
         }
         saveToFile();
+        userManager.saveToFile();
+    }
+
+    public void syncCourseLessonsForAllStudents(String courseID) {
+        Course course = getCourseFromCourseID(courseID);
+        if (course == null) {
+            return;
+        }
+        ArrayList<Lesson> updatedLessons = course.getLessons();
+        ArrayList<Student> allStudents = userManager.getAllStudents();
+        for (Student s : allStudents) {
+            if (!s.getEnrolledCourses().contains(courseID)) {
+                continue;
+            }
+            LessonsProgress lp = s.getLessonsProgress();
+            if (lp == null) {
+                lp = new LessonsProgress();  
+                s.setLessonsProgress(lp);
+            }
+            lp.syncWithCourse(courseID, updatedLessons);
+        }
+        userManager.saveToFile();
+    }
+
+    public void markLessonCompleted(String courseID, String studentID, String lessonID) {
+        Student student = (Student) userManager.getUserFromID(studentID);
+        student.completeLesson(courseID, lessonID);
+        userManager.saveToFile();
+    }
+
+    public double getStudentCourseProgress(String courseID, String studentID) {
+        Student student = (Student) userManager.getUserFromID(studentID);
+        if (student != null) {
+            return student.getCourseProgress(courseID);
+        }
+        return 0.0;
+    }
+
+    public boolean isLessonCompleted(String courseID, String studentID, String lessonID) {
+        Student student = (Student) userManager.getUserFromID(studentID);
+        if (student != null) {
+            return student.isLessonCompleted(courseID, lessonID);
+        }
+        return false;
     }
 }

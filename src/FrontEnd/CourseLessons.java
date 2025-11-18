@@ -4,9 +4,14 @@
  */
 package FrontEnd;
 
+import BackEnd.Course;
+import BackEnd.CourseManager;
 import BackEnd.Lesson;
+import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.util.ArrayList;
+import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,23 +25,46 @@ public class CourseLessons extends javax.swing.JFrame {
      */
     DefaultTableModel lessonsModel;
     ArrayList<Lesson> lessons;
-    public CourseLessons(ArrayList<Lesson> lessons) {
+    String StudentID;
+    CourseManager courseManager;
+    Course course;
+
+    public CourseLessons(Course course, String studentID, CourseManager courseManager) {
         initComponents();
-        this.lessons = lessons;
+        this.lessons = course.getLessons();
+        this.StudentID = studentID;
+        this.courseManager = courseManager;
+        this.course = course;
+        courseNameLabel.setText(course.getTitle() + "(" + course.getCourseID() + ")");
         this.setSize(500, 600);
         this.setLocationRelativeTo(null);
         progressBar.setStringPainted(true);
-        lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content", "Progress"}, 0);
-        
+        progressBar.setMinimum(0);
+        progressBar.setMaximum(100);
+        progressBar.setValue((int) (courseManager.getStudentCourseProgress(course.getCourseID(), studentID)));
+        lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content", "Progress"}, 0){
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; // disables editing
+        }
+    };
+
         fillTable();
     }
-    private void fillTable(){
-        
+
+    private void fillTable() {
+
         for (Lesson l : lessons) {
-            lessonsModel.addRow(new Object[]{l.getId(), l.getTitle(), l.getContent()});
+            if (courseManager.isLessonCompleted(course.getCourseID(), StudentID, l.getId())) {
+                lessonsModel.addRow(new Object[]{l.getId(), l.getTitle(), l.getContent(), true});
+            } else {
+                lessonsModel.addRow(new Object[]{l.getId(), l.getTitle(), l.getContent(), false});
+            }
+
         }
         lessonsTable.setModel(lessonsModel);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,6 +83,7 @@ public class CourseLessons extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        lessonsTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lessonsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -78,6 +107,8 @@ public class CourseLessons extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        lessonsTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lessonsTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lessonsTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(lessonsTable);
 
@@ -85,35 +116,42 @@ public class CourseLessons extends javax.swing.JFrame {
         courseNameLabel.setText("Course name - id");
 
         progressBar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        progressBar.setMinimum(10);
+        progressBar.setValue(0);
         progressBar.setMaximumSize(new java.awt.Dimension(32767, 25));
         progressBar.setMinimumSize(new java.awt.Dimension(10, 25));
         progressBar.setPreferredSize(new java.awt.Dimension(146, 25));
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setText("Save");
+        jButton1.setText("Close");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setText("Toggle");
+        jButton2.setText("Complete");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(155, 155, 155)
-                        .addComponent(courseNameLabel))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1)
-                            .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addComponent(courseNameLabel)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1)
+                        .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -135,6 +173,40 @@ public class CourseLessons extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int selectedRow = lessonsTable.getSelectedRow();
+        if (selectedRow != -1) {
+            String lessonID = lessonsTable.getValueAt(selectedRow, 0).toString();
+            boolean progress = Boolean.TRUE.equals(lessonsTable.getValueAt(selectedRow, 3));
+            if (progress) {
+                JOptionPane.showMessageDialog(this, "Lesson already completed", "Selection warining", JOptionPane.WARNING_MESSAGE);
+            } else {
+                int option = JOptionPane.showConfirmDialog(
+                        this,
+                        "Do you want to mark lesson " + lessonID + " as completed?",
+                        "Complete lesson",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (option == JOptionPane.OK_OPTION) {
+                    courseManager.markLessonCompleted(course.getCourseID(), StudentID, lessonID);
+                    lessonsTable.setValueAt(true, selectedRow, 3);
+                    double progressBarValue = courseManager.getStudentCourseProgress(course.getCourseID(), StudentID);
+                    progressBar.setValue((int) progressBarValue);
+                    JOptionPane.showMessageDialog(this, "Lesson completed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No lesson selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -148,7 +220,7 @@ public class CourseLessons extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CourseLessons(new ArrayList<>()).setVisible(true);
+                new CourseLessons(new Course("", "", "", "", new ArrayList<Lesson>(), new ArrayList<>()), "", new CourseManager("", new UserManager(""))).setVisible(true);
             }
         });
     }

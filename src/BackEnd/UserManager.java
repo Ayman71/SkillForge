@@ -1,11 +1,13 @@
 package BackEnd;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class UserManager {
 
@@ -22,12 +24,13 @@ public class UserManager {
         String role;
         ArrayList<String> enrolledCourses;
         ArrayList<String> createdCourses;
+        Map<String, Map<String, Boolean>>  lessonsProgress;
 
     }
 
     public UserManager(String filename) {
         this.filename = filename;
-        this.gson = new Gson();
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.users = new ArrayList<>();
         readFromFile();
     }
@@ -49,6 +52,11 @@ public class UserManager {
                         Student s = new Student(u.userId, u.username, u.email, u.passwordHash);
                         if (u.enrolledCourses != null) {
                             s.setEnrolledCourses(u.enrolledCourses);
+                        }
+                        if (u.lessonsProgress != null) {
+                            LessonsProgress lp = new LessonsProgress();
+                            lp.setProgressMap(u.lessonsProgress);
+                            s.setLessonsProgress(lp);
                         }
                         users.add(s);
                     } else if ("instructor".equalsIgnoreCase(u.role)) {
@@ -81,6 +89,7 @@ public class UserManager {
                 if (u instanceof Student) {
                     j.role = "student";
                     j.enrolledCourses = ((Student) u).getEnrolledCourses();
+                    j.lessonsProgress = ((Student) u).getLessonsProgress().getProgressMap();
                 } else if (u instanceof Instructor) {
                     j.role = "instructor";
                     j.createdCourses = ((Instructor) u).getCreatedCourses();
@@ -117,7 +126,7 @@ public class UserManager {
         saveToFile();
         return true;
     }
-
+    
     public boolean addInstructor(String username, String email, String password) throws Exception {
         if (emailExists(email)) {
             return false;
@@ -183,6 +192,15 @@ public class UserManager {
         return null;
     }
 
+    public User getUserFromID(String ID) {
+        for (User u : users) {
+            if (u.getUserId().equals(ID)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
     public int login(String email, String password) throws Exception {
         String hashed = hashPassword(password);
         for (User u : users) {
@@ -204,6 +222,15 @@ public class UserManager {
 
     public ArrayList<User> getAllUsers() {
         return users;
+    }
+    public ArrayList<Student> getAllStudents() {
+        ArrayList<Student> students = new ArrayList<Student>();
+        for (User user : users) {
+            if(user instanceof Student){
+                students.add((Student) user);
+            }
+        }
+        return students;
     }
 
     public void deleteUser(String userId) {

@@ -322,6 +322,7 @@ public class CourseForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Course added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         } else {
             courseManager.modifyCourse(courseToModiy.getCourseID(), course);
+            courseManager.syncCourseLessonsForAllStudents(courseID);
             JOptionPane.showMessageDialog(this, "Course updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
         for (int i = 0; i < coursesModel.getRowCount(); i++) {
@@ -338,6 +339,7 @@ public class CourseForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         int selectedRow = lessonsTable.getSelectedRow();
         if (selectedRow != -1) {
+            
             lessonsModel.removeRow(selectedRow);
         } else {
             JOptionPane.showMessageDialog(this, "No lesson selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
@@ -357,7 +359,7 @@ public class CourseForm extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CourseForm(new DefaultTableModel(), "",new CourseManager(""),new UserManager("")).setVisible(true);
+                new CourseForm(new DefaultTableModel(), "",new CourseManager("",new UserManager("")),new UserManager("")).setVisible(true);
             }
         });
     }
