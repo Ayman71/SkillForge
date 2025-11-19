@@ -37,7 +37,7 @@ public class CourseLessons extends javax.swing.JFrame {
         this.course = course;
         courseNameLabel.setText(course.getTitle() + "(" + course.getCourseID() + ")");
         this.setSize(500, 600);
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null);   
         progressBar.setStringPainted(true);
         progressBar.setMinimum(0);
         progressBar.setMaximum(100);
