@@ -6,8 +6,8 @@ package BackEnd;
 
 /**
  *
- * @author husse
+ * @author iislam
  */
-public class Progress {
+public class Quiz {
     
 }

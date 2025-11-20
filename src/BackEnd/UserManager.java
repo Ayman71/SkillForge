@@ -1,38 +1,37 @@
 package BackEnd;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserManager {
-
-    private List<User> users;
+    private static UserManager instance;
+    public static UserManager getInstance() { return instance; }
     private String filename;
+    private ArrayList<User> users;
     private Gson gson;
-
     public UserManager(String filename) {
         this.filename = filename;
-        this.gson = new Gson();
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
         this.users = new ArrayList<>();
         readFromFile();
+        instance = this;
     }
-
-    public void readFromFile() {
+    private void readFromFile() {
         try (FileReader reader = new FileReader(filename)) {
-            users = gson.fromJson(reader, new TypeToken<List<User>>() {
-            }.getType());
-            if (users == null) {
-                users = new ArrayList<>();
-            }
+            users = gson.fromJson(reader, new TypeToken<ArrayList<User>>() {}.getType());
+            if (users == null) users = new ArrayList<>();
+            rebuildUserObjects();
         } catch (Exception e) {
             users = new ArrayList<>();
         }
     }
-
     public void saveToFile() {
         try (FileWriter writer = new FileWriter(filename)) {
             gson.toJson(users, writer);
@@ -40,85 +39,95 @@ public class UserManager {
             e.printStackTrace();
         }
     }
-
-    public static String hashPassword(String password) throws Exception {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] hash = md.digest(password.getBytes());
-        StringBuilder sb = new StringBuilder();
-        for (byte b : hash) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
-    }
-
-    public boolean addStudent(String username, String email, String password) throws Exception {
-        if (emailExists(email)) {
-            return false;
-        }
-
-        String userId = "S" + (users.size() + 1);
-        Student s = new Student(userId, username, email, hashPassword(password));
-        users.add(s);
-        saveToFile();
-        return true;
-    }
-
-    public boolean addInstructor(String username, String email, String password) throws Exception {
-        if (emailExists(email)) {
-            return false;
-        }
-
-        String userId = "I" + (users.size() + 1);
-        Instructor i = new Instructor(userId, username, email, hashPassword(password));
-        users.add(i);
-        saveToFile();
-        return true;
-    }
-
-    private boolean emailExists(String email) {
+    private void rebuildUserObjects() {
+        ArrayList<User> rebuilt = new ArrayList<>();
         for (User u : users) {
-            if (u.getEmail().equals(email)) {
-                return true;
+            switch (u.getRole()) {
+                case "Student": {
+                    Student s = new Student(
+                            u.getUserId(),
+                            u.getUsername(),
+                            u.getEmail(),
+                            u.getPasswordHash()
+                    );
+                    if (u instanceof Student) {
+                        Student raw = (Student) u;
+                        s.setEnrolledCourses(raw.getEnrolledCourses());
+                        if (raw.getLessonsProgress() != null)
+                            s.setLessonsProgress(raw.getLessonsProgress());
+                        else
+                            s.setLessonsProgress(new LessonsProgress());
+                        Map<String, Map<String, java.util.List<Integer>>> attempts =
+                                raw.getQuizAttempts();
+                        s.setQuizAttempts(attempts != null ? attempts : new HashMap<>());
+                    }
+                    rebuilt.add(s);
+                }
+                break;
+                case "Instructor": {
+                    Instructor inst = new Instructor(
+                            u.getUserId(),
+                            u.getUsername(),
+                            u.getEmail(),
+                            u.getPasswordHash()
+                    );
+                    rebuilt.add(inst);
+                }
+                break;
+                case "Admin": {
+                    Admin admin = new Admin(
+                            u.getUserId(),
+                            u.getUsername(),
+                            u.getEmail(),
+                            u.getPasswordHash()
+                    );
+                    rebuilt.add(admin);
+                }
+                break;
+                default:
+                    rebuilt.add(u);
             }
         }
-        return false;
+        users = rebuilt;
     }
-
-    public User login(String email, String password) throws Exception {
-        String hashed = hashPassword(password);
-        for (User u : users) {
-            if (u.getEmail().equals(email) && u.getPasswordHash().equals(hashed)) {
-                return u;
-            }
-        }
+    public User getUserFromID(String userId) {
+        for (User u : users)
+            if (u.getUserId().equals(userId)) return u;
         return null;
     }
-
-    public void logout() {
-        saveToFile();
+    public User getUserFromEmail(String email) {
+        for (User u : users)
+            if (u.getEmail().equalsIgnoreCase(email)) return u;
+        return null;
     }
-
-    public List<User> getAllUsers() {
+    public boolean emailExists(String email) {
+        return getUserFromEmail(email) != null;
+    }
+    public boolean addUser(User user) {
+        if (getUserFromID(user.getUserId()) != null) return false;
+        users.add(user);
+        saveToFile();
+        return true;
+    }
+    public ArrayList<Student> getAllStudents() {
+        ArrayList<Student> list = new ArrayList<>();
+        for (User u : users)
+            if (u instanceof Student) list.add((Student) u);
+        return list;
+    }
+    public ArrayList<Instructor> getAllInstructors() {
+        ArrayList<Instructor> list = new ArrayList<>();
+        for (User u : users)
+            if (u instanceof Instructor) list.add((Instructor) u);
+        return list;
+    }
+    public ArrayList<Admin> getAllAdmins() {
+        ArrayList<Admin> list = new ArrayList<>();
+        for (User u : users)
+            if (u instanceof Admin) list.add((Admin) u);
+        return list;
+    }
+    public ArrayList<User> getAllUsers() {
         return users;
-    }
-
-    public void deleteUser(String userId) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserId().equals(userId)) {
-                users.remove(i);
-                break;
-            }
-        }
-        saveToFile();
-    }
-
-    public void updateUser(String userId, User updatedUser) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserId().equals(userId)) {
-                users.set(i, updatedUser);
-                saveToFile();
-                return;
-            }
-        }
     }
 }

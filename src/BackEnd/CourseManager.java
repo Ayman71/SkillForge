@@ -1,44 +1,41 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BackEnd;
 
-/**
- *
- * @author husse
- */
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class CourseManager {
 
-    private List<Course> courses;
+    private static CourseManager instance;
+    public static CourseManager getInstance() {
+        return instance;
+    }
     private String filename;
+    private ArrayList<Course> courses;
     private Gson gson;
-
-    public CourseManager(String filename) {
+    private UserManager userManager;
+    public CourseManager(String filename, UserManager userManager) {
         this.filename = filename;
-        this.gson = new Gson();
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
+        this.userManager = userManager;
         this.courses = new ArrayList<>();
         readFromFile();
+        instance = this;
     }
-    public void readFromFile() {
+    private void readFromFile() {
         try (FileReader reader = new FileReader(filename)) {
-            courses = gson.fromJson(reader, new TypeToken<List<Course>>() {}.getType());
-            if (courses == null) {
-                courses = new ArrayList<>();
-            }
+            courses = gson.fromJson(reader, new TypeToken<ArrayList<Course>>() {}.getType());
+            if (courses == null) courses = new ArrayList<>();
         } catch (Exception e) {
+            e.printStackTrace();
             courses = new ArrayList<>();
         }
     }
-
     public void saveToFile() {
         try (FileWriter writer = new FileWriter(filename)) {
             gson.toJson(courses, writer);
@@ -46,91 +43,120 @@ public class CourseManager {
             e.printStackTrace();
         }
     }
-
-    public boolean createCourse(String courseId, String title, String description, String instructorId) {
-        if (getCourseById(courseId) != null) {
-            return false;
+    public int indexOf(String courseID) {
+        for (int i = 0; i < courses.size(); i++) {
+            if (courses.get(i).getCourseID().equals(courseID)) return i;
         }
-
-        Course c = new Course(courseId, title, description, instructorId);
-        courses.add(c);
-        saveToFile();
-        return true;
+        return -1;
     }
-
-    public Course getCourseById(String courseId) {
+    public Course getCourseByID(String courseID) {
         for (Course c : courses) {
-            if (c.getCourseId().equals(courseId)) {
-                return c;
-            }
+            if (c.getCourseID().equals(courseID)) return c;
         }
         return null;
     }
-
-    public boolean editCourse(String courseId, String newTitle, String newDescription) {
-        Course c = getCourseById(courseId);
-        if (c == null) return false;
-
-        c.editCourse(newTitle, newDescription);
-        saveToFile();
-        return true;
-    }
-
-    public boolean deleteCourse(String courseId) {
-        for (int i = 0; i < courses.size(); i++) {
-            if (courses.get(i).getCourseId().equals(courseId)) {
-                courses.remove(i);
-                saveToFile();
-                return true;
-            }
+    public boolean addCourse(Course course) {
+        if (getCourseByID(course.getCourseID()) == null) {
+            courses.add(course);
+            saveToFile();
+            return true;
         }
         return false;
     }
-
-    public List<Course> getAllCourses() {
-        return courses;
-    }
-
-    public boolean addLesson(String courseId, String lessonId, String title, String content) {
-        Course c = getCourseById(courseId);
-        if (c == null) return false;
-
-        if (c.getLessonById(lessonId) != null) return false; 
-
-        Lesson lesson = new Lesson(lessonId, title, content);
-        c.addLesson(lesson);
+    public boolean modifyCourse(String oldCourseID, Course updated) {
+        int idx = indexOf(oldCourseID);
+        if (idx == -1) return false;
+        updated.setEnrolledStudents(courses.get(idx).getEnrolledStudents());
+        courses.set(idx, updated);
         saveToFile();
         return true;
     }
+    public boolean deleteCourse(String courseID) {
+        int idx = indexOf(courseID);
+        if (idx == -1) return false;
 
-    public boolean removeLesson(String courseId, String lessonId) {
-        Course c = getCourseById(courseId);
-        if (c == null) return false;
-
-        c.removeLesson(lessonId);
+        courses.remove(idx);
         saveToFile();
         return true;
     }
-
-    public List<Lesson> getLessons(String courseId) {
-        Course c = getCourseById(courseId);
-        if (c == null) return new ArrayList<>();
-        return c.getLessons();
-    }
-
-    public boolean enrollStudent(String courseId, String studentId) {
-        Course c = getCourseById(courseId);
-        if (c == null) return false;
-
-        c.enrollStudent(studentId);
+    public boolean updateLessons(String courseID, ArrayList<Lesson> lessons) {
+        int idx = indexOf(courseID);
+        if (idx == -1) return false;
+        courses.get(idx).setLessons(lessons);
         saveToFile();
         return true;
     }
+    public ArrayList<Course> getCoursesFromInstructor(String instructorID) {
+        ArrayList<Course> result = new ArrayList<>();
+        for (Course c : courses) {
+            if (c.getInstructorId().equals(instructorID)) result.add(c);
+        }
+        return result;
+    }
+    public ArrayList<Course> getEnrolledCourses(String studentID) {
+        ArrayList<Course> enrolled = new ArrayList<>();
+        for (Course c : courses) {
+            if (c.getEnrolledStudents().contains(studentID)) {
+                enrolled.add(c);
+            }
+        }
+        return enrolled;
+    }
+    public ArrayList<Course> getAvailableCourses(String studentID) {
+        ArrayList<Course> available = new ArrayList<>();
 
-    public List<String> getStudents(String courseId) {
-        Course c = getCourseById(courseId);
-        if (c == null) return new ArrayList<>();
-        return c.getStudentIds();
+        for (Course c : courses) {
+            if (!c.isApproved()) continue;
+
+            if (!c.getEnrolledStudents().contains(studentID)) {
+                available.add(c);
+            }
+        }
+        return available;
     }
+    public void studentEnrolled(String studentID, String courseID) {
+        Course c = getCourseByID(courseID);
+        if (c == null || !c.isApproved()) return;
+        c.getEnrolledStudents().add(studentID);
+        Student student = (Student) userManager.getUserFromID(studentID);
+        if (student != null) {
+            student.enrollCourse(courseID);
+        }
+        saveToFile();
+        userManager.saveToFile();
     }
-      
+    public ArrayList<Course> getPendingCourses() {
+        ArrayList<Course> pending = new ArrayList<>();
+        for (Course c : courses) {
+            if (c.getApprovalStatus() == ApprovalStatus.PENDING) pending.add(c);
+        }
+        return pending;
+    }
+    public void updateCourseStatus(String courseID, ApprovalStatus status, String adminId) {
+        Course c = getCourseByID(courseID);
+        if (c == null) return;
+        c.setApprovalStatus(status, adminId);
+        saveToFile();
+    }
+    public void updateCourseStatus(Course course, ApprovalStatus status, String adminId) {
+        if (course == null) return;
+        course.setApprovalStatus(status, adminId);
+        saveToFile();
+    }
+    public void markLessonCompleted(String courseID, String studentID, String lessonID) {
+        Student s = (Student) userManager.getUserFromID(studentID);
+        if (s == null) return;
+        s.getLessonsProgress().markLessonCompleted(courseID, lessonID);
+        userManager.saveToFile();
+    }
+    public boolean isLessonCompleted(String courseID, String studentID, String lessonID) {
+        Student s = (Student) userManager.getUserFromID(studentID);
+        if (s == null) return false;
+        return s.getLessonsProgress().isLessonCompleted(courseID, lessonID);
+    }
+    public double getStudentCourseProgress(String courseID, String studentID) {
+        Student s = (Student) userManager.getUserFromID(studentID);
+        if (s == null) return 0.0;
+        return s.getLessonsProgress().getCourseProgress(courseID);
+    }
+}

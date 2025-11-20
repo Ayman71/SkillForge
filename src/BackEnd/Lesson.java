@@ -1,59 +1,44 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BackEnd;
 
 /**
  *
- * @author islam
+ * @author husse
  */
-import java.util.ArrayList;
-import java.util.List;
-
 public class Lesson {
-    private String lessonId;
+    private String id;
     private String title;
     private String content;
-    private List<String> resources;
-
-    public Lesson(String lessonId, String title, String content) {
-        this.lessonId = lessonId;
+    private Quiz quiz;
+    public Lesson(String id, String title, String content) {
+        this.id = id;
         this.title = title;
         this.content = content;
-        this.resources = new ArrayList<>();
     }
-
-    public String getLessonId() {
-        return lessonId;
+    public String getId() {
+        return id;
     }
-
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getTitle() {
         return title;
     }
-
+    public void setTitle(String title) {
+        this.title = title;
+    }
     public String getContent() {
         return content;
     }
-
-    public List<String> getResources() {
-        return resources;
+    public void setContent(String content) {
+        this.content = content;
     }
-
-    public void addResource(String r) {
-        resources.add(r);
+    public Quiz getQuiz() {
+        return quiz;
     }
-
-    public void editLesson(String newTitle, String newContent) {
-        this.title = newTitle;
-        this.content = newContent;
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
     }
-
-    @Override
-    public String toString() {
-        return "Lesson{" + "lessonId=" + lessonId + ", title=" + title + ", content=" + content + ", resources=" + resources + '}';
+    public boolean isCompletedForStudent(Student student, String courseId) {
+        return student.hasPassedQuiz(courseId, id);
     }
-
- 
 }
-

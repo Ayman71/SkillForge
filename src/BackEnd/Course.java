@@ -1,74 +1,81 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BackEnd;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  *
- * @author islam
+ * @author husse
  */
-import java.util.ArrayList;
-import java.util.List;
 public class Course {
-    private String courseId;
+    private String courseID;
     private String title;
     private String description;
     private String instructorId;
-    private List<Lesson> lessons;
-    private List<String> studentIds;
-    public Course(String courseId, String title, String description, String instructorId) {
-        this.courseId = courseId;
+    private ArrayList<Lesson> lessons;
+    private ArrayList<String> enrolledStudents;
+    private ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
+    private String approvedBy;
+    private Date approvalDate;
+    public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons, ArrayList<String> enrolledStudents) {
+        this.courseID = courseID;
         this.title = title;
         this.description = description;
         this.instructorId = instructorId;
-        this.lessons = new ArrayList<>();
-        this.studentIds = new ArrayList<>();
+        this.lessons = lessons;
+        this.enrolledStudents = enrolledStudents;
     }
-    public String getCourseId() {
-        return courseId;
+    public String getCourseID() {
+        return courseID;
+    }
+    public void setCourseID(String courseID) {
+        this.courseID = courseID;
     }
     public String getTitle() {
         return title;
     }
+    public void setTitle(String title) {
+        this.title = title;
+    }
     public String getDescription() {
         return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
     public String getInstructorId() {
         return instructorId;
     }
-    public List<Lesson> getLessons() {
+    public void setInstructorId(String instructorId) {
+        this.instructorId = instructorId;
+    }
+    public ArrayList<Lesson> getLessons() {
         return lessons;
     }
-    public List<String> getStudentIds() {
-        return studentIds;
+    public void setLessons(ArrayList<Lesson> lessons) {
+        this.lessons = lessons;
     }
-   
-    public void editCourse(String newTitle, String newDescription) {
-        this.title = newTitle;
-        this.description = newDescription;
-    }
-    public void addLesson(Lesson lesson) {
-        lessons.add(lesson);
-    }
-    public void removeLesson(String lessonId) {
-        for (int i = 0; i < lessons.size(); i++) {
-            if (lessons.get(i).getLessonId().equals(lessonId)) {
-                lessons.remove(i);
-                break; // Assuming lesson IDs are unique; remove this if multiple removals are needed
-            }
+    public ArrayList<String> getEnrolledStudents() {
+        if (enrolledStudents == null) {
+            return new ArrayList<String>();
         }
+        return enrolledStudents;
     }
-    public Lesson getLessonById(String lessonId) {
-        for (Lesson l : lessons)
-            if (l.getLessonId().equals(lessonId)) return l;
-        return null;
+    public void setEnrolledStudents(ArrayList<String> enrolledStudents) {
+        this.enrolledStudents = enrolledStudents;
     }
-    public void enrollStudent(String studentId) {
-        if (!studentIds.contains(studentId))
-            studentIds.add(studentId);
+    public ApprovalStatus getApprovalStatus() {
+        return approvalStatus;
     }
-    @Override
-    public String toString() {
-        return "Course{" + "courseId=" + courseId + ", title=" + title + ", description=" + description + ", instructorId=" + instructorId + ", lessons=" + lessons + ", studentIds=" + studentIds + '}';
+    public void setApprovalStatus(ApprovalStatus status, String adminId) {
+        this.approvalStatus = status;
+        this.approvedBy = adminId;
+        this.approvalDate = new Date();
     }
+    public boolean isApproved() {
+        return approvalStatus == ApprovalStatus.APPROVED;
+    }
+}
+enum ApprovalStatus {
+    PENDING, APPROVED, REJECTED
 }
