@@ -13,21 +13,21 @@ package BackEnd;
 import java.util.ArrayList;
 public class Quiz {
     
-    private String quizID; 
+    private String quizID ; 
       private String question;
     private ArrayList<String> options; 
     private char correctOption; 
-    private ArrayList<Character> studentChoice;
     
     
     
     
     
-      public Quiz(String question, ArrayList<String> options, char correctOption) {
+      public Quiz(String quizID,String question, ArrayList<String> options, char correctOption) {
         this.question = question;
         this.options = options;
         this.correctOption = correctOption;
-        this.studentChoice = new ArrayList<>();
+        this.quizID = quizID;
+       
     }
 
     public String getQuestion() {
@@ -54,13 +54,7 @@ public class Quiz {
         this.correctOption = correctOption;
     }
 
-    public ArrayList<Character> getStudentChoice() {
-        return studentChoice;
-    }
-
-    public void setStudentChoice(ArrayList<Character> studentChoice) {
-        this.studentChoice = studentChoice;
-    }
+  
 
     
     
@@ -73,4 +67,4 @@ public class Quiz {
     
     
     
-}
+
