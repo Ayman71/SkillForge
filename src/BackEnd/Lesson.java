@@ -13,6 +13,7 @@ public class Lesson {
     private String id;
     private String title;
     private String content;
+    private Quiz quiz;
 
     public Lesson(String id, String title, String content) {
         this.id = id;

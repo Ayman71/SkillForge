@@ -45,4 +45,17 @@ public class Student extends User {
     }
     
 
+       public boolean isPassed(String quizID, char correctOption) {
+        for (char x : ) {
+            if (x == correctOption)
+            { return true;}
+        }
+        return false;
+    
+    
+    
+    
+    
+    
+    
 }
