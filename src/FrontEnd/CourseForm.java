@@ -271,7 +271,7 @@ public class CourseForm extends javax.swing.JFrame {
         String title = courseTitleText.getText();
 
         String description = descriptionText.getText();
-        String idPattern = "^[A-Za-z][0-9]+$";
+        String idPattern = "^[C][0-9]+$";
 
         if (courseID.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Course ID cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -291,7 +291,7 @@ public class CourseForm extends javax.swing.JFrame {
         }
 
         if (!courseID.matches(idPattern)) {
-            JOptionPane.showMessageDialog(this, "Course ID must start with a letter followed by numbers (e.g., C123).", "Invalid ID", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Course ID must start with a 'C' followed by numbers (e.g., C123).", "Invalid ID", JOptionPane.WARNING_MESSAGE);
             return;
         }
         ArrayList<Lesson> lessons = new ArrayList<>();
