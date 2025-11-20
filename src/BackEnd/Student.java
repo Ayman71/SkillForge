@@ -1,17 +1,20 @@
 package BackEnd;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Student extends User {
 
     private ArrayList<String> enrolledCourses;
     private LessonsProgress lessonsProgress;
-    
+        private Map<String, QuizAttempt> quizAttempts;
 
     public Student(String userId, String username, String email, String passwordHash) {
         super(userId, username, email, passwordHash, "Student");
         enrolledCourses = new ArrayList<>();
         lessonsProgress = new LessonsProgress();
+        quizAttempts = new HashMap<>();
     }
 
     public void setLessonsProgress(LessonsProgress lessonsProgress) {
@@ -44,18 +47,31 @@ public class Student extends User {
         return lessonsProgress.isLessonCompleted(courseID, lessonID);
     }
     
-
-       public boolean isPassed(String quizID, char correctOption) {
-        for (char x : ) {
-            if (x == correctOption)
-            { return true;}
+      public void attemptQuiz(String quizID, int score) {
+        if (quizAttempts.containsKey(quizID)) {
+            QuizAttempt q = quizAttempts.get(quizID);
+            q.AddAttempt();
+            q.setScore(score);
+        } else {
+            quizAttempts.put(quizID, new QuizAttempt(quizID, 1, score));
         }
-        return false;
-    
-    
-    
-    
-    
-    
-    
+    }
+
+        public int getQuizAttemptNumber(String quizID) {
+        return quizAttempts.getOrDefault(quizID, new QuizAttempt(quizID, 0, 0)).getAttemptNumber();
+    }
+        
+       public int getQuizScore(String quizID) {
+        return quizAttempts.getOrDefault(quizID, new QuizAttempt(quizID, 0, 0)).getScore();
+    }
+      
+      
+ public boolean isPassed(String quizID, Quiz quiz, char studentChoice) {
+        int score = 0;
+        if (studentChoice == quiz.getCorrectOption()) {
+            score = 1;
+        }
+        attemptQuiz(quizID, score);
+        return studentChoice == quiz.getCorrectOption();
+    }
 }
