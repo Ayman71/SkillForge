@@ -260,7 +260,6 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
             );
 
             if (option == JOptionPane.OK_OPTION) {
-                // User clicked OK — perform enrollment
                 courseManager.studentEnrolled(studentID, courseID);
                 userManager.studentEnrolled(studentID, courseID);
                 fillTable(2);
@@ -282,7 +281,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
 
     private void Button4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button4ActionPerformed
         // TODO add your handling code here:
-         ArrayList<Course> courses = courseManager.getEnrolledCourses(studentID);
+         
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();

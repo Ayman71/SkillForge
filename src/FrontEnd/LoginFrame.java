@@ -190,7 +190,9 @@ public class LoginFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSignupActionPerformed
-
+        SignUpFrame signUpFrame = new SignUpFrame();
+        signUpFrame.setVisible(true);
+        this.setVisible(false);
 
     }//GEN-LAST:event_jSignupActionPerformed
 

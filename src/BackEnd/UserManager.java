@@ -24,7 +24,7 @@ public class UserManager {
         String role;
         ArrayList<String> enrolledCourses;
         ArrayList<String> createdCourses;
-        Map<String, Map<String, Boolean>>  lessonsProgress;
+        Map<String, Map<String, Boolean>> lessonsProgress;
 
     }
 
@@ -115,24 +115,20 @@ public class UserManager {
         return sb.toString();
     }
 
-    public boolean addStudent(String username, String email, String password) throws Exception {
-        if (emailExists(email)) {
+    public boolean addStudent(String userId, String username, String email, String password) throws Exception {
+        if (emailExists(email) || IdExists(userId)) {
             return false;
         }
-
-        String userId = "S" + (users.size() + 1);
         Student s = new Student(userId, username, email, hashPassword(password));
         users.add(s);
         saveToFile();
         return true;
     }
-    
-    public boolean addInstructor(String username, String email, String password) throws Exception {
-        if (emailExists(email)) {
+
+    public boolean addInstructor(String userId, String username, String email, String password) throws Exception {
+        if (emailExists(email) || IdExists(userId)) {
             return false;
         }
-
-        String userId = "I" + (users.size() + 1);
         Instructor i = new Instructor(userId, username, email, hashPassword(password));
         users.add(i);
         saveToFile();
@@ -183,6 +179,15 @@ public class UserManager {
         return false;
     }
 
+    private boolean IdExists(String userId) {
+        for (User u : users) {
+            if (u.getUserId().equals(userId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public User getUserFromEmail(String email) {
         for (User u : users) {
             if (u.getEmail().equals(email)) {
@@ -223,10 +228,11 @@ public class UserManager {
     public ArrayList<User> getAllUsers() {
         return users;
     }
+
     public ArrayList<Student> getAllStudents() {
         ArrayList<Student> students = new ArrayList<Student>();
         for (User user : users) {
-            if(user instanceof Student){
+            if (user instanceof Student) {
                 students.add((Student) user);
             }
         }

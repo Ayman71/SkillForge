@@ -38,7 +38,9 @@
         "content": "Bubble, merge, quicksort fundamentals."
       }
     ],
-    "enrolledStudents": []
+    "enrolledStudents": [
+      "S9642"
+    ]
   },
   {
     "courseID": "C320",
