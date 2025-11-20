@@ -9,6 +9,9 @@ public class Student extends User {
     private ArrayList<String> enrolledCourses;
     private LessonsProgress lessonsProgress;
         private Map<String, QuizAttempt> quizAttempts;
+        private Map<String, ArrayList<Character>> quizChoices;
+            private ArrayList<Certificate> certificates;
+        
 
     public Student(String userId, String username, String email, String passwordHash) {
         super(userId, username, email, passwordHash, "Student");
@@ -47,7 +50,8 @@ public class Student extends User {
         return lessonsProgress.isLessonCompleted(courseID, lessonID);
     }
     
-      public void attemptQuiz(String quizID, int score) {
+      public void attemptQuiz(String quizID, int score) { 
+          if (quizAttempts == null) {quizAttempts = new HashMap<>();}
         if (quizAttempts.containsKey(quizID)) {
             QuizAttempt q = quizAttempts.get(quizID);
             q.AddAttempt();
@@ -65,13 +69,6 @@ public class Student extends User {
         return quizAttempts.getOrDefault(quizID, new QuizAttempt(quizID, 0, 0)).getScore();
     }
       
-      
- public boolean isPassed(String quizID, Quiz quiz, char studentChoice) {
-        int score = 0;
-        if (studentChoice == quiz.getCorrectOption()) {
-            score = 1;
-        }
-        attemptQuiz(quizID, score);
-        return studentChoice == quiz.getCorrectOption();
-    }
+    
+ 
 }

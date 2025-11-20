@@ -8,63 +8,31 @@ package BackEnd;
  *
  * @author husse
  */
-
-
 import java.util.ArrayList;
+
 public class Quiz {
-    
-    private String quizID ; 
-      private String question;
-    private ArrayList<String> options; 
-    private char correctOption; 
-    
-    
-    
-    
-    
-      public Quiz(String quizID,String question, ArrayList<String> options, char correctOption) {
-        this.question = question;
-        this.options = options;
-        this.correctOption = correctOption;
+
+    private String quizID;
+    private ArrayList<Question> questions;
+
+    public Quiz(String quizID, ArrayList<Question> questions) {
         this.quizID = quizID;
-       
+        this.questions = questions;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getQuizID() {
+        return quizID;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public ArrayList<Question> getQuestions() {
+        return questions;
     }
 
-    public ArrayList<String> getOptions() {
-        return options;
+    public void addQuestion(Question q) {
+        if (questions == null) {
+            questions = new ArrayList<>();
+        }
+        questions.add(q);
     }
 
-    public void setOptions(ArrayList<String> options) {
-        this.options = options;
-    }
-
-    public char getCorrectOption() {
-        return correctOption;
-    }
-
-    public void setCorrectOption(char correctOption) {
-        this.correctOption = correctOption;
-    }
-
-  
-
-    
-    
-  
-    }
-    
-    
-    
-    
-    
-    
-    
-
+}

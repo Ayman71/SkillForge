@@ -9,6 +9,45 @@ package BackEnd;
  *
  * @author husse
  */
+
+ import java.util.ArrayList;
 public class QuizManager {
+        private ArrayList<Quiz> quizzes;
+    
+    
+    public QuizManager() {
+        quizzes = new ArrayList<>();
+    }
+    
+    public boolean isPassed(Student student,String quizID, ArrayList<Character> studentChoices) {
+    
+         Quiz quiz = findQuizByID(quizID);
+         if (quiz == null) return false;
+        ArrayList<Question> questions = quiz.getQuestions();
+    int score = 0;
+
+    for (int i = 0; i < questions.size(); i++) {
+        if (studentChoices.get(i) == questions.get(i).getCorrectChoice()) {
+            score++;
+        }
+    }
+
+    student.attemptQuiz(quizID, score);
+    
+    if(score >= (questions.size()) * 0.5){
+    return true; } 
+    else return false;
+}
+    
+    
+    private Quiz findQuizByID(String quizID) {
+        for (Quiz q : quizzes) {
+            if (q.getQuizID().equals(quizID)) return q;
+        }
+        return null;
+    }
+    
+    
+    
     
 }
