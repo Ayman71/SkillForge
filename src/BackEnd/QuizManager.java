@@ -48,6 +48,6 @@ public class QuizManager {
     }
     
     
-    
+        public void addQuiz(Quiz quiz) { quizzes.add(quiz); }
     
 }

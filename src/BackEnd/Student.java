@@ -9,7 +9,6 @@ public class Student extends User {
     private ArrayList<String> enrolledCourses;
     private LessonsProgress lessonsProgress;
         private Map<String, QuizAttempt> quizAttempts;
-        private Map<String, ArrayList<Character>> quizChoices;
             private ArrayList<Certificate> certificates;
         
 
@@ -18,6 +17,7 @@ public class Student extends User {
         enrolledCourses = new ArrayList<>();
         lessonsProgress = new LessonsProgress();
         quizAttempts = new HashMap<>();
+        certificates = new ArrayList<>();
     }
 
     public void setLessonsProgress(LessonsProgress lessonsProgress) {
