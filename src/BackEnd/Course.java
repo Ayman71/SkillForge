@@ -18,8 +18,7 @@ public class Course {
     private ArrayList<Lesson> lessons;
     private ArrayList<String> enrolledStudents;
     private String approvalStatus;
-    private String approverId;
-    private String approvalDate;
+
 
     public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons, ArrayList<String> enrolledStudents) {
         this.courseID = courseID;
@@ -30,8 +29,7 @@ public class Course {
         this.enrolledStudents = enrolledStudents;
         
          this.approvalStatus = "Pending";
-        this.approverId = null;
-        this.approvalDate = null;
+      
     }
     
 
@@ -93,16 +91,6 @@ public class Course {
     public void setApprovalStatus(String approvalStatus)
     { this.approvalStatus = approvalStatus; }
 
-    public String getApproverId()
-    { return approverId; }
-    public void setApproverId(String approverId)
-    { this.approverId = approverId; }
-
-    public String getApprovalDate()
-    { return approvalDate; }
-    
-    public void setApprovalDate(String approvalDate)
-    { this.approvalDate = approvalDate; }
 
     
 }

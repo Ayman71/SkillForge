@@ -50,4 +50,21 @@ public class QuizManager {
     
         public void addQuiz(Quiz quiz) { quizzes.add(quiz); }
     
+        
+        
+        
+public boolean LessonBasedOnQuiz(Student student, String courseId, String lessonId, 
+                                   String quizID, ArrayList<Character> studentChoices,
+                                   CourseManager courseManager) {
+    boolean passed = isPassed(student, quizID, studentChoices);
+    
+    if (passed) {
+        courseManager.markLessonCompleted(courseId, student.getUserId(), lessonId);
+    }
+    
+    return passed;
+}
+        
+        
+        
 }

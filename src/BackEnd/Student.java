@@ -69,6 +69,40 @@ public class Student extends User {
         return quizAttempts.getOrDefault(quizID, new QuizAttempt(quizID, 0, 0)).getScore();
     }
       
+    public boolean isCourseCompleted(String courseId, Course course) {
+    ArrayList<Lesson> lessons = course.getLessons();
+    if (lessons == null) {
+        return false;
+    }
     
- 
+    for (Lesson lesson : lessons) {
+        if (!isLessonCompleted(courseId, lesson.getId())) {
+            return false;
+        }
+    }
+    return true;
+}
+ public void addCertificate(Certificate certificate) {
+    if (certificates == null) {
+        certificates = new ArrayList<>();
+    }
+    certificates.add(certificate);
+}
+ public ArrayList<Certificate> getCertificates() {
+    if (certificates == null) {
+        return new ArrayList<>();
+    }
+    return certificates;
+}
+public Certificate getCertificateForCourse(String courseId) {
+    if (certificates == null) {
+        return null;
+    }
+    for (Certificate certificate : certificates) {
+        if (certificate.getCourseId().equals(courseId)) {
+            return certificate;
+        }
+    }
+    return null;
+}
 }

@@ -147,6 +147,9 @@ public class CourseManager {
         ArrayList<Course> availableCourses = new ArrayList<>();
 
         for (Course c : courses) {
+            if (!c.getApprovalStatus().equals("Approved")) {
+            continue;
+        }
             boolean isEnrolled = false;
             for (Course e : enrolledCourses) {
                 if (c.getCourseID().equals(e.getCourseID())) {
@@ -218,4 +221,44 @@ public class CourseManager {
         }
         return false;
     }
+    
+    public ArrayList<Course> getPendingCourses() {
+    ArrayList<Course> pending = new ArrayList<>();
+    for (Course c : courses) {
+        if (c.getApprovalStatus().equals("Pending")) {
+            pending.add(c);
+        }
+    }
+    return pending;
 }
+public ArrayList<Course> getApprovedCourses() {
+    ArrayList<Course> approved = new ArrayList<>();
+    for (Course c : courses) {
+        if (c.getApprovalStatus().equals("Approved")) {
+            approved.add(c);
+        }
+    }
+    return approved;
+}
+
+    
+    public void approveCourse(String courseId, Admin admin) {
+    Course course = getCourseFromCourseID(courseId);
+    if (course != null) {
+        admin.approveCourse(course);
+        saveToFile();
+    }
+  
+}
+
+
+
+  
+    public void rejectCourse(String courseId, Admin admin) {
+    Course course = getCourseFromCourseID(courseId);
+    if (course != null) {
+        admin.rejectCourse(course);
+        saveToFile();
+    }
+     
+    } }

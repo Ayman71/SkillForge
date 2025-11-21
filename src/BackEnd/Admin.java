@@ -8,6 +8,19 @@ package BackEnd;
  *
  * @author husse
  */
-public class Admin {
+
+public class Admin extends User {
     
+      public Admin(String userId, String username, String email, String passwordHash) {
+        super(userId, username, email, passwordHash, "Admin");
+    }
+    
+     public void approveCourse(Course course) {
+        course.setApprovalStatus("Approved");
+        
+    }
+       public void rejectCourse(Course course) {
+        course.setApprovalStatus("Rejected");
+      
+    }
 }
