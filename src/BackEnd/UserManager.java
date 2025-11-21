@@ -65,7 +65,11 @@ public class UserManager {
                             i.setCreatedCourses(u.createdCourses);
                         }
                         users.add(i);
+                    }else{
+                        Admin a = new Admin(u.userId, u.username, u.email, u.passwordHash);
+                        users.add(a);
                     }
+                    
                 }
             }
 
@@ -93,6 +97,8 @@ public class UserManager {
                 } else if (u instanceof Instructor) {
                     j.role = "instructor";
                     j.createdCourses = ((Instructor) u).getCreatedCourses();
+                }else{
+                    j.role = "Admin";
                 }
 
                 x.add(j);
@@ -131,6 +137,16 @@ public class UserManager {
         }
         Instructor i = new Instructor(userId, username, email, hashPassword(password));
         users.add(i);
+        saveToFile();
+        return true;
+    }
+    
+    public boolean addAdmin(String userId, String username, String email, String password) throws Exception {
+        if (emailExists(email) || IdExists(userId)) {
+            return false;
+        }
+        Admin a = new Admin(userId, username, email, hashPassword(password));
+        users.add(a);
         saveToFile();
         return true;
     }
