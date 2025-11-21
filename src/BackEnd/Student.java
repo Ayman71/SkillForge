@@ -94,7 +94,7 @@ public class Student extends User {
     }
     return certificates;
 }
-public Certificate getCertificateForCourse(String courseId) {
+public Certificate haveExisitingCertificateForCourse(String courseId) {
     if (certificates == null) {
         return null;
     }

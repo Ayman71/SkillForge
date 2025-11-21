@@ -46,6 +46,10 @@ private int attemptNumber;
       public void AddAttempt() {
         this.attemptNumber++;
     }
+
+    public void setAttemptNumber(int attemptNumber) {
+        this.attemptNumber = attemptNumber;
+    }
     
     
     
