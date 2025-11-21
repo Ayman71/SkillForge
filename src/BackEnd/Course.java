@@ -17,6 +17,8 @@ public class Course {
     private String instructorId;
     private ArrayList<Lesson> lessons;
     private ArrayList<String> enrolledStudents;
+    private String approvalStatus;
+
 
     public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons, ArrayList<String> enrolledStudents) {
         this.courseID = courseID;
@@ -25,6 +27,9 @@ public class Course {
         this.instructorId = instructorId;
         this.lessons = lessons;
         this.enrolledStudents = enrolledStudents;
+        
+         this.approvalStatus = "Pending";
+      
     }
     
 
@@ -61,6 +66,8 @@ public class Course {
     }
 
     public ArrayList<Lesson> getLessons() {
+        if (lessons == null)
+        { return new ArrayList<>();}
         return lessons;
     }
 
@@ -79,6 +86,11 @@ public class Course {
         this.enrolledStudents = enrolledStudents;
     }
     
-    
+    public String getApprovalStatus()
+    { return approvalStatus; }
+    public void setApprovalStatus(String approvalStatus)
+    { this.approvalStatus = approvalStatus; }
+
+
     
 }

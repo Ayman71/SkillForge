@@ -13,6 +13,7 @@ public class Lesson {
     private String id;
     private String title;
     private String content;
+    private Quiz quiz;
 
     public Lesson(String id, String title, String content) {
         this.id = id;
@@ -43,6 +44,14 @@ public class Lesson {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
     }
 
 }
