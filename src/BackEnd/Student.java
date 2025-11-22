@@ -8,8 +8,8 @@ public class Student extends User {
 
     private ArrayList<String> enrolledCourses;
     private LessonsProgress lessonsProgress;
-        private Map<String, QuizAttempt> quizAttempts;
-            private ArrayList<Certificate> certificates;
+    private Map<String, QuizAttempt> quizAttempts;
+    private ArrayList<Certificate> certificates;
         
 
     public Student(String userId, String username, String email, String passwordHash) {

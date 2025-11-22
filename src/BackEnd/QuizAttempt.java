@@ -1,18 +1,13 @@
 package BackEnd;
 
-
-
-
 /**
  *
  * @author husse
  */
-
-
 public class QuizAttempt {
-    
-        private String quizId;
-private int attemptNumber;
+
+    private String quizId;
+    private int attemptNumber;
     private int score;
 
     public QuizAttempt(String quizId, int attemptNumber, int score) {
@@ -33,7 +28,6 @@ private int attemptNumber;
         return attemptNumber;
     }
 
- 
     public int getScore() {
         return score;
     }
@@ -42,36 +36,12 @@ private int attemptNumber;
         this.score = score;
     }
 
-   
-      public void AddAttempt() {
+    public void AddAttempt() {
         this.attemptNumber++;
     }
 
     public void setAttemptNumber(int attemptNumber) {
         this.attemptNumber = attemptNumber;
     }
-    
-    
-    
-    
-    
-    
-     
-    }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
+}

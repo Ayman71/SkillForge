@@ -116,7 +116,6 @@ public class CourseLessons extends javax.swing.JFrame {
         courseNameLabel.setText("Course name - id");
 
         progressBar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        progressBar.setValue(0);
         progressBar.setMaximumSize(new java.awt.Dimension(32767, 25));
         progressBar.setMinimumSize(new java.awt.Dimension(10, 25));
         progressBar.setPreferredSize(new java.awt.Dimension(146, 25));
@@ -130,7 +129,7 @@ public class CourseLessons extends javax.swing.JFrame {
         });
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setText("Complete");
+        jButton2.setText("View");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -176,27 +175,8 @@ public class CourseLessons extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         int selectedRow = lessonsTable.getSelectedRow();
         if (selectedRow != -1) {
-            String lessonID = lessonsTable.getValueAt(selectedRow, 0).toString();
-            boolean progress = Boolean.TRUE.equals(lessonsTable.getValueAt(selectedRow, 3));
-            if (progress) {
-                JOptionPane.showMessageDialog(this, "Lesson already completed", "Selection warining", JOptionPane.WARNING_MESSAGE);
-            } else {
-                int option = JOptionPane.showConfirmDialog(
-                        this,
-                        "Do you want to mark lesson " + lessonID + " as completed?",
-                        "Complete lesson",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE
-                );
-
-                if (option == JOptionPane.OK_OPTION) {
-                    courseManager.markLessonCompleted(course.getCourseID(), StudentID, lessonID);
-                    lessonsTable.setValueAt(true, selectedRow, 3);
-                    double progressBarValue = courseManager.getStudentCourseProgress(course.getCourseID(), StudentID);
-                    progressBar.setValue((int) progressBarValue);
-                    JOptionPane.showMessageDialog(this, "Lesson completed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
+            LessonDetails lessonDetails = new LessonDetails(course.getLessonByID(lessonsModel.getValueAt(selectedRow, 0).toString()));
+            lessonDetails.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "No lesson selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
         }

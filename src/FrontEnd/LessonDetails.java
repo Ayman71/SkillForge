@@ -4,6 +4,7 @@
  */
 package FrontEnd;
 
+import BackEnd.Lesson;
 import com.formdev.flatlaf.FlatDarkLaf;
 
 /**
@@ -15,11 +16,12 @@ public class LessonDetails extends javax.swing.JFrame {
     /**
      * Creates new form LessonDetails
      */
-    public LessonDetails() {
+    public LessonDetails(Lesson lesson) {
         initComponents();
         this.setSize(500, 600);
         this.setLocationRelativeTo(null);   
-        
+        jLabel1.setText(lesson.getId()+": "+ lesson.getTitle());
+        contentTextArea.setText(lesson.getContent());
     }
 
     /**
@@ -38,7 +40,8 @@ public class LessonDetails extends javax.swing.JFrame {
         attemptQuizButton = new javax.swing.JButton();
         backButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("LessonID and title");
@@ -118,6 +121,7 @@ public class LessonDetails extends javax.swing.JFrame {
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_backButtonActionPerformed
 
     /**
@@ -133,7 +137,7 @@ public class LessonDetails extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LessonDetails().setVisible(true);
+                new LessonDetails(new Lesson("","","")).setVisible(true);
             }
         });
     }
