@@ -25,7 +25,8 @@ public class UserManager {
         ArrayList<String> enrolledCourses;
         ArrayList<String> createdCourses;
         Map<String, Map<String, Boolean>> lessonsProgress;
-
+        Map<String, QuizAttempt> quizAttempts; 
+        ArrayList<Certificate> certificates; 
     }
 
     public UserManager(String filename) {
@@ -57,6 +58,10 @@ public class UserManager {
                             LessonsProgress lp = new LessonsProgress();
                             lp.setProgressMap(u.lessonsProgress);
                             s.setLessonsProgress(lp);
+                        }  if (u.quizAttempts != null) {
+                            s.setQuizAttempts(u.quizAttempts);
+                        }if (u.certificates != null) {
+                            s.setCertificates(u.certificates);
                         }
                         users.add(s);
                     } else if ("instructor".equalsIgnoreCase(u.role)) {
@@ -94,6 +99,8 @@ public class UserManager {
                     j.role = "student";
                     j.enrolledCourses = ((Student) u).getEnrolledCourses();
                     j.lessonsProgress = ((Student) u).getLessonsProgress().getProgressMap();
+                     j.quizAttempts = ((Student) u).getQuizAttempts(); 
+                     j.certificates = ((Student) u).getCertificates();   
                 } else if (u instanceof Instructor) {
                     j.role = "instructor";
                     j.createdCourses = ((Instructor) u).getCreatedCourses();
