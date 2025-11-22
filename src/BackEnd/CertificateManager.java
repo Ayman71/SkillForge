@@ -10,8 +10,6 @@ package BackEnd;
  */
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
@@ -19,34 +17,27 @@ public class CertificateManager {
 
     private UserManager userManager;
     private CourseManager courseManager;
-    private String certificatesFilename;
+
     private Gson gson;
     private ArrayList<CertificateRecord> certificateRecords;
 
-    public CertificateManager(UserManager userManager, CourseManager courseManager, String certificatesFilename) {
+    public CertificateManager(UserManager userManager, CourseManager courseManager) {
         this.userManager = userManager;
         this.courseManager = courseManager;
-        this.certificatesFilename = certificatesFilename;
+  
         this.gson = new GsonBuilder().setPrettyPrinting().create();
-        this.certificateRecords = new ArrayList<>();
-        loadCertificatesFromFile();
+
+    
     }
 
-    private void loadCertificatesFromFile() {
-        try (FileReader reader = new FileReader(certificatesFilename)) {
-            certificateRecords = gson.fromJson(reader, new TypeToken<ArrayList<CertificateRecord>>() {
-            }.getType());
-            if (certificateRecords == null) {
-                certificateRecords = new ArrayList<>();
-            }
-        } catch (Exception e) {
-            certificateRecords = new ArrayList<>();
-        }
-    }
+  
 
-    private void saveCertificatesToFile() {
-        try (FileWriter writer = new FileWriter(certificatesFilename)) {
-            gson.toJson(certificateRecords, writer);
+    private void saveCertificatesToFile(CertificateRecord record) {
+       try {
+            String filename = record.getCertificateId() + ".json";
+            FileWriter writer = new FileWriter(filename);
+            gson.toJson(record, writer);
+            writer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,8 +67,7 @@ public class CertificateManager {
         int latestQuizScore = getLatestQuizScore(student, course);
 
         CertificateRecord record = new CertificateRecord(certId, studentId, courseId,certificate.getIssueDate(), latestQuizScore);
-        certificateRecords.add(record);
-        saveCertificatesToFile();
+        saveCertificatesToFile(record);
         return certificate;
     }
 
