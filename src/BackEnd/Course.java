@@ -27,7 +27,6 @@ public class Course {
         this.instructorId = instructorId;
         this.lessons = lessons;
         this.enrolledStudents = enrolledStudents;
-
         this.approvalStatus = "Pending";
 
     }

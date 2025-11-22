@@ -120,6 +120,15 @@ public class CourseManager {
         }
         return instructorCourses;
     }
+    public ArrayList<Course> getPendingCourses(String instructorID) {
+        ArrayList<Course> pendingCourses = new ArrayList<Course>();
+        for (Course c : courses) {
+            if (c.getApprovalStatus().equals("Pending")) {
+                pendingCourses.add(c);
+            }
+        }
+        return pendingCourses;
+    }
 
     public Course getCourseFromID(String courseID) {
         for (Course c : courses) {

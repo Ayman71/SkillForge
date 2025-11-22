@@ -197,11 +197,10 @@ public class LoginFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jSignupActionPerformed
 
     private void jLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLoginActionPerformed
-        String email = jTextField1.getText().trim();
+        String userID = jTextField1.getText().trim();
         String password = jPasswordField1.getText().trim();
         try {
-            int role = userManager.login(email, password);
-            String userID = userManager.getUserFromEmail(email).getUserId();
+            int role = userManager.login(userID, password);
             if (role == 1) {
                 InstructorDashboardFrame instructorDashboard = new InstructorDashboardFrame(userID);
                 this.setVisible(false);
@@ -211,7 +210,12 @@ public class LoginFrame extends javax.swing.JFrame {
                 this.setVisible(false);
                 studentDashboard.setVisible(true);
 
-            } else if (email.equals("") || password.equals("")) {
+            } else if (role == 3) {
+                AdminDashboardFrame adminDashboardFrame = new AdminDashboardFrame(userID);
+                this.setVisible(false);
+                adminDashboardFrame.setVisible(true);
+
+            }else if (userID.equals("") || password.equals("")) {
                 JOptionPane.showMessageDialog(this, "Empty feild detected! please try again.", "Login Error", JOptionPane.WARNING_MESSAGE);
             } else if (role == -1) {
                 JOptionPane.showMessageDialog(this, "Invalid username or password! please try again.", "Login Error", JOptionPane.ERROR_MESSAGE);

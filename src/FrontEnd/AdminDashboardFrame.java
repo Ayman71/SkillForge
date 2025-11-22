@@ -4,7 +4,12 @@
  */
 package FrontEnd;
 
+import BackEnd.Course;
+import BackEnd.CourseManager;
+import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,11 +21,26 @@ public class AdminDashboardFrame extends javax.swing.JFrame {
      * Creates new form AdminDashboardFrame
      */
     String adminID;
+    CourseManager courseManager;
+    UserManager userManager;
+    DefaultTableModel pendingCoursesModel;
+
     public AdminDashboardFrame(String adminID) {
         initComponents();
         this.setSize(840, 600);
         this.setLocationRelativeTo(null);
+        this.userManager = new UserManager("users.json");
+        this.courseManager = new CourseManager("courses.json", userManager);
         this.adminID = adminID;
+        this.pendingCoursesModel = new DefaultTableModel(new Object[]{"Course ID", "Title", "Instructor ID"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        pendingCoursesTable.setModel(pendingCoursesModel);
+        adminLabel.setText("Admin (" + adminID + ") Dashboard");
+        fillTable();
     }
 
     /**
@@ -36,11 +56,14 @@ public class AdminDashboardFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         pendingCoursesTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        approveButton = new javax.swing.JButton();
+        viewDetailsButton = new javax.swing.JButton();
+        rejectButton = new javax.swing.JButton();
+        logoutButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Admin Dashboard");
+        setResizable(false);
 
         adminLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         adminLabel.setText("Admin Dashboard");
@@ -79,17 +102,35 @@ public class AdminDashboardFrame extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setText("Pending Courses");
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setText("Aprrove Course");
-
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setText("View Course Details");
-
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton3.setText("Reject Course");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        approveButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        approveButton.setText("Aprrove Course");
+        approveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                approveButtonActionPerformed(evt);
+            }
+        });
+
+        viewDetailsButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        viewDetailsButton.setText("View Course Details");
+        viewDetailsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewDetailsButtonActionPerformed(evt);
+            }
+        });
+
+        rejectButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        rejectButton.setText("Reject Course");
+        rejectButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rejectButtonActionPerformed(evt);
+            }
+        });
+
+        logoutButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        logoutButton.setText("Logout");
+        logoutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logoutButtonActionPerformed(evt);
             }
         });
 
@@ -100,18 +141,21 @@ public class AdminDashboardFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 828, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(adminLabel)
                             .addComponent(jLabel2))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 285, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(viewDetailsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(rejectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(approveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -124,19 +168,95 @@ public class AdminDashboardFrame extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(approveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rejectButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(viewDetailsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void rejectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rejectButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        int selectedRow = pendingCoursesTable.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = pendingCoursesTable.getValueAt(selectedRow, 0).toString();
+            Course course = courseManager.getCourseFromCourseID(courseID);
+            int option = JOptionPane.showConfirmDialog(
+                    this,
+                    "Do you want to reject course: " + course.getTitle() + " (" + courseID + ")?",
+                    "Confirm Rejection",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (option == JOptionPane.OK_OPTION) {
+                course.setApprovalStatus("Rejected");
+                courseManager.saveToFile();
+                fillTable();
+                JOptionPane.showMessageDialog(this, "Rejected successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_rejectButtonActionPerformed
+
+    private void approveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_approveButtonActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = pendingCoursesTable.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = pendingCoursesTable.getValueAt(selectedRow, 0).toString();
+            Course course = courseManager.getCourseFromCourseID(courseID);
+            int option = JOptionPane.showConfirmDialog(
+                    this,
+                    "Do you want to approve course: " + course.getTitle() + " (" + courseID + ")?",
+                    "Confirm Approval",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (option == JOptionPane.OK_OPTION) {
+                course.setApprovalStatus("Approved");
+                courseManager.saveToFile();
+                fillTable();
+                JOptionPane.showMessageDialog(this, "Approved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_approveButtonActionPerformed
+
+    private void viewDetailsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewDetailsButtonActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = pendingCoursesTable.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = pendingCoursesTable.getValueAt(selectedRow, 0).toString();
+            Course course = courseManager.getCourseFromID(courseID);
+            CourseDetails courseDetails = new CourseDetails(course);
+            courseDetails.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_viewDetailsButtonActionPerformed
+
+    private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
+        // TODO add your handling code here:
+        courseManager.saveToFile();
+        LoginFrame loginFrame = new LoginFrame();
+        this.setVisible(false);
+        loginFrame.setVisible(true);
+    }//GEN-LAST:event_logoutButtonActionPerformed
+    
+    public void fillTable() {
+        pendingCoursesModel.setRowCount(0);
+        for (Course c : courseManager.getPendingCourses()) {
+            pendingCoursesModel.addRow(new Object[]{c.getCourseID(), c.getTitle(), c.getInstructorId()});
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -151,18 +271,19 @@ public class AdminDashboardFrame extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdminDashboardFrame("").setVisible(true);
+                new AdminDashboardFrame("A001").setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel adminLabel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton approveButton;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton logoutButton;
     private javax.swing.JTable pendingCoursesTable;
+    private javax.swing.JButton rejectButton;
+    private javax.swing.JButton viewDetailsButton;
     // End of variables declaration//GEN-END:variables
 }

@@ -222,14 +222,16 @@ public class UserManager {
         return null;
     }
 
-    public int login(String email, String password) throws Exception {
+    public int login(String id, String password) throws Exception {
         String hashed = hashPassword(password);
         for (User u : users) {
-            if (u.getEmail().equals(email) && u.getPasswordHash().equals(hashed)) {
+            if (u.getUserId().equals(id) && u.getPasswordHash().equals(hashed)) {
                 if (u.getRole().equals("Instructor")) {
                     return 1;
-                } else {
+                }else if (u.getRole().equals("Student")){
                     return 2;
+                }else{
+                    return 3;
                 }
 
             }

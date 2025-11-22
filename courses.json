@@ -19,7 +19,8 @@
     "enrolledStudents": [
       "S502",
       "S501"
-    ]
+    ],
+    "approvalStatus": "Approved"
   },
   {
     "courseID": "C310",
@@ -40,7 +41,8 @@
     ],
     "enrolledStudents": [
       "S9642"
-    ]
+    ],
+    "approvalStatus": "Approved"
   },
   {
     "courseID": "C320",
@@ -59,7 +61,8 @@
         "content": "SELECT, INSERT, UPDATE, DELETE."
       }
     ],
-    "enrolledStudents": []
+    "enrolledStudents": [],
+    "approvalStatus": "Approved"
   },
   {
     "courseID": "C330",
@@ -85,7 +88,8 @@
     ],
     "enrolledStudents": [
       "S501"
-    ]
+    ],
+    "approvalStatus": "Approved"
   },
   {
     "courseID": "C101",
@@ -111,6 +115,43 @@
     ],
     "enrolledStudents": [
       "S501"
-    ]
+    ],
+    "approvalStatus": "Approved"
+  },
+  {
+    "courseID": "C401",
+    "title": "Artificial Intelligence Basics",
+    "description": "Introduction to AI concepts, agents, and problem solving.",
+    "instructorId": "I101",
+    "lessons": [],
+    "enrolledStudents": [],
+    "approvalStatus": "Pending"
+  },
+  {
+    "courseID": "C402",
+    "title": "Mobile App Development",
+    "description": "Building Android applications using Java and XML.",
+    "instructorId": "I101",
+    "lessons": [],
+    "enrolledStudents": [],
+    "approvalStatus": "Pending"
+  },
+  {
+    "courseID": "C450",
+    "title": "Advanced Hacking Techniques",
+    "description": "Unethical penetration techniques and illegal access methods.",
+    "instructorId": "I105",
+    "lessons": [],
+    "enrolledStudents": [],
+    "approvalStatus": "Rejected"
+  },
+  {
+    "courseID": "C451",
+    "title": "Obsolete Programming Languages",
+    "description": "Focus on outdated technologies no longer supported.",
+    "instructorId": "I106",
+    "lessons": [],
+    "enrolledStudents": [],
+    "approvalStatus": "Rejected"
   }
 ]
