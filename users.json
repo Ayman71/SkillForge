@@ -46,7 +46,7 @@
       },
       "C330": {
         "L1": 100.0,
-        "L2": 50.0,
+        "L2": 100.0,
         "L4": 100.0
       },
       "C310": {
@@ -87,8 +87,8 @@
       },
       "QC330L2": {
         "quizId": "QC330L2",
-        "attemptNumber": 3,
-        "score": 50.0
+        "attemptNumber": 5,
+        "score": 100.0
       },
       "QC330L4": {
         "quizId": "QC330L4",
@@ -102,7 +102,7 @@
       },
       "QC310L2": {
         "quizId": "QC310L2",
-        "attemptNumber": 7,
+        "attemptNumber": 9,
         "score": 100.0
       }
     },
