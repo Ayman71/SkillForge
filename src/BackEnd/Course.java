@@ -69,7 +69,14 @@ public class Course {
         }
         return lessons;
     }
-
+    public Lesson getLessonByID(String id){
+        for (Lesson lesson : lessons) {
+            if(lesson.getId().equals(id)){
+                return lesson;
+            }
+        }
+        return null;
+    }
     public void setLessons(ArrayList<Lesson> lessons) {
         this.lessons = lessons;
     }

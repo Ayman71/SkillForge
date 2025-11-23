@@ -45,20 +45,8 @@ public class CourseForm extends javax.swing.JFrame {
         instructorIDText.setText(instructorID);
         this.instructorID = instructorID;
         addModifyButton.setText("Add");
-        addLessonButton.addActionListener(e -> {
-            LessonForm form = new LessonForm(new LessonCallback() {
-                @Override
-                public void onLessonCreated(Lesson lesson) {
-                    lessons.add(lesson);
-
-                    lessonsModel.addRow(new Object[]{
-                        lesson.getId(),
-                        lesson.getTitle()
-                    });
-                }
-            });
-            form.setVisible(true);
-        });
+        addLessonButton.setEnabled(false);
+        jButton3.setEnabled(false);
     }
 
     public CourseForm(Course course, DefaultTableModel parentModel, String userID, CourseManager courseManager, UserManager userManager) {
@@ -85,7 +73,7 @@ public class CourseForm extends javax.swing.JFrame {
                         lesson.getTitle()
                     });
                 }
-            });
+            },courseToModiy.getCourseID());
             form.setVisible(true);
         });
         

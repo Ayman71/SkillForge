@@ -24,10 +24,11 @@ public class LessonForm extends javax.swing.JFrame {
     Quiz quiz;
     DefaultTableModel quizModel;
     private LessonCallback callback;
+    String courseID;
 
-    public LessonForm(LessonCallback callback) {
+    public LessonForm(LessonCallback callback, String courseID) {
         initComponents();
-
+        this.courseID = courseID;
         this.callback = callback;
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
@@ -58,7 +59,7 @@ public class LessonForm extends javax.swing.JFrame {
         addQuestionButton = new javax.swing.JButton();
         saveLessonButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         quizTable.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         quizTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -103,6 +104,11 @@ public class LessonForm extends javax.swing.JFrame {
 
         addQuestionButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         addQuestionButton.setText("Add Question");
+        addQuestionButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addQuestionButtonActionPerformed(evt);
+            }
+        });
 
         saveLessonButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         saveLessonButton.setText("Save Lesson");
@@ -188,7 +194,7 @@ public class LessonForm extends javax.swing.JFrame {
                 return;
             }
             char correctOptionchar = correctOption.charAt(0);
-            if (correctOption.length() != 1 || (!correctOption.equals("A") && !correctOption.equals("B") && !correctOption.equals("C"))) {
+            if (correctOption.length() != 1 || !(correctOption.equals("A") || correctOption.equals("B") || correctOption.equals("C"))) {
                 JOptionPane.showMessageDialog(this, "Correct option must be A,B or C!", "Warning", JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -198,13 +204,22 @@ public class LessonForm extends javax.swing.JFrame {
             options.add(optionC);
             questions.add(new Question(question, options, correctOptionchar));
         }
-        quiz = new Quiz("Q"+lessonID,questions);
+        if (questions.size() == 0) {
+                JOptionPane.showMessageDialog(this, "Every lesson must have a quiz!", "Warning", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        quiz = new Quiz("Q"+courseID+lessonID,questions);
         Lesson lesson = new Lesson(lessonID, lessonTitle, content);
         lesson.setQuiz(quiz);
         callback.onLessonCreated(lesson);
         JOptionPane.showMessageDialog(this, "Lesson added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }//GEN-LAST:event_saveLessonButtonActionPerformed
+
+    private void addQuestionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addQuestionButtonActionPerformed
+        // TODO add your handling code here:
+        quizModel.addRow(new Object[]{"Question", "Option A", "Option B", "Option C", "Correct Option"});
+    }//GEN-LAST:event_addQuestionButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -224,7 +239,7 @@ public class LessonForm extends javax.swing.JFrame {
                     public void onLessonCreated(Lesson lesson) {
 
                     }
-                }).setVisible(true);
+                }, "").setVisible(true);
 
             }
         });

@@ -8,12 +8,58 @@
       {
         "id": "L1",
         "title": "OOP Overview",
-        "content": "Classes, objects, methods, fields."
+        "content": "Classes, objects, methods, fields.",
+        "quiz": {
+          "quizID": "QC205L1",
+          "questions": [
+            {
+              "questionText": "What is a class in OOP?",
+              "choices": [
+                "A blueprint for objects",
+                "A type of function",
+                "A variable"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "What does encapsulation mean?",
+              "choices": [
+                "Hiding data",
+                "Inheriting classes",
+                "Overloading methods"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
       },
       {
         "id": "L2",
         "title": "Inheritance \u0026 Polymorphism",
-        "content": "Extending classes, overriding, dynamic dispatch."
+        "content": "Extending classes, overriding, dynamic dispatch.",
+        "quiz": {
+          "quizID": "QC205L2",
+          "questions": [
+            {
+              "questionText": "What is inheritance in OOP?",
+              "choices": [
+                "A class derives from another",
+                "A method call",
+                "A loop structure"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "What is polymorphism?",
+              "choices": [
+                "Same interface, different behavior",
+                "A type of variable",
+                "Encapsulation technique"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
       }
     ],
     "enrolledStudents": [
@@ -31,16 +77,63 @@
       {
         "id": "L1",
         "title": "Introduction to Algorithms",
-        "content": "What is an algorithm? Complexity, notation."
+        "content": "What is an algorithm? Complexity, notation.",
+        "quiz": {
+          "quizID": "QC310L1",
+          "questions": [
+            {
+              "questionText": "What is an algorithm?",
+              "choices": [
+                "Step-by-step procedure",
+                "A programming language",
+                "A variable type"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "What is time complexity?",
+              "choices": [
+                "Resource usage estimation",
+                "Memory allocation",
+                "Function name"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
       },
       {
         "id": "L2",
         "title": "Sorting Algorithms",
-        "content": "Bubble, merge, quicksort fundamentals."
+        "content": "Bubble, merge, quicksort fundamentals.",
+        "quiz": {
+          "quizID": "QC310L2",
+          "questions": [
+            {
+              "questionText": "Which sorting is fastest on average?",
+              "choices": [
+                "Quicksort",
+                "Bubble sort",
+                "Selection sort"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "Bubble sort complexity is?",
+              "choices": [
+                "O(n^2)",
+                "O(n log n)",
+                "O(n)"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
       }
     ],
     "enrolledStudents": [
-      "S9642"
+      "S9642",
+      "S501"
     ],
     "approvalStatus": "Approved"
   },
@@ -53,42 +146,61 @@
       {
         "id": "L1",
         "title": "Introduction to Databases",
-        "content": "Database types, relational model."
+        "content": "Database types, relational model.",
+        "quiz": {
+          "quizID": "QC320L1",
+          "questions": [
+            {
+              "questionText": "What is a relational database?",
+              "choices": [
+                "Data stored in tables",
+                "Object-oriented code",
+                "Network connection"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "What is ERD?",
+              "choices": [
+                "Entity-Relationship Diagram",
+                "Execution Runtime Device",
+                "Encrypted Data"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
       },
       {
         "id": "L2",
         "title": "Basic SQL",
-        "content": "SELECT, INSERT, UPDATE, DELETE."
+        "content": "SELECT, INSERT, UPDATE, DELETE.",
+        "quiz": {
+          "quizID": "QC320L2",
+          "questions": [
+            {
+              "questionText": "Which SQL command reads data?",
+              "choices": [
+                "SELECT",
+                "INSERT",
+                "UPDATE"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "Which command updates existing data?",
+              "choices": [
+                "UPDATE",
+                "DELETE",
+                "SELECT"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
       }
     ],
     "enrolledStudents": [],
-    "approvalStatus": "Approved"
-  },
-  {
-    "courseID": "C330",
-    "title": "Web Development Basics",
-    "description": "HTML, CSS, JavaScript fundamentals, layout, forms.",
-    "instructorId": "I101",
-    "lessons": [
-      {
-        "id": "L1",
-        "title": "HTML Structure",
-        "content": "Tags, elements, attributes."
-      },
-      {
-        "id": "L2",
-        "title": "CSS Basics",
-        "content": "Selectors, layout principles."
-      },
-      {
-        "id": "L4",
-        "title": "Title",
-        "content": "Content"
-      }
-    ],
-    "enrolledStudents": [
-      "S501"
-    ],
     "approvalStatus": "Approved"
   },
   {
@@ -100,17 +212,77 @@
       {
         "id": "L1",
         "title": "Introduction to Java",
-        "content": "History of Java, JVM, JDK, JRE."
+        "content": "History of Java, JVM, JDK, JRE.",
+        "quiz": {
+          "quizID": "QC101L1",
+          "questions": [
+            {
+              "questionText": "What is JVM?",
+              "choices": [
+                "Java Virtual Machine",
+                "Java Variable Method",
+                "Just Variable Memory"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "What is JDK?",
+              "choices": [
+                "Java Development Kit",
+                "Java Data Key",
+                "Java Deployment Kit"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
       },
       {
         "id": "L2",
         "title": "Variables and Data Types",
-        "content": "Primitive types, reference types, declarations, examples."
+        "content": "Primitive types, reference types, declarations, examples.",
+        "quiz": {
+          "quizID": "QC101L2",
+          "questions": [
+            {
+              "questionText": "Which is a primitive type?",
+              "choices": [
+                "int",
+                "String",
+                "ArrayList"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "Which is a reference type?",
+              "choices": [
+                "String",
+                "int",
+                "boolean"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
       },
       {
         "id": "L3",
         "title": "Title",
-        "content": "Content"
+        "content": "Content",
+        "quiz": {
+          "quizID": "QC101L3",
+          "questions": [
+            {
+              "questionText": "Sample question?",
+              "choices": [
+                "Option A",
+                "Option B",
+                "Option C"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
       }
     ],
     "enrolledStudents": [
@@ -123,7 +295,36 @@
     "title": "Artificial Intelligence Basics",
     "description": "Introduction to AI concepts, agents, and problem solving.",
     "instructorId": "I101",
-    "lessons": [],
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "AI Overview",
+        "content": "Agents, environments, problem-solving.",
+        "quiz": {
+          "quizID": "QC401L1",
+          "questions": [
+            {
+              "questionText": "What is an intelligent agent?",
+              "choices": [
+                "Something that perceives and acts",
+                "Just a program",
+                "A database"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "What is the environment in AI?",
+              "choices": [
+                "Where agent operates",
+                "The CPU",
+                "Memory storage"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      }
+    ],
     "enrolledStudents": [],
     "approvalStatus": "Pending"
   },
@@ -132,7 +333,36 @@
     "title": "Mobile App Development",
     "description": "Building Android applications using Java and XML.",
     "instructorId": "I101",
-    "lessons": [],
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Android Basics",
+        "content": "Activities, layouts, resources.",
+        "quiz": {
+          "quizID": "QC402L1",
+          "questions": [
+            {
+              "questionText": "What is an Activity in Android?",
+              "choices": [
+                "UI component",
+                "Database",
+                "Network module"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "What file defines UI layouts?",
+              "choices": [
+                "XML",
+                "JSON",
+                "CSV"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      }
+    ],
     "enrolledStudents": [],
     "approvalStatus": "Pending"
   },
@@ -141,7 +371,36 @@
     "title": "Advanced Hacking Techniques",
     "description": "Unethical penetration techniques and illegal access methods.",
     "instructorId": "I105",
-    "lessons": [],
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Hacking Intro",
+        "content": "Overview of penetration techniques.",
+        "quiz": {
+          "quizID": "QC450L1",
+          "questions": [
+            {
+              "questionText": "What is penetration testing?",
+              "choices": [
+                "Testing system security",
+                "Writing code",
+                "Monitoring network traffic"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "Is hacking legal?",
+              "choices": [
+                "Not without permission",
+                "Always legal",
+                "Depends on OS"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      }
+    ],
     "enrolledStudents": [],
     "approvalStatus": "Rejected"
   },
@@ -150,8 +409,124 @@
     "title": "Obsolete Programming Languages",
     "description": "Focus on outdated technologies no longer supported.",
     "instructorId": "I106",
-    "lessons": [],
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "Old Languages Overview",
+        "content": "History of old programming languages.",
+        "quiz": {
+          "quizID": "QC451L1",
+          "questions": [
+            {
+              "questionText": "Which language is obsolete?",
+              "choices": [
+                "COBOL",
+                "Java",
+                "Python"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "Why do we study old languages?",
+              "choices": [
+                "Understand history",
+                "Write new code",
+                "Networking"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      }
+    ],
     "enrolledStudents": [],
     "approvalStatus": "Rejected"
+  },
+  {
+    "courseID": "C330",
+    "title": "Web Development Basics",
+    "description": "HTML, CSS, JavaScript fundamentals, layout, forms.",
+    "instructorId": "I101",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "HTML Structure",
+        "content": "Tags, elements, attributes.",
+        "quiz": {
+          "quizID": "QC330L1",
+          "questions": [
+            {
+              "questionText": "Which tag defines a paragraph?",
+              "choices": [
+                "\u003cp\u003e",
+                "\u003cdiv\u003e",
+                "\u003cspan\u003e"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "Which attribute sets the class?",
+              "choices": [
+                "class",
+                "id",
+                "style"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      },
+      {
+        "id": "L2",
+        "title": "CSS Basics",
+        "content": "Selectors, layout principles.",
+        "quiz": {
+          "quizID": "QC330L2",
+          "questions": [
+            {
+              "questionText": "Which selector targets an id?",
+              "choices": [
+                "#id",
+                ".class",
+                "*"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "What does flex display do?",
+              "choices": [
+                "Aligns items in a row or column",
+                "Changes font size",
+                "Sets color"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      },
+      {
+        "id": "L4",
+        "title": "Title",
+        "content": "Content",
+        "quiz": {
+          "quizID": "QC330L4",
+          "questions": [
+            {
+              "questionText": "Sample question?",
+              "choices": [
+                "Option A",
+                "Option B",
+                "Option C"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      }
+    ],
+    "enrolledStudents": [
+      "S501"
+    ],
+    "approvalStatus": "Pending"
   }
 ]

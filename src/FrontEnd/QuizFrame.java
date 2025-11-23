@@ -4,6 +4,24 @@
  */
 package FrontEnd;
 
+import BackEnd.CourseManager;
+import BackEnd.Question;
+import BackEnd.Quiz;
+import BackEnd.QuizManager;
+import BackEnd.Student;
+import BackEnd.UserManager;
+import com.formdev.flatlaf.FlatDarkLaf;
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author Ayman
@@ -13,8 +31,67 @@ public class QuizFrame extends javax.swing.JFrame {
     /**
      * Creates new form QuizFrame
      */
-    public QuizFrame() {
-        initComponents();
+    private Quiz quiz;
+    QuizManager quizManager;
+    Student student;
+    CourseManager courseManager;
+    String courseID;
+    private ArrayList<QuestionPanel> questionPanels = new ArrayList<>();
+
+    public QuizFrame(Quiz quiz, QuizManager quizManager, Student student, CourseManager courseManager, String courseID) {
+        this.quiz = quiz;
+        this.quizManager = quizManager;
+        this.student = student;
+        this.courseManager = courseManager;
+        this.courseID = courseID;
+        setTitle("Quiz");
+        setSize(700, 600);
+        setLocationRelativeTo(null);
+
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+
+        JScrollPane scrollPane = new JScrollPane(container);
+        add(scrollPane, BorderLayout.CENTER);
+
+        int number = 1;
+
+        for (Question q : quiz.getQuestions()) {
+            QuestionPanel qp = new QuestionPanel(q, number++);
+            questionPanels.add(qp);
+            container.add(qp);
+            container.add(Box.createVerticalStrut(10));
+        }
+
+        JButton submitBtn = new JButton("Submit Quiz");
+        submitBtn.addActionListener(e -> {
+            ArrayList<Character> studentChoices = new ArrayList<Character>();
+            for (QuestionPanel qp : questionPanels) {
+                studentChoices.add(qp.getSelectedAnswer().charAt(0));
+            }
+            double score = quizManager.isPassed(student, quiz.getQuizID(), studentChoices);
+            courseManager.setQuizScore(courseID, student.getUserId(), quiz.getQuizID().substring(quiz.getQuizID().indexOf("L")), score);
+            JOptionPane.showMessageDialog(this, "Score: " + score + " % ");
+        });
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.add(submitBtn);
+
+        add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    private void calculateScore() {
+        int score = 0;
+
+        for (QuestionPanel qp : questionPanels) {
+            if (qp.getSelectedAnswer().charAt(0) == qp.getCorrectAnswer()) {
+                score++;
+            }
+            qp.showResult();
+        }
+
+        JOptionPane.showMessageDialog(this,
+                "Score: " + score + " / " + questionPanels.size());
     }
 
     /**
@@ -32,11 +109,11 @@ public class QuizFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 500, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 600, Short.MAX_VALUE)
         );
 
         pack();
@@ -45,35 +122,47 @@ public class QuizFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    public static void main(String[] args) {
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(QuizFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(QuizFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(QuizFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(QuizFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+            // Set FlatLaf Dark look and feel
+            FlatDarkLaf.setup();
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new QuizFrame().setVisible(true);
-            }
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize FlatLaf");
+        }
+        SwingUtilities.invokeLater(() -> {
+
+            // Create sample questions for testing
+            ArrayList<Question> questions = new ArrayList<>();
+
+            // Question 1
+            ArrayList<String> options1 = new ArrayList<>();
+            options1.add("3");
+            options1.add("4");
+            options1.add("5");
+            questions.add(new Question("What is 2 + 2?", options1, 'B'));
+
+            // Question 2
+            ArrayList<String> options2 = new ArrayList<>();
+            options2.add("Programming Language");
+            options2.add("Operating System");
+            options2.add("Browser");
+            questions.add(new Question("Java is?", options2, 'A'));
+
+            // Question 3
+            ArrayList<String> options3 = new ArrayList<>();
+            options3.add("Encapsulation");
+            options3.add("Polymorphism");
+            options3.add("Compilation");
+            questions.add(new Question("Which is not OOP concept?", options3, 'C'));
+
+            // Create quiz and pass questions
+            Quiz quiz = new Quiz("Sample Quiz", questions);
+
+            // Show the frame
+            QuizFrame frame = new QuizFrame(quiz, new QuizManager(new CourseManager("", new UserManager("")), new UserManager("")), new Student("", "", "", ""), new CourseManager("", new UserManager("")), "");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setVisible(true);
         });
     }
 

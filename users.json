@@ -31,24 +31,82 @@
     "enrolledCourses": [
       "C101",
       "C205",
-      "C330"
+      "C330",
+      "C310"
     ],
     "lessonsProgress": {
       "C101": {
-        "L1": true,
-        "L2": true,
-        "L3": false
+        "L1": 85.0,
+        "L2": 50.0,
+        "L3": 100.0
       },
       "C205": {
-        "L1": false,
-        "L2": true
+        "L1": 100.0,
+        "L2": 75.0
       },
       "C330": {
-        "L1": true,
-        "L2": true,
-        "L3": false
+        "L1": 100.0,
+        "L2": 50.0,
+        "L4": 100.0
+      },
+      "C310": {
+        "L1": 50.0,
+        "L2": 0.0
       }
-    }
+    },
+    "quizAttempts": {
+      "QC101L1": {
+        "quizId": "QC101L1",
+        "attemptNumber": 2,
+        "score": 85.0
+      },
+      "QC101L2": {
+        "quizId": "QC101L2",
+        "attemptNumber": 2,
+        "score": 50.0
+      },
+      "QC101L3": {
+        "quizId": "QC101L3",
+        "attemptNumber": 4,
+        "score": 100.0
+      },
+      "QC205L1": {
+        "quizId": "QC205L1",
+        "attemptNumber": 3,
+        "score": 100.0
+      },
+      "QC205L2": {
+        "quizId": "QC205L2",
+        "attemptNumber": 2,
+        "score": 75.0
+      },
+      "QC330L1": {
+        "quizId": "QC330L1",
+        "attemptNumber": 1,
+        "score": 100.0
+      },
+      "QC330L2": {
+        "quizId": "QC330L2",
+        "attemptNumber": 3,
+        "score": 50.0
+      },
+      "QC330L4": {
+        "quizId": "QC330L4",
+        "attemptNumber": 1,
+        "score": 100.0
+      },
+      "QC310L1": {
+        "quizId": "QC310L1",
+        "attemptNumber": 1,
+        "score": 50.0
+      },
+      "QC310L2": {
+        "quizId": "QC310L2",
+        "attemptNumber": 1,
+        "score": 0.0
+      }
+    },
+    "certificates": []
   },
   {
     "userId": "S502",
@@ -61,10 +119,23 @@
     ],
     "lessonsProgress": {
       "C205": {
-        "L1": false,
-        "L2": false
+        "L1": 50.0,
+        "L2": 65.0
       }
-    }
+    },
+    "quizAttempts": {
+      "QC205L1": {
+        "quizId": "QC205L1",
+        "attemptNumber": 1,
+        "score": 50.0
+      },
+      "QC205L2": {
+        "quizId": "QC205L2",
+        "attemptNumber": 2,
+        "score": 65.0
+      }
+    },
+    "certificates": []
   },
   {
     "userId": "S9642",
@@ -77,9 +148,29 @@
     ],
     "lessonsProgress": {
       "C310": {
-        "L1": false,
-        "L2": true
+        "L1": 100.0,
+        "L2": 35.0
       }
-    }
+    },
+    "quizAttempts": {
+      "QC310L1": {
+        "quizId": "QC310L1",
+        "attemptNumber": 3,
+        "score": 100.0
+      },
+      "QC310L2": {
+        "quizId": "QC310L2",
+        "attemptNumber": 1,
+        "score": 35.0
+      }
+    },
+    "certificates": []
+  },
+  {
+    "userId": "A1",
+    "username": "Ayman",
+    "email": "A@g.com",
+    "passwordHash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+    "role": "Admin"
   }
 ]
