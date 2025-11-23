@@ -12,6 +12,8 @@ import BackEnd.Student;
 import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -72,26 +74,19 @@ public class QuizFrame extends javax.swing.JFrame {
             double score = quizManager.isPassed(student, quiz.getQuizID(), studentChoices);
             courseManager.setQuizScore(courseID, student.getUserId(), quiz.getQuizID().substring(quiz.getQuizID().indexOf("L")), score);
             JOptionPane.showMessageDialog(this, "Score: " + score + " % ");
+            for (QuestionPanel qp : questionPanels) {
+                qp.showResult();
+            }
+            submitBtn.setEnabled(false);
         });
-
+        submitBtn.setPreferredSize(new Dimension(150, 50));
+        submitBtn.setMinimumSize(new Dimension(150, 50));
+        submitBtn.setMaximumSize(new Dimension(150, 50));
+        submitBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         JPanel bottomPanel = new JPanel();
         bottomPanel.add(submitBtn);
 
         add(bottomPanel, BorderLayout.SOUTH);
-    }
-
-    private void calculateScore() {
-        int score = 0;
-
-        for (QuestionPanel qp : questionPanels) {
-            if (qp.getSelectedAnswer().charAt(0) == qp.getCorrectAnswer()) {
-                score++;
-            }
-            qp.showResult();
-        }
-
-        JOptionPane.showMessageDialog(this,
-                "Score: " + score + " / " + questionPanels.size());
     }
 
     /**

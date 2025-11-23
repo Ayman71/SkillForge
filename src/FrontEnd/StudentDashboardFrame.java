@@ -4,11 +4,13 @@
  */
 package FrontEnd;
 
+import BackEnd.CertificateManager;
 import BackEnd.Course;
 import BackEnd.CourseManager;
 import BackEnd.Lesson;
 import BackEnd.Quiz;
 import BackEnd.QuizManager;
+import BackEnd.Student;
 import BackEnd.User;
 import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -28,6 +30,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     private CourseManager courseManager;
     private UserManager userManager;
     private QuizManager quizManager;
+    private CertificateManager certificateManager;
     DefaultTableModel coursesModel = new DefaultTableModel(new Object[]{"Course ID", "Title", "Instructor ID"}, 0) {
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -45,6 +48,8 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         userManager = new UserManager("users.json");
         courseManager = new CourseManager("courses.json", userManager);
         quizManager = new QuizManager(courseManager,userManager);
+        certificateManager = new CertificateManager(courseManager, userManager);
+        certificateManager.setCertificates(((Student)userManager.getUserFromID(studentID)).getCertificates());
         ArrayList<Course> courses = courseManager.getAllCourses();
         for (Course c : courses) {
             for (Lesson l : c.getLessons()) {
@@ -97,6 +102,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         Button1 = new javax.swing.JButton();
         Button3 = new javax.swing.JButton();
         viewLessonsButton = new javax.swing.JButton();
+        viewCertificatesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -186,6 +192,14 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
             }
         });
 
+        viewCertificatesButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        viewCertificatesButton.setText("View Certificates");
+        viewCertificatesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewCertificatesButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -207,7 +221,8 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                             .addComponent(Button1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Button2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                             .addComponent(Button3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(viewLessonsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))
+                            .addComponent(viewLessonsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                            .addComponent(viewCertificatesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(89, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -228,6 +243,8 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                         .addComponent(viewLessonsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Button3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(viewCertificatesButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Button2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -297,12 +314,18 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
             Course course = courseManager.getCourseFromCourseID(courseID);
-            CourseLessons courseLessons = new CourseLessons(course, studentID, courseManager, quizManager);
+            CourseLessons courseLessons = new CourseLessons(course, studentID, courseManager, quizManager, certificateManager);
             courseLessons.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_viewLessonsButtonActionPerformed
+
+    private void viewCertificatesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewCertificatesButtonActionPerformed
+        // TODO add your handling code here:
+        CertificatesFrame certificatesFrame = new CertificatesFrame(certificateManager);
+        certificatesFrame.setVisible(true);
+    }//GEN-LAST:event_viewCertificatesButtonActionPerformed
 
     private void fillTable(int i) {
 
@@ -352,6 +375,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.ButtonGroup tableModelbtn;
+    private javax.swing.JButton viewCertificatesButton;
     private javax.swing.JButton viewLessonsButton;
     // End of variables declaration//GEN-END:variables
 }
