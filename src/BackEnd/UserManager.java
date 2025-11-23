@@ -58,6 +58,10 @@ public class UserManager {
                             LessonsProgress lp = new LessonsProgress();
                             lp.setProgressMap(u.lessonsProgress);
                             s.setLessonsProgress(lp);
+                        }  if (u.quizAttempts != null) {
+                            s.setQuizAttempts(u.quizAttempts);
+                        }if (u.certificates != null) {
+                            s.setCertificates(u.certificates);
                         }
                         if (u.quizAttempts != null) {
                             s.setQuizAttempts(u.quizAttempts);
