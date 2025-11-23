@@ -8,21 +8,31 @@ package BackEnd;
  *
  * @author husse
  */
-
 import java.time.LocalDate;
+import java.util.Map;
 
 public class Certificate {
-    
-        private String issueDate;
-        private String studentId;  
-        private String courseId;
-            private String certificateId;
 
-    public Certificate( String certificateId, String studentId, String courseId) {
+    private String certificateId;
+    private String issueDate;
+    private String studentId;
+    private String courseId;
+    private Map<String, Double> performance;
+
+    public Certificate(String certificateId, String studentId, String courseId, Map<String, Double> performance) {
         this.issueDate = LocalDate.now().toString();
         this.studentId = studentId;
         this.courseId = courseId;
         this.certificateId = certificateId;
+        this.performance = performance;
+    }
+
+    public Map<String, Double> getPerformance() {
+        return performance;
+    }
+
+    public void setPerformance(Map<String, Double> performance) {
+        this.performance = performance;
     }
 
     public String getIssueDate() {
@@ -56,8 +66,5 @@ public class Certificate {
     public void setCertificateId(String certificateId) {
         this.certificateId = certificateId;
     }
-            
-        
-        
-        
+
 }

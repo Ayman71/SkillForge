@@ -4,6 +4,7 @@
  */
 package FrontEnd;
 
+import BackEnd.CertificateManager;
 import BackEnd.Course;
 import BackEnd.CourseManager;
 import BackEnd.Lesson;
@@ -31,13 +32,15 @@ public class CourseLessons extends javax.swing.JFrame {
     CourseManager courseManager;
     QuizManager quizManager;
     Course course;
+    CertificateManager certificateManager;
 
-    public CourseLessons(Course course, String studentID, CourseManager courseManager, QuizManager quizManager) {
+    public CourseLessons(Course course, String studentID, CourseManager courseManager, QuizManager quizManager, CertificateManager certificateManager) {
         initComponents();
         this.lessons = course.getLessons();
         this.StudentID = studentID;
         this.courseManager = courseManager;
         this.quizManager = quizManager;
+        this.certificateManager = certificateManager;
         this.course = course;
         courseNameLabel.setText(course.getTitle() + "(" + course.getCourseID() + ")");
         this.setSize(500, 600);
@@ -45,7 +48,14 @@ public class CourseLessons extends javax.swing.JFrame {
         progressBar.setStringPainted(true);
         progressBar.setMinimum(0);
         progressBar.setMaximum(100);
-        progressBar.setValue((int) (courseManager.getStudentCourseProgress(course.getCourseID(), studentID)));
+        int courseProgress = (int) (courseManager.getStudentCourseProgress(course.getCourseID(), studentID));
+        progressBar.setValue(courseProgress);
+        if (courseProgress == 100.0) {
+            generateCertificateButton.setEnabled(true);
+        }
+        if (certificateManager.certificateExistsForStudentCourse(studentID, course.getCourseID())) {
+            generateCertificateButton.setEnabled(false);
+        }
         lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content", "Last Score"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -79,6 +89,7 @@ public class CourseLessons extends javax.swing.JFrame {
         progressBar = new javax.swing.JProgressBar();
         jButton1 = new javax.swing.JButton();
         viewButton = new javax.swing.JButton();
+        generateCertificateButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -135,6 +146,15 @@ public class CourseLessons extends javax.swing.JFrame {
             }
         });
 
+        generateCertificateButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        generateCertificateButton.setText("Generate Certificate");
+        generateCertificateButton.setEnabled(false);
+        generateCertificateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateCertificateButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -147,6 +167,8 @@ public class CourseLessons extends javax.swing.JFrame {
                         .addComponent(jScrollPane1)
                         .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(generateCertificateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(viewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -164,7 +186,8 @@ public class CourseLessons extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(viewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(viewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(generateCertificateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(46, 46, 46))
         );
 
@@ -174,7 +197,7 @@ public class CourseLessons extends javax.swing.JFrame {
     private void viewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewButtonActionPerformed
         int selectedRow = lessonsTable.getSelectedRow();
         if (selectedRow != -1) {
-            LessonDetails lessonDetails = new LessonDetails(course.getLessonByID(lessonsModel.getValueAt(selectedRow, 0).toString()), quizManager, (Student) (new UserManager("users.json").getUserFromID(StudentID)),courseManager, course.getCourseID());
+            LessonDetails lessonDetails = new LessonDetails(course.getLessonByID(lessonsModel.getValueAt(selectedRow, 0).toString()), quizManager, (Student) (new UserManager("users.json").getUserFromID(StudentID)), courseManager, course.getCourseID());
             this.dispose();
             lessonDetails.setVisible(true);
         } else {
@@ -186,6 +209,20 @@ public class CourseLessons extends javax.swing.JFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void generateCertificateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateCertificateButtonActionPerformed
+        // TODO add your handling code here:
+        int res = certificateManager.generateCertificate(StudentID, course.getCourseID());
+        if (res == -1) {
+            JOptionPane.showMessageDialog(this, "Course not completed yet!", "Unfinished course warining", JOptionPane.WARNING_MESSAGE);
+        } else if(res == 0){
+            JOptionPane.showMessageDialog(this, "Previous certificate already generated!", "Duplicate certificate warning warining", JOptionPane.WARNING_MESSAGE);
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "Certificate generated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            generateCertificateButton.setEnabled(false);
+        }
+    }//GEN-LAST:event_generateCertificateButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,13 +237,14 @@ public class CourseLessons extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CourseLessons(new Course("", "", "", "", new ArrayList<Lesson>(), new ArrayList<>()), "", new CourseManager("", new UserManager("")), new QuizManager(new CourseManager("", new UserManager("")), new UserManager(""))).setVisible(true);
+                new CourseLessons(new Course("", "", "", "", new ArrayList<Lesson>(), new ArrayList<>()), "", new CourseManager("", new UserManager("")), new QuizManager(new CourseManager("", new UserManager("")), new UserManager("")), new CertificateManager(new CourseManager("", new UserManager("")), new UserManager(""))).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel courseNameLabel;
+    private javax.swing.JButton generateCertificateButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable lessonsTable;

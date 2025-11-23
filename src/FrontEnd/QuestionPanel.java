@@ -35,12 +35,13 @@ public class QuestionPanel extends javax.swing.JPanel {
         //setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         JLabel questionLabel = new JLabel(number + ". " + question.getQuestionText());
-        questionLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        questionLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(questionLabel);
 
         for (int i = 0; i < question.getChoices().size(); i++) {
             radios[i] = new JRadioButton(question.getChoices().get(i));
             radios[i].setActionCommand(String.valueOf((char) ('A' + i))); // A, B, C
+            radios[i].setFont(new Font("Arial", Font.BOLD, 14));
             group.add(radios[i]);
             add(radios[i]);
         }
@@ -59,28 +60,27 @@ public class QuestionPanel extends javax.swing.JPanel {
         return question.getCorrectChoice();
     }
 
-
     public void showResult() {
-    String selected = getSelectedAnswer(); 
-    String correct = String.valueOf(question.getCorrectChoice()); 
+        String selected = getSelectedAnswer();
+        String correct = String.valueOf(question.getCorrectChoice());
 
-    for (JRadioButton radio : radios) {
-        String action = radio.getActionCommand();
+        for (JRadioButton radio : radios) {
+            String action = radio.getActionCommand();
 
-        if (action.equals(correct)) {
+            if (action.equals(correct)) {
 
-            radio.setForeground(Color.GREEN);
-        } else if (action.equals(selected)) {
+                radio.setForeground(Color.GREEN);
+            } else if (action.equals(selected)) {
 
-            radio.setForeground(Color.RED);
-        } else {
+                radio.setForeground(Color.RED);
+            } else {
 
-            radio.setForeground(Color.BLACK);
+                radio.setForeground(Color.BLACK);
+            }
+            radio.setFocusable(false);
         }
-
-        radio.setEnabled(false);
+        repaint();
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.

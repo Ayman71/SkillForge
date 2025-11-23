@@ -47,6 +47,10 @@ public class Student extends User {
         return lessonsProgress;
     }
 
+    public Map<String, Double> getLessonsProgressByCourse(String courseID) {
+        return lessonsProgress.getProgressMap().get(courseID);
+    }
+    
     public void enrollCourse(Course course) {
         lessonsProgress.addCourse(course.getCourseID(), course.getLessons());
     }
@@ -113,15 +117,15 @@ public class Student extends User {
         return certificates;
     }
 
-    public Certificate haveExisitingCertificateForCourse(String courseId) {
+    public int haveExisitingCertificateForCourse(String courseId) {
         if (certificates == null) {
-            return null;
+            return 0;
         }
         for (Certificate certificate : certificates) {
             if (certificate.getCourseId().equals(courseId)) {
-                return certificate;
+                return 1;
             }
         }
-        return null;
+        return 0;
     }
 }
