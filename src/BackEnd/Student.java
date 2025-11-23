@@ -124,21 +124,4 @@ public class Student extends User {
         }
         return null;
     }
-    return null;
-}
-
-    public Map<String, QuizAttempt> getQuizAttempts() {
-        return quizAttempts;
-    }
-
-    public void setQuizAttempts(Map<String, QuizAttempt> quizAttempts) {
-        this.quizAttempts = quizAttempts;
-    }
-
-    public void setCertificates(ArrayList<Certificate> certificates) {
-        this.certificates = certificates;
-    }
-
-
-
 }
