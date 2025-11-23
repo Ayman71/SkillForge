@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * @author husse
  */
 public class Course {
+
     private String courseID;
     private String title;
     private String description;
@@ -19,7 +20,6 @@ public class Course {
     private ArrayList<String> enrolledStudents;
     private String approvalStatus;
 
-
     public Course(String courseID, String title, String description, String instructorId, ArrayList<Lesson> lessons, ArrayList<String> enrolledStudents) {
         this.courseID = courseID;
         this.title = title;
@@ -27,11 +27,9 @@ public class Course {
         this.instructorId = instructorId;
         this.lessons = lessons;
         this.enrolledStudents = enrolledStudents;
-        
-         this.approvalStatus = "Pending";
-      
+        this.approvalStatus = "Pending";
+
     }
-    
 
     public String getCourseID() {
         return courseID;
@@ -66,17 +64,25 @@ public class Course {
     }
 
     public ArrayList<Lesson> getLessons() {
-        if (lessons == null)
-        { return new ArrayList<>();}
+        if (lessons == null) {
+            return new ArrayList<>();
+        }
         return lessons;
     }
-
+    public Lesson getLessonByID(String id){
+        for (Lesson lesson : lessons) {
+            if(lesson.getId().equals(id)){
+                return lesson;
+            }
+        }
+        return null;
+    }
     public void setLessons(ArrayList<Lesson> lessons) {
         this.lessons = lessons;
     }
 
     public ArrayList<String> getEnrolledStudents() {
-        if(enrolledStudents == null){
+        if (enrolledStudents == null) {
             return new ArrayList<String>();
         }
         return enrolledStudents;
@@ -85,12 +91,13 @@ public class Course {
     public void setEnrolledStudents(ArrayList<String> enrolledStudents) {
         this.enrolledStudents = enrolledStudents;
     }
-    
-    public String getApprovalStatus()
-    { return approvalStatus; }
-    public void setApprovalStatus(String approvalStatus)
-    { this.approvalStatus = approvalStatus; }
 
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
 
-    
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+
 }

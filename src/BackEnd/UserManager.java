@@ -24,8 +24,9 @@ public class UserManager {
         String role;
         ArrayList<String> enrolledCourses;
         ArrayList<String> createdCourses;
-        Map<String, Map<String, Boolean>> lessonsProgress;
-
+        Map<String, Map<String, Double>> lessonsProgress;
+        Map<String, QuizAttempt> quizAttempts;
+        ArrayList<Certificate> certificates;
     }
 
     public UserManager(String filename) {
@@ -58,6 +59,12 @@ public class UserManager {
                             lp.setProgressMap(u.lessonsProgress);
                             s.setLessonsProgress(lp);
                         }
+                        if (u.quizAttempts != null) {
+                            s.setQuizAttempts(u.quizAttempts);
+                        }
+                        if (u.certificates != null) {
+                            s.setCertificates(u.certificates);
+                        }
                         users.add(s);
                     } else if ("instructor".equalsIgnoreCase(u.role)) {
                         Instructor i = new Instructor(u.userId, u.username, u.email, u.passwordHash);
@@ -65,7 +72,11 @@ public class UserManager {
                             i.setCreatedCourses(u.createdCourses);
                         }
                         users.add(i);
+                    } else {
+                        Admin a = new Admin(u.userId, u.username, u.email, u.passwordHash);
+                        users.add(a);
                     }
+
                 }
             }
 
@@ -90,9 +101,13 @@ public class UserManager {
                     j.role = "student";
                     j.enrolledCourses = ((Student) u).getEnrolledCourses();
                     j.lessonsProgress = ((Student) u).getLessonsProgress().getProgressMap();
+                    j.quizAttempts = ((Student) u).getQuizAttempts();
+                    j.certificates = ((Student) u).getCertificates();
                 } else if (u instanceof Instructor) {
                     j.role = "instructor";
                     j.createdCourses = ((Instructor) u).getCreatedCourses();
+                } else {
+                    j.role = "Admin";
                 }
 
                 x.add(j);
@@ -131,6 +146,16 @@ public class UserManager {
         }
         Instructor i = new Instructor(userId, username, email, hashPassword(password));
         users.add(i);
+        saveToFile();
+        return true;
+    }
+
+    public boolean addAdmin(String userId, String username, String email, String password) throws Exception {
+        if (emailExists(email) || IdExists(userId)) {
+            return false;
+        }
+        Admin a = new Admin(userId, username, email, hashPassword(password));
+        users.add(a);
         saveToFile();
         return true;
     }
@@ -206,14 +231,16 @@ public class UserManager {
         return null;
     }
 
-    public int login(String email, String password) throws Exception {
+    public int login(String id, String password) throws Exception {
         String hashed = hashPassword(password);
         for (User u : users) {
-            if (u.getEmail().equals(email) && u.getPasswordHash().equals(hashed)) {
+            if (u.getUserId().equals(id) && u.getPasswordHash().equals(hashed)) {
                 if (u.getRole().equals("Instructor")) {
                     return 1;
-                } else {
+                } else if (u.getRole().equals("Student")) {
                     return 2;
+                } else {
+                    return 3;
                 }
 
             }
@@ -273,5 +300,19 @@ public class UserManager {
             i++;
         }
         saveToFile();
+    }
+
+    public void attemptQuiz(Student student, String quizID, double score) {
+        for (User u : users) {
+            if (u instanceof Student) {
+                Student s = (Student) u;
+                if (s.getUserId().equals(student.getUserId())) {
+                    s.attemptQuiz(quizID, score);
+                    saveToFile();
+                    return;
+                }
+            }
+        }
+
     }
 }

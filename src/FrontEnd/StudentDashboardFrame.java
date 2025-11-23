@@ -6,6 +6,9 @@ package FrontEnd;
 
 import BackEnd.Course;
 import BackEnd.CourseManager;
+import BackEnd.Lesson;
+import BackEnd.Quiz;
+import BackEnd.QuizManager;
 import BackEnd.User;
 import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -24,6 +27,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
      */
     private CourseManager courseManager;
     private UserManager userManager;
+    private QuizManager quizManager;
     DefaultTableModel coursesModel = new DefaultTableModel(new Object[]{"Course ID", "Title", "Instructor ID"}, 0) {
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -40,26 +44,33 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         this.studentID = studentID;
         userManager = new UserManager("users.json");
         courseManager = new CourseManager("courses.json", userManager);
+        quizManager = new QuizManager(courseManager,userManager);
+        ArrayList<Course> courses = courseManager.getAllCourses();
+        for (Course c : courses) {
+            for (Lesson l : c.getLessons()) {
+                quizManager.addQuiz(l.getQuiz());
+            }
+        }
         if (enrolledCoursesRadio.isSelected()) {
             fillTable(1);
-            Button4.setEnabled(true);
+            viewLessonsButton.setEnabled(true);
             Button3.setEnabled(false);
         } else if (availableCoursesRadio.isSelected()) {
             fillTable(2);
-            Button4.setEnabled(false);
+            viewLessonsButton.setEnabled(false);
             Button3.setEnabled(true);
         }
         enrolledCoursesRadio.addItemListener(e -> {
             if (enrolledCoursesRadio.isSelected()) {
                 fillTable(1);
-                Button4.setEnabled(true);
+                viewLessonsButton.setEnabled(true);
                 Button3.setEnabled(false);
             }
         });
         availableCoursesRadio.addItemListener(e -> {
             if (availableCoursesRadio.isSelected()) {
                 fillTable(2);
-                Button4.setEnabled(false);
+                viewLessonsButton.setEnabled(false);
                 Button3.setEnabled(true);
             }
         });
@@ -85,7 +96,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         Button2 = new javax.swing.JButton();
         Button1 = new javax.swing.JButton();
         Button3 = new javax.swing.JButton();
-        Button4 = new javax.swing.JButton();
+        viewLessonsButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -166,12 +177,12 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
             }
         });
 
-        Button4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        Button4.setText("View Course Lessons");
-        Button4.setEnabled(false);
-        Button4.addActionListener(new java.awt.event.ActionListener() {
+        viewLessonsButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        viewLessonsButton.setText("View Course Lessons");
+        viewLessonsButton.setEnabled(false);
+        viewLessonsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Button4ActionPerformed(evt);
+                viewLessonsButtonActionPerformed(evt);
             }
         });
 
@@ -196,7 +207,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                             .addComponent(Button1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Button2, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                             .addComponent(Button3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Button4, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))
+                            .addComponent(viewLessonsButton, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))))
                 .addContainerGap(89, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -214,7 +225,7 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(Button1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Button4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(viewLessonsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Button3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -279,27 +290,28 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
         loginFrame.setVisible(true);
     }//GEN-LAST:event_Button2ActionPerformed
 
-    private void Button4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Button4ActionPerformed
+    private void viewLessonsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewLessonsButtonActionPerformed
         // TODO add your handling code here:
-         
+
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow != -1) {
             String courseID = jTable1.getValueAt(selectedRow, 0).toString();
             Course course = courseManager.getCourseFromCourseID(courseID);
-            CourseLessons courseLessons = new CourseLessons(course,studentID, courseManager);
+            CourseLessons courseLessons = new CourseLessons(course, studentID, courseManager, quizManager);
             courseLessons.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_Button4ActionPerformed
+    }//GEN-LAST:event_viewLessonsButtonActionPerformed
 
     private void fillTable(int i) {
-        
+
         if (i == 1) {
             coursesModel.setRowCount(0);
             ArrayList<Course> enrolledCourses = courseManager.getEnrolledCourses(studentID);
             for (Course c : enrolledCourses) {
                 coursesModel.addRow(new Object[]{c.getCourseID(), c.getTitle(), c.getInstructorId()});
+
             }
         } else {
             coursesModel.setRowCount(0);
@@ -333,7 +345,6 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     private javax.swing.JButton Button1;
     private javax.swing.JButton Button2;
     private javax.swing.JButton Button3;
-    private javax.swing.JButton Button4;
     private javax.swing.JRadioButton availableCoursesRadio;
     private javax.swing.JRadioButton enrolledCoursesRadio;
     private javax.swing.JLabel jLabel1;
@@ -341,5 +352,6 @@ public class StudentDashboardFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.ButtonGroup tableModelbtn;
+    private javax.swing.JButton viewLessonsButton;
     // End of variables declaration//GEN-END:variables
 }

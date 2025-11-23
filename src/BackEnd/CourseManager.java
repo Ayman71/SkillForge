@@ -120,6 +120,10 @@ public class CourseManager {
         }
         return instructorCourses;
     }
+   
+    public ArrayList<Course> getAllCourses() {
+        return courses;
+    }
 
     public Course getCourseFromID(String courseID) {
         for (Course c : courses) {
@@ -200,12 +204,17 @@ public class CourseManager {
         userManager.saveToFile();
     }
 
-    public void markLessonCompleted(String courseID, String studentID, String lessonID) {
+    public void setQuizScore(String courseID, String studentID, String lessonID, double score) {
         Student student = (Student) userManager.getUserFromID(studentID);
-        student.completeLesson(courseID, lessonID);
+        student.setScore(courseID, lessonID, score);
         userManager.saveToFile();
     }
 
+    public double getQuizScore(String courseID, String studentID, String lessonID) {
+        Student student = (Student) userManager.getUserFromID(studentID);
+        return student.getScore(courseID, lessonID);
+    }
+    
     public double getStudentCourseProgress(String courseID, String studentID) {
         Student student = (Student) userManager.getUserFromID(studentID);
         if (student != null) {
@@ -216,8 +225,8 @@ public class CourseManager {
 
     public boolean isLessonCompleted(String courseID, String studentID, String lessonID) {
         Student student = (Student) userManager.getUserFromID(studentID);
-        if (student != null) {
-            return student.isLessonCompleted(courseID, lessonID);
+        if (student != null && student.getScore(courseID, lessonID)>=50) {
+            return true;
         }
         return false;
     }

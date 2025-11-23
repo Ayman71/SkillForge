@@ -301,8 +301,18 @@ public class SignUpFrame extends javax.swing.JFrame {
                 Logger.getLogger(SignUpFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            role = "Admin";
-            expectedPrefix = "A";
+            try {
+                if (userManager.addAdmin(userId, username, email, pass2)) {
+                    JOptionPane.showMessageDialog(this, "Admin signed up successfully", "Successful SignUp", JOptionPane.INFORMATION_MESSAGE);
+                    AdminDashboardFrame adminDashboardFrame = new AdminDashboardFrame(userId);
+                    adminDashboardFrame.setVisible(true);
+                    this.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Email or User ID already signedUp try logging in!", "Duplicate entries", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(SignUpFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }//GEN-LAST:event_signUpButtonActionPerformed

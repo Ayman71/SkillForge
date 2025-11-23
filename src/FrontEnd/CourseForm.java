@@ -7,6 +7,7 @@ package FrontEnd;
 import BackEnd.Course;
 import BackEnd.CourseManager;
 import BackEnd.Lesson;
+import BackEnd.Question;
 import BackEnd.Student;
 import BackEnd.User;
 import BackEnd.UserManager;
@@ -30,23 +31,25 @@ public class CourseForm extends javax.swing.JFrame {
     private CourseManager courseManager;
     UserManager userManager;
     String instructorID;
+    ArrayList<Lesson> lessons = new ArrayList<Lesson>();
 
-    public CourseForm(DefaultTableModel parentModel, String instructorID, CourseManager courseManager,UserManager userManager) {
+    public CourseForm(DefaultTableModel parentModel, String instructorID, CourseManager courseManager, UserManager userManager) {
         initComponents();
         this.coursesModel = parentModel;
         this.setSize(500, 600);
         this.setLocationRelativeTo(null);
-        lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content"}, 0);
+        lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title"}, 0);
         lessonsTable.setModel(lessonsModel);
         this.courseManager = courseManager;
         this.userManager = userManager;
         instructorIDText.setText(instructorID);
         this.instructorID = instructorID;
         addModifyButton.setText("Add");
-
+        addLessonButton.setEnabled(false);
+        jButton3.setEnabled(false);
     }
 
-    public CourseForm(Course course, DefaultTableModel parentModel, String userID, CourseManager courseManager,UserManager userManager) {
+    public CourseForm(Course course, DefaultTableModel parentModel, String userID, CourseManager courseManager, UserManager userManager) {
         initComponents();
         this.coursesModel = parentModel;
         courseToModiy = course;
@@ -58,15 +61,31 @@ public class CourseForm extends javax.swing.JFrame {
         fillForm(course);
         addModifyButton.setText("Update");
         instructorIDText.setText(userID);
+        this.lessons = new ArrayList<>(course.getLessons());
+        addLessonButton.addActionListener(e -> {
+            LessonForm form = new LessonForm(new LessonCallback() {
+                @Override
+                public void onLessonCreated(Lesson lesson) {
+                    lessons.add(lesson);
+
+                    lessonsModel.addRow(new Object[]{
+                        lesson.getId(),
+                        lesson.getTitle()
+                    });
+                }
+            },courseToModiy.getCourseID());
+            form.setVisible(true);
+        });
+        
     }
 
     private void fillForm(Course course) {
         courseIDtext.setText(course.getCourseID());
         courseTitleText.setText(course.getTitle());
         descriptionText.setText(course.getDescription());
-        lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content"}, 0);
+        lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title"}, 0);
         for (Lesson l : course.getLessons()) {
-            lessonsModel.addRow(new Object[]{l.getId(), l.getTitle(), l.getContent()});
+            lessonsModel.addRow(new Object[]{l.getId(), l.getTitle()});
         }
         lessonsTable.setModel(lessonsModel);
         for (int i = 1; i <= course.getEnrolledStudents().size(); i++) {
@@ -99,7 +118,7 @@ public class CourseForm extends javax.swing.JFrame {
         addModifyButton = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         lessonsTable = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        addLessonButton = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -159,11 +178,11 @@ public class CourseForm extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Lesson ID", "Title", "Content"
+                "Lesson ID", "Title"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -172,11 +191,11 @@ public class CourseForm extends javax.swing.JFrame {
         });
         jScrollPane4.setViewportView(lessonsTable);
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton2.setText("+");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        addLessonButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        addLessonButton.setText("+");
+        addLessonButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                addLessonButtonActionPerformed(evt);
             }
         });
 
@@ -213,7 +232,7 @@ public class CourseForm extends javax.swing.JFrame {
                             .addComponent(courseIDtext))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(addLessonButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(198, 198, 198)
@@ -244,7 +263,7 @@ public class CourseForm extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(addLessonButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)))
                 .addGap(18, 18, 18)
@@ -259,10 +278,10 @@ public class CourseForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void addLessonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addLessonButtonActionPerformed
         // TODO add your handling code here:
-        lessonsModel.addRow(new Object[]{"ID", "Title", "Content"});
-    }//GEN-LAST:event_jButton2ActionPerformed
+
+    }//GEN-LAST:event_addLessonButtonActionPerformed
 
     private void addModifyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addModifyButtonActionPerformed
 
@@ -271,7 +290,8 @@ public class CourseForm extends javax.swing.JFrame {
         String title = courseTitleText.getText();
 
         String description = descriptionText.getText();
-        String idPattern = "^[C][0-9]+$";
+        String coursePattern = "^[C][0-9]+$";
+        String lessonPattern = "^[L][0-9]+$";
 
         if (courseID.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Course ID cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -290,28 +310,12 @@ public class CourseForm extends javax.swing.JFrame {
             return;
         }
 
-        if (!courseID.matches(idPattern)) {
+        if (!courseID.matches(coursePattern)) {
             JOptionPane.showMessageDialog(this, "Course ID must start with a 'C' followed by numbers (e.g., C123).", "Invalid ID", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        ArrayList<Lesson> lessons = new ArrayList<>();
-        for (int row = 0; row < lessonsTable.getRowCount(); row++) {
-            String lessonID = lessonsModel.getValueAt(row, 0).toString().trim();
-            String lessonTitle = lessonsModel.getValueAt(row, 1).toString().trim();
-            String lessonContent = lessonsModel.getValueAt(row, 2).toString().trim();
-            if (lessonID.isEmpty() || lessonTitle.isEmpty() || lessonContent.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Lesson fields cannot be empty!", "Warning", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
 
-            if (!lessonID.matches(idPattern)) {
-                JOptionPane.showMessageDialog(this, "Lesson ID must start with a letter then numbers (e.g., L01).", "Invalid Lesson ID", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            lessons.add(new Lesson(lessonsModel.getValueAt(row, 0).toString(), lessonsModel.getValueAt(row, 1).toString(), lessonsModel.getValueAt(row, 2).toString()));
-        }
-
-        course = new Course(courseID, title, description, instructorID, lessons,new ArrayList<String>());
+        course = new Course(courseID, title, description, instructorID, this.lessons, new ArrayList<String>());
         if (courseToModiy != null) {
             course.setEnrolledStudents(courseToModiy.getEnrolledStudents());
         }
@@ -339,7 +343,7 @@ public class CourseForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         int selectedRow = lessonsTable.getSelectedRow();
         if (selectedRow != -1) {
-            
+
             lessonsModel.removeRow(selectedRow);
         } else {
             JOptionPane.showMessageDialog(this, "No lesson selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
@@ -359,18 +363,18 @@ public class CourseForm extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CourseForm(new DefaultTableModel(), "",new CourseManager("",new UserManager("")),new UserManager("")).setVisible(true);
+                new CourseForm(new DefaultTableModel(), "", new CourseManager("", new UserManager("")), new UserManager("")).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addLessonButton;
     private javax.swing.JButton addModifyButton;
     private javax.swing.JTextField courseIDtext;
     private javax.swing.JTextField courseTitleText;
     private javax.swing.JTextArea descriptionText;
     private javax.swing.JTextField instructorIDText;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

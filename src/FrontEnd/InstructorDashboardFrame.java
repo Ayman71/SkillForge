@@ -69,6 +69,7 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
         logoutButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Instructor Dashboard");
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
