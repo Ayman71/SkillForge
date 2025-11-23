@@ -175,6 +175,7 @@ public class CourseLessons extends javax.swing.JFrame {
         int selectedRow = lessonsTable.getSelectedRow();
         if (selectedRow != -1) {
             LessonDetails lessonDetails = new LessonDetails(course.getLessonByID(lessonsModel.getValueAt(selectedRow, 0).toString()), quizManager, (Student) (new UserManager("users.json").getUserFromID(StudentID)),courseManager, course.getCourseID());
+            this.dispose();
             lessonDetails.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "No lesson selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);

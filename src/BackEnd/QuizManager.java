@@ -36,10 +36,7 @@ public class QuizManager {
             }
         }
         score =  (score/questions.size())*100;
-        student.attemptQuiz(quizID, score);
-        if(score >= 50.0){
-            userManager.attemptQuiz(student, quizID, score);
-        }
+        userManager.attemptQuiz(student, quizID, score);
         return score;
                 
     }

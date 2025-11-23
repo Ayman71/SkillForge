@@ -10,7 +10,7 @@
         "title": "OOP Overview",
         "content": "Classes, objects, methods, fields.",
         "quiz": {
-          "quizID": "QL1",
+          "quizID": "QC205L1",
           "questions": [
             {
               "questionText": "What is a class in OOP?",
@@ -38,7 +38,7 @@
         "title": "Inheritance \u0026 Polymorphism",
         "content": "Extending classes, overriding, dynamic dispatch.",
         "quiz": {
-          "quizID": "QL2",
+          "quizID": "QC205L2",
           "questions": [
             {
               "questionText": "What is inheritance in OOP?",
@@ -79,7 +79,7 @@
         "title": "Introduction to Algorithms",
         "content": "What is an algorithm? Complexity, notation.",
         "quiz": {
-          "quizID": "QL1",
+          "quizID": "QC310L1",
           "questions": [
             {
               "questionText": "What is an algorithm?",
@@ -107,7 +107,7 @@
         "title": "Sorting Algorithms",
         "content": "Bubble, merge, quicksort fundamentals.",
         "quiz": {
-          "quizID": "QL2",
+          "quizID": "QC310L2",
           "questions": [
             {
               "questionText": "Which sorting is fastest on average?",
@@ -132,7 +132,8 @@
       }
     ],
     "enrolledStudents": [
-      "S9642"
+      "S9642",
+      "S501"
     ],
     "approvalStatus": "Approved"
   },
@@ -147,7 +148,7 @@
         "title": "Introduction to Databases",
         "content": "Database types, relational model.",
         "quiz": {
-          "quizID": "QL1",
+          "quizID": "QC320L1",
           "questions": [
             {
               "questionText": "What is a relational database?",
@@ -175,7 +176,7 @@
         "title": "Basic SQL",
         "content": "SELECT, INSERT, UPDATE, DELETE.",
         "quiz": {
-          "quizID": "QL2",
+          "quizID": "QC320L2",
           "questions": [
             {
               "questionText": "Which SQL command reads data?",
@@ -203,93 +204,6 @@
     "approvalStatus": "Approved"
   },
   {
-    "courseID": "C330",
-    "title": "Web Development Basics",
-    "description": "HTML, CSS, JavaScript fundamentals, layout, forms.",
-    "instructorId": "I101",
-    "lessons": [
-      {
-        "id": "L1",
-        "title": "HTML Structure",
-        "content": "Tags, elements, attributes.",
-        "quiz": {
-          "quizID": "QL1",
-          "questions": [
-            {
-              "questionText": "Which tag defines a paragraph?",
-              "choices": [
-                "\u003cp\u003e",
-                "\u003cdiv\u003e",
-                "\u003cspan\u003e"
-              ],
-              "correctChoice": "A"
-            },
-            {
-              "questionText": "Which attribute sets the class?",
-              "choices": [
-                "class",
-                "id",
-                "style"
-              ],
-              "correctChoice": "A"
-            }
-          ]
-        }
-      },
-      {
-        "id": "L2",
-        "title": "CSS Basics",
-        "content": "Selectors, layout principles.",
-        "quiz": {
-          "quizID": "QL2",
-          "questions": [
-            {
-              "questionText": "Which selector targets an id?",
-              "choices": [
-                "#id",
-                ".class",
-                "*"
-              ],
-              "correctChoice": "A"
-            },
-            {
-              "questionText": "What does flex display do?",
-              "choices": [
-                "Aligns items in a row or column",
-                "Changes font size",
-                "Sets color"
-              ],
-              "correctChoice": "A"
-            }
-          ]
-        }
-      },
-      {
-        "id": "L4",
-        "title": "Title",
-        "content": "Content",
-        "quiz": {
-          "quizID": "QL4",
-          "questions": [
-            {
-              "questionText": "Sample question?",
-              "choices": [
-                "Option A",
-                "Option B",
-                "Option C"
-              ],
-              "correctChoice": "A"
-            }
-          ]
-        }
-      }
-    ],
-    "enrolledStudents": [
-      "S501"
-    ],
-    "approvalStatus": "Approved"
-  },
-  {
     "courseID": "C101",
     "title": "Java Programming Basics",
     "description": "Introduction to Java programming, syntax, OOP, and basic concepts.",
@@ -300,7 +214,7 @@
         "title": "Introduction to Java",
         "content": "History of Java, JVM, JDK, JRE.",
         "quiz": {
-          "quizID": "QL1",
+          "quizID": "QC101L1",
           "questions": [
             {
               "questionText": "What is JVM?",
@@ -328,7 +242,7 @@
         "title": "Variables and Data Types",
         "content": "Primitive types, reference types, declarations, examples.",
         "quiz": {
-          "quizID": "QL2",
+          "quizID": "QC101L2",
           "questions": [
             {
               "questionText": "Which is a primitive type?",
@@ -356,7 +270,7 @@
         "title": "Title",
         "content": "Content",
         "quiz": {
-          "quizID": "QL3",
+          "quizID": "QC101L3",
           "questions": [
             {
               "questionText": "Sample question?",
@@ -387,7 +301,7 @@
         "title": "AI Overview",
         "content": "Agents, environments, problem-solving.",
         "quiz": {
-          "quizID": "QL1",
+          "quizID": "QC401L1",
           "questions": [
             {
               "questionText": "What is an intelligent agent?",
@@ -425,7 +339,7 @@
         "title": "Android Basics",
         "content": "Activities, layouts, resources.",
         "quiz": {
-          "quizID": "QL1",
+          "quizID": "QC402L1",
           "questions": [
             {
               "questionText": "What is an Activity in Android?",
@@ -463,7 +377,7 @@
         "title": "Hacking Intro",
         "content": "Overview of penetration techniques.",
         "quiz": {
-          "quizID": "QL1",
+          "quizID": "QC450L1",
           "questions": [
             {
               "questionText": "What is penetration testing?",
@@ -501,7 +415,7 @@
         "title": "Old Languages Overview",
         "content": "History of old programming languages.",
         "quiz": {
-          "quizID": "QL1",
+          "quizID": "QC451L1",
           "questions": [
             {
               "questionText": "Which language is obsolete?",
@@ -527,5 +441,92 @@
     ],
     "enrolledStudents": [],
     "approvalStatus": "Rejected"
+  },
+  {
+    "courseID": "C330",
+    "title": "Web Development Basics",
+    "description": "HTML, CSS, JavaScript fundamentals, layout, forms.",
+    "instructorId": "I101",
+    "lessons": [
+      {
+        "id": "L1",
+        "title": "HTML Structure",
+        "content": "Tags, elements, attributes.",
+        "quiz": {
+          "quizID": "QC330L1",
+          "questions": [
+            {
+              "questionText": "Which tag defines a paragraph?",
+              "choices": [
+                "\u003cp\u003e",
+                "\u003cdiv\u003e",
+                "\u003cspan\u003e"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "Which attribute sets the class?",
+              "choices": [
+                "class",
+                "id",
+                "style"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      },
+      {
+        "id": "L2",
+        "title": "CSS Basics",
+        "content": "Selectors, layout principles.",
+        "quiz": {
+          "quizID": "QC330L2",
+          "questions": [
+            {
+              "questionText": "Which selector targets an id?",
+              "choices": [
+                "#id",
+                ".class",
+                "*"
+              ],
+              "correctChoice": "A"
+            },
+            {
+              "questionText": "What does flex display do?",
+              "choices": [
+                "Aligns items in a row or column",
+                "Changes font size",
+                "Sets color"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      },
+      {
+        "id": "L4",
+        "title": "Title",
+        "content": "Content",
+        "quiz": {
+          "quizID": "QC330L4",
+          "questions": [
+            {
+              "questionText": "Sample question?",
+              "choices": [
+                "Option A",
+                "Option B",
+                "Option C"
+              ],
+              "correctChoice": "A"
+            }
+          ]
+        }
+      }
+    ],
+    "enrolledStudents": [
+      "S501"
+    ],
+    "approvalStatus": "Pending"
   }
 ]
