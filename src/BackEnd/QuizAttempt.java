@@ -8,9 +8,9 @@ public class QuizAttempt {
 
     private String quizId;
     private int attemptNumber;
-    private int score;
+    private double score;
 
-    public QuizAttempt(String quizId, int attemptNumber, int score) {
+    public QuizAttempt(String quizId, int attemptNumber, double score) {
         this.quizId = quizId;
         this.attemptNumber = attemptNumber;
         this.score = score;
@@ -28,11 +28,11 @@ public class QuizAttempt {
         return attemptNumber;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 

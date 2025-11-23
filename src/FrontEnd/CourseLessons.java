@@ -7,6 +7,8 @@ package FrontEnd;
 import BackEnd.Course;
 import BackEnd.CourseManager;
 import BackEnd.Lesson;
+import BackEnd.QuizManager;
+import BackEnd.Student;
 import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.util.ArrayList;
@@ -27,27 +29,29 @@ public class CourseLessons extends javax.swing.JFrame {
     ArrayList<Lesson> lessons;
     String StudentID;
     CourseManager courseManager;
+    QuizManager quizManager;
     Course course;
 
-    public CourseLessons(Course course, String studentID, CourseManager courseManager) {
+    public CourseLessons(Course course, String studentID, CourseManager courseManager, QuizManager quizManager) {
         initComponents();
         this.lessons = course.getLessons();
         this.StudentID = studentID;
         this.courseManager = courseManager;
+        this.quizManager = quizManager;
         this.course = course;
         courseNameLabel.setText(course.getTitle() + "(" + course.getCourseID() + ")");
         this.setSize(500, 600);
-        this.setLocationRelativeTo(null);   
+        this.setLocationRelativeTo(null);
         progressBar.setStringPainted(true);
         progressBar.setMinimum(0);
         progressBar.setMaximum(100);
         progressBar.setValue((int) (courseManager.getStudentCourseProgress(course.getCourseID(), studentID)));
-        lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content", "Progress"}, 0){
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false; // disables editing
-        }
-    };
+        lessonsModel = new DefaultTableModel(new Object[]{"ID", "Title", "Content", "Last Score"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // disables editing
+            }
+        };
 
         fillTable();
     }
@@ -55,12 +59,7 @@ public class CourseLessons extends javax.swing.JFrame {
     private void fillTable() {
 
         for (Lesson l : lessons) {
-            if (courseManager.isLessonCompleted(course.getCourseID(), StudentID, l.getId())) {
-                lessonsModel.addRow(new Object[]{l.getId(), l.getTitle(), l.getContent(), true});
-            } else {
-                lessonsModel.addRow(new Object[]{l.getId(), l.getTitle(), l.getContent(), false});
-            }
-
+            lessonsModel.addRow(new Object[]{l.getId(), l.getTitle(), l.getContent(), courseManager.getQuizScore(course.getCourseID(), StudentID, l.getId())});
         }
         lessonsTable.setModel(lessonsModel);
     }
@@ -79,7 +78,7 @@ public class CourseLessons extends javax.swing.JFrame {
         courseNameLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        viewButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -89,11 +88,11 @@ public class CourseLessons extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Lesson ID", "Title", "Content", "Status"
+                "Lesson ID", "Title", "Content", "Last Score"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
@@ -128,11 +127,11 @@ public class CourseLessons extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setText("View");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        viewButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        viewButton.setText("View");
+        viewButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                viewButtonActionPerformed(evt);
             }
         });
 
@@ -148,7 +147,7 @@ public class CourseLessons extends javax.swing.JFrame {
                         .addComponent(jScrollPane1)
                         .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(viewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(29, Short.MAX_VALUE))
@@ -165,22 +164,22 @@ public class CourseLessons extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(viewButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(46, 46, 46))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void viewButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewButtonActionPerformed
         int selectedRow = lessonsTable.getSelectedRow();
         if (selectedRow != -1) {
-            LessonDetails lessonDetails = new LessonDetails(course.getLessonByID(lessonsModel.getValueAt(selectedRow, 0).toString()));
+            LessonDetails lessonDetails = new LessonDetails(course.getLessonByID(lessonsModel.getValueAt(selectedRow, 0).toString()), quizManager, (Student) (new UserManager("users.json").getUserFromID(StudentID)),courseManager, course.getCourseID());
             lessonDetails.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "No lesson selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_viewButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
@@ -200,7 +199,7 @@ public class CourseLessons extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CourseLessons(new Course("", "", "", "", new ArrayList<Lesson>(), new ArrayList<>()), "", new CourseManager("", new UserManager(""))).setVisible(true);
+                new CourseLessons(new Course("", "", "", "", new ArrayList<Lesson>(), new ArrayList<>()), "", new CourseManager("", new UserManager("")), new QuizManager(new CourseManager("", new UserManager("")), new UserManager(""))).setVisible(true);
             }
         });
     }
@@ -208,9 +207,9 @@ public class CourseLessons extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel courseNameLabel;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable lessonsTable;
     private javax.swing.JProgressBar progressBar;
+    private javax.swing.JButton viewButton;
     // End of variables declaration//GEN-END:variables
 }

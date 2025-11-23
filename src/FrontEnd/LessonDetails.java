@@ -4,7 +4,11 @@
  */
 package FrontEnd;
 
+import BackEnd.CourseManager;
 import BackEnd.Lesson;
+import BackEnd.QuizManager;
+import BackEnd.Student;
+import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
 
 /**
@@ -16,12 +20,22 @@ public class LessonDetails extends javax.swing.JFrame {
     /**
      * Creates new form LessonDetails
      */
-    public LessonDetails(Lesson lesson) {
+     QuizManager quizManager;
+     Lesson lesson;
+     Student student;
+      CourseManager courseManager;
+      String courseID;
+    public LessonDetails(Lesson lesson, QuizManager quizManager, Student student, CourseManager courseManager, String courseID) {
         initComponents();
         this.setSize(500, 600);
         this.setLocationRelativeTo(null);   
         jLabel1.setText(lesson.getId()+": "+ lesson.getTitle());
         contentTextArea.setText(lesson.getContent());
+        this.lesson = lesson;
+        this.quizManager = quizManager;
+        this.student = student;
+        this.courseManager = courseManager;
+        this.courseID = courseID;
     }
 
     /**
@@ -117,6 +131,10 @@ public class LessonDetails extends javax.swing.JFrame {
 
     private void attemptQuizButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attemptQuizButtonActionPerformed
         // TODO add your handling code here:
+        QuizFrame quizFrame = new QuizFrame(lesson.getQuiz(), quizManager, student, courseManager, courseID);
+        this.dispose();
+        quizFrame.setVisible(true);
+        
     }//GEN-LAST:event_attemptQuizButtonActionPerformed
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
@@ -137,7 +155,7 @@ public class LessonDetails extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LessonDetails(new Lesson("","","")).setVisible(true);
+                new LessonDetails(new Lesson("","",""), new QuizManager(new CourseManager("", new UserManager("")),new UserManager("")), new Student("","","",""),new CourseManager("", new UserManager("")), "").setVisible(true);
             }
         });
     }

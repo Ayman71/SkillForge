@@ -24,10 +24,11 @@ public class LessonForm extends javax.swing.JFrame {
     Quiz quiz;
     DefaultTableModel quizModel;
     private LessonCallback callback;
+    String courseID;
 
-    public LessonForm(LessonCallback callback) {
+    public LessonForm(LessonCallback callback, String courseID) {
         initComponents();
-
+        this.courseID = courseID;
         this.callback = callback;
         this.setSize(800, 600);
         this.setLocationRelativeTo(null);
@@ -207,7 +208,7 @@ public class LessonForm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Every lesson must have a quiz!", "Warning", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-        quiz = new Quiz("Q"+lessonID,questions);
+        quiz = new Quiz("Q"+courseID+lessonID,questions);
         Lesson lesson = new Lesson(lessonID, lessonTitle, content);
         lesson.setQuiz(quiz);
         callback.onLessonCreated(lesson);
@@ -238,7 +239,7 @@ public class LessonForm extends javax.swing.JFrame {
                     public void onLessonCreated(Lesson lesson) {
 
                     }
-                }).setVisible(true);
+                }, "").setVisible(true);
 
             }
         });

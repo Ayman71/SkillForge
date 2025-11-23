@@ -13,33 +13,35 @@ import java.util.ArrayList;
 public class QuizManager {
 
     private ArrayList<Quiz> quizzes;
-
-    public QuizManager() {
+    CourseManager courseManager;
+    UserManager userManager;
+    public QuizManager(CourseManager courseManager, UserManager userManager) {
         quizzes = new ArrayList<>();
+        this.courseManager = courseManager;
+        this.userManager = userManager;
     }
 
-    public boolean isPassed(Student student, String quizID, ArrayList<Character> studentChoices) {
+    public double isPassed(Student student, String quizID, ArrayList<Character> studentChoices) {
 
         Quiz quiz = findQuizByID(quizID);
         if (quiz == null) {
-            return false;
+            return 0.0;
         }
         ArrayList<Question> questions = quiz.getQuestions();
-        int score = 0;
+        double score = 0.0;
 
         for (int i = 0; i < questions.size(); i++) {
             if (studentChoices.get(i) == questions.get(i).getCorrectChoice()) {
                 score++;
             }
         }
-
+        score =  (score/questions.size())*100;
         student.attemptQuiz(quizID, score);
-
-        if (score >= (questions.size()) * 0.5) {
-            return true;
-        } else {
-            return false;
+        if(score >= 50.0){
+            userManager.attemptQuiz(student, quizID, score);
         }
+        return score;
+                
     }
     
     private Quiz findQuizByID(String quizID) {
@@ -54,17 +56,4 @@ public class QuizManager {
     public void addQuiz(Quiz quiz) {
         quizzes.add(quiz);
     }
-
-    public boolean LessonBasedOnQuiz(Student student, String courseId, String lessonId,
-            String quizID, ArrayList<Character> studentChoices,
-            CourseManager courseManager) {
-        boolean passed = isPassed(student, quizID, studentChoices);
-
-        if (passed) {
-            courseManager.markLessonCompleted(courseId, student.getUserId(), lessonId);
-        }
-
-        return passed;
-    }
-
 }

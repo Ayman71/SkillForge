@@ -10,77 +10,79 @@ import java.util.Map;
 
 public class LessonsProgress {
 
-    private Map<String, Map<String, Boolean>> progressMap;
-
+    private Map<String, Map<String, Double>> progressMap;
+    
     public LessonsProgress() {
         progressMap = new HashMap<>();
     }
 
     public void addCourse(String courseID, ArrayList<Lesson> lessons) {
-        Map<String, Boolean> lessonStatus = new HashMap<>();
+        Map<String, Double> lessonStatus = new HashMap<>();
         for (Lesson lesson : lessons) {
-            lessonStatus.put(lesson.getId(), false); // not completed
+            lessonStatus.put(lesson.getId(), 0.0); // not completed
         }
         progressMap.put(courseID, lessonStatus);
     }
 
-    public Map<String, Map<String, Boolean>> getProgressMap() {
+    public Map<String, Map<String, Double>> getProgressMap() {
         return progressMap;
     }
 
-    public void setProgressMap(Map<String, Map<String, Boolean>> progressMap) {
+    public void setProgressMap(Map<String, Map<String, Double>> progressMap) {
         this.progressMap = progressMap;
     }
 
-    public void markLessonCompleted(String courseID, String lessonID) {
+    public void setLessonScore(String courseID, String lessonID, double score) {
         if (progressMap.containsKey(courseID)) {
-            Map<String, Boolean> lessons = progressMap.get(courseID);
+            Map<String, Double> lessons = progressMap.get(courseID);
             if (lessons.containsKey(lessonID)) {
-                lessons.put(lessonID, true);
+                lessons.put(lessonID, score);
             }
         }
     }
 
-    public boolean isLessonCompleted(String courseID, String lessonID) {
-        return progressMap.containsKey(courseID)
-                && progressMap.get(courseID).getOrDefault(lessonID, false);
+    public double getLessonScore(String courseID, String lessonID) {
+         if(progressMap.containsKey(courseID)){
+             return progressMap.get(courseID).getOrDefault(lessonID,0.0);
+         }
+         return 0.0;       
     }
 
     public double getCourseProgress(String courseID) {
         if (!progressMap.containsKey(courseID)) {
             return 0.0;
         }
-        Map<String, Boolean> lessons = progressMap.get(courseID);
+        Map<String, Double> lessons = progressMap.get(courseID);
         if (lessons.isEmpty()) {
             return 0.0;
         }
 
         int completedCount = 0;
-        for (Boolean status : lessons.values()) {
-            if (status) {
+        for (double status : lessons.values()) {
+            if (status>=50.0) {
                 completedCount++;
             }
         }
-        return (completedCount*100) / lessons.size();
+        return (completedCount * 100) / lessons.size();
     }
 
-    public Map<String, Boolean> getCourseLessonProgress(String courseID) {
+    public Map<String, Double> getCourseLessonProgress(String courseID) {
         return progressMap.getOrDefault(courseID, new HashMap<>());
     }
 
     public void syncWithCourse(String courseID, ArrayList<Lesson> updatedLessons) {
 
-        Map<String, Boolean> lessonStatus = progressMap.get(courseID);
+        Map<String, Double> lessonStatus = progressMap.get(courseID);
         if (lessonStatus == null) {
             lessonStatus = new HashMap<>();
             progressMap.put(courseID, lessonStatus);
         }
 
-        Map<String, Boolean> newMap = new HashMap<>();
+        Map<String, Double> newMap = new HashMap<>();
 
         for (Lesson lesson : updatedLessons) {
             String lessonID = lesson.getId();
-            boolean old = lessonStatus.getOrDefault(lessonID, false);
+            double old = lessonStatus.getOrDefault(lessonID, 0.0);
             newMap.put(lessonID, old);
         }
 

@@ -38,19 +38,19 @@ public class Student extends User {
         lessonsProgress.addCourse(course.getCourseID(), course.getLessons());
     }
 
-    public void completeLesson(String courseID, String lessonID) {
-        lessonsProgress.markLessonCompleted(courseID, lessonID);
+    public void setScore(String courseID, String lessonID, double score) {
+        lessonsProgress.setLessonScore(courseID, lessonID, score);
     }
 
     public double getCourseProgress(String courseID) {
         return lessonsProgress.getCourseProgress(courseID);
     }
 
-    public boolean isLessonCompleted(String courseID, String lessonID) {
-        return lessonsProgress.isLessonCompleted(courseID, lessonID);
+    public double getScore(String courseID, String lessonID) {
+        return lessonsProgress.getLessonScore(courseID, lessonID);
     }
     
-      public void attemptQuiz(String quizID, int score) { 
+      public void attemptQuiz(String quizID, double score) { 
           if (quizAttempts == null) {quizAttempts = new HashMap<>();}
         if (quizAttempts.containsKey(quizID)) {
             QuizAttempt q = quizAttempts.get(quizID);
@@ -65,7 +65,7 @@ public class Student extends User {
         return quizAttempts.getOrDefault(quizID, new QuizAttempt(quizID, 0, 0)).getAttemptNumber();
     }
         
-       public int getQuizScore(String quizID) {
+       public double getQuizScore(String quizID) {
         return quizAttempts.getOrDefault(quizID, new QuizAttempt(quizID, 0, 0)).getScore();
     }
       
@@ -76,7 +76,7 @@ public class Student extends User {
     }
     
     for (Lesson lesson : lessons) {
-        if (!isLessonCompleted(courseId, lesson.getId())) {
+        if (getScore(courseId, lesson.getId())<50.0) {
             return false;
         }
     }

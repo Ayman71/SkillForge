@@ -33,20 +33,32 @@
       "C205",
       "C330"
     ],
+    "quizAttempts": {
+      "QC101L1": { "quizId": "QC101L1", "attemptNumber": 2, "score": 85.0 },
+      "QC101L2": { "quizId": "QC101L2", "attemptNumber": 1, "score": 42.0 },
+      "QC101L3": { "quizId": "QC101L3", "attemptNumber": 3, "score": 90.0 },
+
+      "QC205L1": { "quizId": "QC205L1", "attemptNumber": 1, "score": 30.0 },
+      "QC205L2": { "quizId": "QC205L2", "attemptNumber": 2, "score": 75.0 },
+
+      "QC330L1": { "quizId": "QC330L1", "attemptNumber": 1, "score": 100.0 },
+      "QC330L2": { "quizId": "QC330L2", "attemptNumber": 2, "score": 45.0 },
+      "QC330L3": { "quizId": "QC330L3", "attemptNumber": 1, "score": 20.0 }
+    },
     "lessonsProgress": {
       "C101": {
-        "L1": true,
-        "L2": true,
-        "L3": false
+        "L1": 85.0,
+        "L2": 42.0,
+        "L3": 90.0
       },
       "C205": {
-        "L1": false,
-        "L2": true
+        "L1": 30.0,
+        "L2": 75.0
       },
       "C330": {
-        "L1": true,
-        "L2": true,
-        "L3": false
+        "L1": 100.0,
+        "L2": 45.0,
+        "L3": 20.0
       }
     }
   },
@@ -59,10 +71,14 @@
     "enrolledCourses": [
       "C205"
     ],
+    "quizAttempts": {
+      "QC205L1": { "quizId": "QC205L1", "attemptNumber": 1, "score": 50.0 },
+      "QC205L2": { "quizId": "QC205L2", "attemptNumber": 2, "score": 65.0 }
+    },
     "lessonsProgress": {
       "C205": {
-        "L1": false,
-        "L2": false
+        "L1": 50.0,
+        "L2": 65.0
       }
     }
   },
@@ -75,10 +91,14 @@
     "enrolledCourses": [
       "C310"
     ],
+    "quizAttempts": {
+      "QC310L1": { "quizId": "QC310L1", "attemptNumber": 3, "score": 100.0 },
+      "QC310L2": { "quizId": "QC310L2", "attemptNumber": 1, "score": 35.0 }
+    },
     "lessonsProgress": {
       "C310": {
-        "L1": false,
-        "L2": true
+        "L1": 100.0,
+        "L2": 35.0
       }
     }
   },

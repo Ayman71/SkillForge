@@ -24,7 +24,7 @@ public class UserManager {
         String role;
         ArrayList<String> enrolledCourses;
         ArrayList<String> createdCourses;
-        Map<String, Map<String, Boolean>> lessonsProgress;
+        Map<String, Map<String, Double>> lessonsProgress;
 
     }
 
@@ -292,4 +292,17 @@ public class UserManager {
         }
         saveToFile();
     }
+    
+     public void attemptQuiz(Student student, String quizID, double score) { 
+         for (User u : users) {
+            if (u instanceof Student) {
+                Student s = (Student) u;
+                if (s.getUserId().equals(student.getUserId())) {
+                    s.attemptQuiz(quizID, score);
+                    return;
+                }
+            }
+        }
+        saveToFile();
+     }
 }
