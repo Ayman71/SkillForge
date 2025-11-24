@@ -2,6 +2,7 @@ package BackEnd;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Student extends User {
@@ -80,6 +81,16 @@ public class Student extends User {
         }
 
     }
+    public void courseDeleted(String courseID) {
+    Iterator<String> iterator = enrolledCourses.iterator();
+
+    while (iterator.hasNext()) {
+        String enrolledCourse = iterator.next();
+        if (enrolledCourse.equals(courseID)) {
+            iterator.remove();
+        }
+    }
+}
 
     public int getQuizAttemptNumber(String quizID) {
         return quizAttempts.getOrDefault(quizID, new QuizAttempt(quizID, 0, 0)).getAttemptNumber();

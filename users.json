@@ -52,6 +52,9 @@
       "C310": {
         "L1": 100.0,
         "L2": 100.0
+      },
+      "C58223": {
+        "L1": 100.0
       }
     },
     "quizAttempts": {
@@ -136,15 +139,6 @@
         "performance": {
           "L1": 100.0,
           "L2": 100.0
-        }
-      },
-      {
-        "certificateId": "S501 CERTIFICATE FOR COURSE C2122",
-        "issueDate": "2025-11-24",
-        "studentId": "S501",
-        "courseId": "C2122",
-        "performance": {
-          "L11": 100.0
         }
       }
     ]

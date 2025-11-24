@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -95,9 +96,17 @@ public class CourseManager {
     }
 
     public boolean deleteCourse(String courseID) {
-        for (Course c : courses) {
+        Iterator<Course> iterator = courses.iterator();
+
+        while (iterator.hasNext()) {
+            Course c = iterator.next();
+
             if (c.getCourseID().equals(courseID)) {
-                courses.remove(c);
+
+                for (String s : c.getEnrolledStudents()) {
+                    ((Student) userManager.getUserFromID(s)).courseDeleted(courseID);
+                }
+                iterator.remove();
                 saveToFile();
                 return true;
             }
@@ -120,7 +129,7 @@ public class CourseManager {
         }
         return instructorCourses;
     }
-   
+
     public ArrayList<Course> getAllCourses() {
         return courses;
     }
@@ -152,8 +161,8 @@ public class CourseManager {
 
         for (Course c : courses) {
             if (!c.getApprovalStatus().equals("Approved")) {
-            continue;
-        }
+                continue;
+            }
             boolean isEnrolled = false;
             for (Course e : enrolledCourses) {
                 if (c.getCourseID().equals(e.getCourseID())) {
@@ -196,7 +205,7 @@ public class CourseManager {
             }
             LessonsProgress lp = s.getLessonsProgress();
             if (lp == null) {
-                lp = new LessonsProgress();  
+                lp = new LessonsProgress();
                 s.setLessonsProgress(lp);
             }
             lp.syncWithCourse(courseID, updatedLessons);
@@ -214,7 +223,7 @@ public class CourseManager {
         Student student = (Student) userManager.getUserFromID(studentID);
         return student.getScore(courseID, lessonID);
     }
-    
+
     public double getStudentCourseProgress(String courseID, String studentID) {
         Student student = (Student) userManager.getUserFromID(studentID);
         if (student != null) {
@@ -225,49 +234,47 @@ public class CourseManager {
 
     public boolean isLessonCompleted(String courseID, String studentID, String lessonID) {
         Student student = (Student) userManager.getUserFromID(studentID);
-        if (student != null && student.getScore(courseID, lessonID)>=50) {
+        if (student != null && student.getScore(courseID, lessonID) >= 50) {
             return true;
         }
         return false;
     }
-    
+
     public ArrayList<Course> getPendingCourses() {
-    ArrayList<Course> pending = new ArrayList<>();
-    for (Course c : courses) {
-        if (c.getApprovalStatus().equals("Pending")) {
-            pending.add(c);
+        ArrayList<Course> pending = new ArrayList<>();
+        for (Course c : courses) {
+            if (c.getApprovalStatus().equals("Pending")) {
+                pending.add(c);
+            }
         }
+        return pending;
     }
-    return pending;
-}
-public ArrayList<Course> getApprovedCourses() {
-    ArrayList<Course> approved = new ArrayList<>();
-    for (Course c : courses) {
-        if (c.getApprovalStatus().equals("Approved")) {
-            approved.add(c);
-        }
-    }
-    return approved;
-}
 
-    
+    public ArrayList<Course> getApprovedCourses() {
+        ArrayList<Course> approved = new ArrayList<>();
+        for (Course c : courses) {
+            if (c.getApprovalStatus().equals("Approved")) {
+                approved.add(c);
+            }
+        }
+        return approved;
+    }
+
     public void approveCourse(String courseId, Admin admin) {
-    Course course = getCourseFromCourseID(courseId);
-    if (course != null) {
-        admin.approveCourse(course);
-        saveToFile();
+        Course course = getCourseFromCourseID(courseId);
+        if (course != null) {
+            admin.approveCourse(course);
+            saveToFile();
+        }
+
     }
-  
-}
 
-
-
-  
     public void rejectCourse(String courseId, Admin admin) {
-    Course course = getCourseFromCourseID(courseId);
-    if (course != null) {
-        admin.rejectCourse(course);
-        saveToFile();
+        Course course = getCourseFromCourseID(courseId);
+        if (course != null) {
+            admin.rejectCourse(course);
+            saveToFile();
+        }
+
     }
-     
-    } }
+}

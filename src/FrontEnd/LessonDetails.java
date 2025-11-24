@@ -82,7 +82,7 @@ public class LessonDetails extends javax.swing.JFrame {
         });
 
         backButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        backButton.setText("Back");
+        backButton.setText("Close");
         backButton.setToolTipText("");
         backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,6 +139,7 @@ public class LessonDetails extends javax.swing.JFrame {
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
+        dispose();
         
     }//GEN-LAST:event_backButtonActionPerformed
 

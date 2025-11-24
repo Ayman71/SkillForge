@@ -30,14 +30,20 @@ public class CertificateDetails extends javax.swing.JFrame {
         this.certificate = certificate;
         this.studentName = studentName;
         this.coursetitle = coursetitle;
-
+        this.issueDateLabel.setText(certificate.getIssueDate());
         certificateIdLabel.setText(certificate.getCertificateId());
         stdNameLabel.setText(studentName + "(" + certificate.getStudentId() + ")");
-        courseNameLabel.setText(coursetitle + "(" + certificate.getCourseId()+ ")");
+        courseNameLabel.setText(coursetitle + "(" + certificate.getCourseId() + ")");
         fillTable();
     }
-    private void fillTable(){
-        DefaultTableModel model = new DefaultTableModel(new Object[]{"Quiz ID", "Score"}, 0);
+
+    private void fillTable() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"Quiz ID", "Score"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // disables editing
+            }
+        };
         Map<String, Double> performance = certificate.getPerformance();
         for (Map.Entry<String, Double> entry : performance.entrySet()) {
             String quizId = entry.getKey();
@@ -61,6 +67,7 @@ public class CertificateDetails extends javax.swing.JFrame {
         scoresTable = new javax.swing.JTable();
         stdNameLabel = new javax.swing.JLabel();
         courseNameLabel = new javax.swing.JLabel();
+        issueDateLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -101,6 +108,9 @@ public class CertificateDetails extends javax.swing.JFrame {
         courseNameLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         courseNameLabel.setText("Course Name & ID");
 
+        issueDateLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        issueDateLabel.setText("Issue Date");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,14 +118,20 @@ public class CertificateDetails extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(certificateIdLabel)
-                            .addComponent(stdNameLabel)
-                            .addComponent(courseNameLabel))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(certificateIdLabel)
+                                    .addComponent(stdNameLabel))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(courseNameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(issueDateLabel)
+                        .addGap(41, 41, 41))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,7 +141,9 @@ public class CertificateDetails extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(stdNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(courseNameLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(courseNameLabel)
+                    .addComponent(issueDateLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                 .addContainerGap())
@@ -147,7 +165,7 @@ public class CertificateDetails extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CertificateDetails(new Certificate("","","",new HashMap<String, Double>()), "", "").setVisible(true);
+                new CertificateDetails(new Certificate("", "", "", new HashMap<String, Double>()), "", "").setVisible(true);
             }
         });
     }
@@ -155,6 +173,7 @@ public class CertificateDetails extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel certificateIdLabel;
     private javax.swing.JLabel courseNameLabel;
+    private javax.swing.JLabel issueDateLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable scoresTable;
     private javax.swing.JLabel stdNameLabel;

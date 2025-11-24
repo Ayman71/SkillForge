@@ -25,23 +25,30 @@ public class CertificatesFrame extends javax.swing.JFrame {
      * Creates new form CertificatesFrame
      */
     CertificateManager certificateManager;
+
     public CertificatesFrame(CertificateManager certificateManager) {
         initComponents();
         this.setSize(400, 500);
         this.setLocationRelativeTo(null);
         this.certificateManager = certificateManager;
         fillTable();
-        
+
     }
-    
-    void fillTable(){
-        DefaultTableModel model = new DefaultTableModel(new Object[]{"Certificates"}, 0);
+
+    void fillTable() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"Certificates"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // disables editing
+            }
+        };
         ArrayList<Certificate> certificates = certificateManager.getAllCertificates();
         for (Certificate certificate : certificates) {
             model.addRow(new Object[]{certificate.getCertificateId()});
         }
         jTable1.setModel(model);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -148,7 +155,7 @@ public class CertificatesFrame extends javax.swing.JFrame {
         }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CertificatesFrame( new CertificateManager(new CourseManager("", new UserManager("")), new UserManager(""))).setVisible(true);
+                new CertificatesFrame(new CertificateManager(new CourseManager("", new UserManager("")), new UserManager(""))).setVisible(true);
             }
         });
     }
