@@ -109,39 +109,7 @@
         "score": 100.0
       }
     },
-    "certificates": [
-      {
-        "certificateId": "S501 CERTIFICATE FOR COURSE C330",
-        "issueDate": "2025-11-23",
-        "studentId": "S501",
-        "courseId": "C330",
-        "performance": {
-          "L1": 100.0,
-          "L2": 50.0,
-          "L4": 100.0
-        }
-      },
-      {
-        "certificateId": "S501 CERTIFICATE FOR COURSE C205",
-        "issueDate": "2025-11-23",
-        "studentId": "S501",
-        "courseId": "C205",
-        "performance": {
-          "L1": 100.0,
-          "L2": 75.0
-        }
-      },
-      {
-        "certificateId": "S501 CERTIFICATE FOR COURSE C310",
-        "issueDate": "2025-11-23",
-        "studentId": "S501",
-        "courseId": "C310",
-        "performance": {
-          "L1": 100.0,
-          "L2": 100.0
-        }
-      }
-    ]
+    "certificates": []
   },
   {
     "userId": "S502",
