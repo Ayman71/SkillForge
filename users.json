@@ -108,7 +108,7 @@
     },
     "certificates": [
       {
-        "certificateId": "S501 CERTIFICATE FOR COURSE: C330",
+        "certificateId": "S501 CERTIFICATE FOR COURSE C330",
         "issueDate": "2025-11-23",
         "studentId": "S501",
         "courseId": "C330",
@@ -119,7 +119,7 @@
         }
       },
       {
-        "certificateId": "S501 CERTIFICATE FOR COURSE: C205",
+        "certificateId": "S501 CERTIFICATE FOR COURSE C205",
         "issueDate": "2025-11-23",
         "studentId": "S501",
         "courseId": "C205",
@@ -129,13 +129,22 @@
         }
       },
       {
-        "certificateId": "S501 CERTIFICATE C310",
+        "certificateId": "S501 CERTIFICATE FOR COURSE C310",
         "issueDate": "2025-11-23",
         "studentId": "S501",
         "courseId": "C310",
         "performance": {
           "L1": 100.0,
           "L2": 100.0
+        }
+      },
+      {
+        "certificateId": "S501 CERTIFICATE FOR COURSE C2122",
+        "issueDate": "2025-11-24",
+        "studentId": "S501",
+        "courseId": "C2122",
+        "performance": {
+          "L11": 100.0
         }
       }
     ]

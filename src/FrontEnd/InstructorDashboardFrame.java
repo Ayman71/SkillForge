@@ -4,8 +4,10 @@
  */
 package FrontEnd;
 
+import BackEnd.AnalyticsManager;
 import BackEnd.Course;
 import BackEnd.CourseManager;
+import BackEnd.InsightChart;
 import BackEnd.User;
 import BackEnd.UserManager;
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -24,7 +26,7 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
      */
     UserManager userManager = new UserManager("users.json");
     CourseManager courseManager = new CourseManager("courses.json", userManager);
-
+    AnalyticsManager analyticsManager;
     DefaultTableModel coursesModel = new DefaultTableModel(new Object[]{"Course ID", "Title", "Instructor ID"}, 0) {
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -35,9 +37,10 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 
     public InstructorDashboardFrame(String userID) {
         initComponents();
-        this.setSize(840, 600);
+        this.setSize(900, 600);
         this.setLocationRelativeTo(null);
         this.userID = userID;
+        analyticsManager = new AnalyticsManager(userID, courseManager, userManager);
         jTable1.setModel(coursesModel);
         fillTable();
     }
@@ -67,7 +70,9 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
         modifyCourseButton = new javax.swing.JButton();
         viewCourseDetailsButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
-        deleteCourseButton1 = new javax.swing.JButton();
+        coursesCompletionInsightsButton = new javax.swing.JButton();
+        quizzesAverageButton = new javax.swing.JButton();
+        studentsPerformanceButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Instructor Dashboard");
@@ -148,11 +153,27 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
             }
         });
 
-        deleteCourseButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        deleteCourseButton1.setText("View insights");
-        deleteCourseButton1.addActionListener(new java.awt.event.ActionListener() {
+        coursesCompletionInsightsButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        coursesCompletionInsightsButton.setText("Courses completion insights");
+        coursesCompletionInsightsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteCourseButton1ActionPerformed(evt);
+                coursesCompletionInsightsButtonActionPerformed(evt);
+            }
+        });
+
+        quizzesAverageButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        quizzesAverageButton.setText("Quizzes average");
+        quizzesAverageButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quizzesAverageButtonActionPerformed(evt);
+            }
+        });
+
+        studentsPerformanceButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        studentsPerformanceButton.setText("Students performance");
+        studentsPerformanceButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                studentsPerformanceButtonActionPerformed(evt);
             }
         });
 
@@ -163,22 +184,23 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(viewCourseDetailsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(coursesCompletionInsightsButton))
                     .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(viewCourseDetailsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(addCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(deleteCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(modifyCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(deleteCourseButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(90, Short.MAX_VALUE))
+                            .addComponent(quizzesAverageButton, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(studentsPerformanceButton, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                            .addComponent(deleteCourseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(modifyCourseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(addCourseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(logoutButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jLabel2))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,8 +210,7 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(addCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -197,12 +218,17 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(deleteCourseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(deleteCourseButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(studentsPerformanceButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(quizzesAverageButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(viewCourseDetailsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(logoutButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(71, Short.MAX_VALUE))
+                    .addComponent(coursesCompletionInsightsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         pack();
@@ -274,9 +300,38 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
         loginFrame.setVisible(true);
     }//GEN-LAST:event_logoutButtonActionPerformed
 
-    private void deleteCourseButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteCourseButton1ActionPerformed
+    private void coursesCompletionInsightsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_coursesCompletionInsightsButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_deleteCourseButton1ActionPerformed
+        InsightChart insightChart = new InsightChart(analyticsManager.getCourseCompletionMap(), InsightChart.ChartType.COURSE_COMPLETION);
+        insightChart.showChart();
+    }//GEN-LAST:event_coursesCompletionInsightsButtonActionPerformed
+
+    private void quizzesAverageButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quizzesAverageButtonActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = jTable1.getValueAt(selectedRow, 0).toString();
+            Course course = courseManager.getCourseFromCourseID(courseID);
+            InsightChart insightChart = new InsightChart(analyticsManager.getQuizAverageMap(course), InsightChart.ChartType.QUIZ_AVERAGE);
+            insightChart.showChart();
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }//GEN-LAST:event_quizzesAverageButtonActionPerformed
+
+    private void studentsPerformanceButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentsPerformanceButtonActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow != -1) {
+            String courseID = jTable1.getValueAt(selectedRow, 0).toString();
+            Course course = courseManager.getCourseFromCourseID(courseID);
+            InsightChart insightChart = new InsightChart(analyticsManager.getStudentPerformanceMap(course), InsightChart.ChartType.STUDENT_PERFORMANCE);
+            insightChart.showChart();
+        } else {
+            JOptionPane.showMessageDialog(this, "No course selected! please try again.", "Selection warining", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_studentsPerformanceButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -298,14 +353,16 @@ public class InstructorDashboardFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCourseButton;
+    private javax.swing.JButton coursesCompletionInsightsButton;
     private javax.swing.JButton deleteCourseButton;
-    private javax.swing.JButton deleteCourseButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton modifyCourseButton;
+    private javax.swing.JButton quizzesAverageButton;
+    private javax.swing.JButton studentsPerformanceButton;
     private javax.swing.JButton viewCourseDetailsButton;
     // End of variables declaration//GEN-END:variables
 }

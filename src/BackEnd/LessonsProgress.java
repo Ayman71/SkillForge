@@ -58,12 +58,15 @@ public class LessonsProgress {
         }
 
         int completedCount = 0;
-        for (double status : lessons.values()) {
-            if (status>=50.0) {
+        for (double score : lessons.values()) {
+            if (score>=50.0) {
                 completedCount++;
             }
         }
         return (completedCount * 100) / lessons.size();
+    }
+    public Map<String, Double> getLessonsProgress(String courseID){
+        return progressMap.get(courseID);
     }
 
     public Map<String, Double> getCourseLessonProgress(String courseID) {

@@ -34,7 +34,7 @@ public class InsightChart {
 
             DefaultCategoryDataset dataset = new DefaultCategoryDataset();
             String seriesName = switch (type) {
-                case STUDENT_PERFORMANCE -> "Score";
+                case STUDENT_PERFORMANCE -> "Avg Score";
                 case QUIZ_AVERAGE -> "Quiz Avg";
                 case COURSE_COMPLETION -> "Completion %";
             };
@@ -51,7 +51,7 @@ public class InsightChart {
 
             JFreeChart chart = ChartFactory.createBarChart(
                     title,
-                    type == ChartType.COURSE_COMPLETION ? "Course" : "Lesson/Quiz",
+                    type == ChartType.COURSE_COMPLETION ? "Course" : type == ChartType.QUIZ_AVERAGE ? "Lesson":"Student",
                     seriesName,
                     dataset
             );
@@ -84,6 +84,7 @@ public class InsightChart {
             frame.add(new ChartPanel(chart));
             frame.setSize(600, 500);
             frame.setVisible(true);
+            frame.setLocationRelativeTo(null);
         });
     }
 

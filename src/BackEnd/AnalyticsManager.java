@@ -31,25 +31,52 @@ public class AnalyticsManager {
 
     public HashMap<String, Double> getCourseCompletionMap() {
         HashMap<String, Double> map = new HashMap<String, Double>();
-        for (Course course : courseManager.getCoursesFromInstructor(instructorID)) {
-            double completed = 0;
 
-            for (String studentID : course.getEnrolledStudents()) {
-                if (courseManager.getStudentCourseProgress(studentID, course.getCourseID()) == 100.0) {
+        for (Course course : courseManager.getCoursesFromInstructor(instructorID)) {
+            int completed = 0;
+            ArrayList<String> students = course.getEnrolledStudents();
+            for (String studentID : students) {
+                if (courseManager.getStudentCourseProgress(course.getCourseID(), studentID) == 100.0) {
                     completed++;
                 }
             }
-            map.put(course.getCourseID(), completed / course.getEnrolledStudents().size());
+
+            int total = students.size();
+
+            double percentage = total == 0 ? 0 : ((double) completed / total) * 100;
+
+            map.put(course.getCourseID(), percentage);
         }
         return map;
     }
 
-    public HashMap<String, Double> getStudentPerformanceMap() {
+    public HashMap<String, Double> getStudentPerformanceMap(Course course) {
         HashMap<String, Double> map = new HashMap<String, Double>();
-        
-        
-        
-        
+        ArrayList<String> students = course.getEnrolledStudents();
+
+        for (String s : students) {
+            double studentAvg = 0;
+            Student student = (Student) userManager.getUserFromID(s);
+            for (double score : student.getLessonsProgressByCourse(course.getCourseID()).values()) {
+                studentAvg += score;
+            }
+            map.put(s, studentAvg / student.getLessonsProgressByCourse(course.getCourseID()).size());
+        }
         return map;
     }
+
+    public HashMap<String, Double> getQuizAverageMap(Course course) {
+        HashMap<String, Double> map = new HashMap<String, Double>();
+        ArrayList<Lesson> lessons = course.getLessons();
+        ArrayList<String> students = course.getEnrolledStudents();
+        for (int i = 0; i < lessons.size(); i++) {
+            double lessonAvg = 0;
+            for (String s : students) {
+                lessonAvg += ((Student) userManager.getUserFromID(s)).getLessonsProgressByCourse(course.getCourseID()).get(lessons.get(i).getId());
+            }
+            map.put(lessons.get(i).getId(), lessonAvg / students.size());
+        }
+        return map;
+    }
+
 }
